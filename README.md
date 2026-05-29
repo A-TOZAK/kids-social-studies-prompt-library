@@ -57,6 +57,9 @@
 4. ログに表示される `Published URL` をコピーします。
 5. `index.html` の `FEEDBACK_FORM_URL` に貼り付けます。
 
+現在の公開フォームURL:
+https://docs.google.com/forms/d/e/1FAIpQLSfyw3Alsnns-Zy_L-aO4uw1-FHgvkFMe-s3refbxZAsZ2U-1Q/viewform
+
 ## GitHub Pages
 
 GitHubに公開後、リポジトリの Settings → Pages から、`main` ブランチの root を公開元に設定するとWebサイトとして公開できます。

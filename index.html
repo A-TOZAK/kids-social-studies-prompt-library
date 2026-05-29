@@ -828,9 +828,9 @@
       <div class="feedback-panel">
         <div>
           <h2 id="feedback-title">フィードバックを集める</h2>
-          <p>Googleフォーム作成用のGASコードを同梱しています。フォームURLを取得したら、このページの `FEEDBACK_FORM_URL` に貼るだけでボタンが有効になります。</p>
+          <p>授業で使って気づいたことをGoogleフォームで送れます。子どもにとって使いにくい言葉、足りない支援、追加したい場面を集めて改善につなげます。</p>
         </div>
-        <button class="btn btn-primary" type="button" id="feedbackTopButton">フォームを開く</button>
+        <a class="btn btn-primary" id="feedbackTopButton" href="https://docs.google.com/forms/d/e/1FAIpQLSfyw3Alsnns-Zy_L-aO4uw1-FHgvkFMe-s3refbxZAsZ2U-1Q/viewform" target="_blank" rel="noopener">フォームを開く</a>
       </div>
     </section>
   </main>
@@ -911,7 +911,7 @@
   </div>
 
   <script>
-    const FEEDBACK_FORM_URL = "";
+    const FEEDBACK_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSfyw3Alsnns-Zy_L-aO4uw1-FHgvkFMe-s3refbxZAsZ2U-1Q/viewform";
 
     const prompts = [
       {
@@ -1331,7 +1331,7 @@
                     ${prompt.teacherTips.map((item) => `<li>${item}</li>`).join("")}
                   </ul>
                 </div>
-                <button class="btn feedback-btn" type="button" data-feedback="${prompt.title}">このカードの感想を送る</button>
+                <a class="btn feedback-btn" href="${FEEDBACK_FORM_URL}" target="_blank" rel="noopener">このカードの感想を送る</a>
               </aside>
             </div>
           </article>
@@ -1448,8 +1448,6 @@
         closeManual();
       }
     });
-
-    document.getElementById("feedbackTopButton").addEventListener("click", () => openFeedback("全体"));
 
     renderNav();
     renderLibrary();

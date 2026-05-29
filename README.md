@@ -23,12 +23,16 @@
 │   └── index.html
 ├── assets/
 │   ├── classroom-ai-social-studies.png
+│   ├── hero-kids.png
 │   ├── manual-new-home.png
-│   └── manual-new-tool.png
+│   ├── manual-new-tool.png
+│   └── 画像生成プロンプト.md
 ├── gas/
 │   └── create-feedback-form.gs
 └── README.md
 ```
+
+`assets/hero-kids.png` はトップページ右側のヒーローイラストです。ファイルがない場合でも、ページ内蔵のSVGマスコットが表示されます。
 
 ## 子ども向けの使い方
 

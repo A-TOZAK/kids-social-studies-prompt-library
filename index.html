@@ -3,25 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>子どものためのプロンプトライブラリ | 社会科</title>
-  <meta name="description" content="小学生が社会科の学習でAIを安全に使うための、子ども向けプロンプトライブラリ。読み書きが苦手な子への足場かけと教師用の支援ポイントを含みます。">
+  <title>社会科AIおたすけ | 小4以上</title>
+  <meta name="description" content="小学校4年生以上の社会科で使う、つかむ・調べる・まとめる・いかすに沿ったAIプロンプト支援サイト。">
   <style>
     :root {
-      --ink: #172033;
-      --sub: #536076;
-      --muted: #778399;
-      --line: #d9e0eb;
+      --ink: #182033;
+      --sub: #526071;
       --paper: #fffdf7;
       --panel: #ffffff;
-      --wash: #f4f7fb;
-      --blue: #2563eb;
-      --green: #11845b;
-      --orange: #c25a14;
-      --rose: #be3455;
-      --teal: #087f8c;
-      --violet: #6d46b9;
-      --yellow: #e8b127;
-      --shadow: 0 18px 48px rgba(23, 32, 51, .12);
+      --line: #d8e1ee;
+      --blue: #245bd6;
+      --green: #0d7c66;
+      --orange: #be5a1d;
+      --purple: #6b4bc4;
+      --red: #b63d4d;
+      --shadow: 0 18px 48px rgba(24, 32, 51, .12);
       --radius: 8px;
     }
 
@@ -38,7 +34,7 @@
       color: var(--ink);
       background: var(--paper);
       font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
-      line-height: 1.75;
+      line-height: 1.7;
     }
 
     body.is-modal-open {
@@ -47,7 +43,7 @@
 
     button,
     input,
-    select {
+    textarea {
       font: inherit;
     }
 
@@ -55,86 +51,74 @@
       color: inherit;
     }
 
-    .skip-link {
-      position: fixed;
-      left: 12px;
-      top: 12px;
-      z-index: 1000;
-      transform: translateY(-140%);
-      background: var(--ink);
-      color: #fff;
-      padding: 8px 12px;
-      border-radius: var(--radius);
-      text-decoration: none;
-    }
-
-    .skip-link:focus {
-      transform: translateY(0);
-    }
-
     .hero {
       min-height: 430px;
       color: #fff;
       background:
-        linear-gradient(90deg, rgba(13, 25, 49, .84) 0%, rgba(13, 25, 49, .58) 44%, rgba(13, 25, 49, .18) 78%),
+        linear-gradient(90deg, rgba(12, 23, 45, .86), rgba(12, 23, 45, .6) 48%, rgba(12, 23, 45, .14)),
         url("assets/classroom-ai-social-studies.png") center right / cover no-repeat;
       display: grid;
       align-items: end;
     }
 
-    .hero-inner {
+    .hero-inner,
+    .shell,
+    .topbar-inner {
       width: min(1120px, calc(100% - 32px));
       margin: 0 auto;
-      padding: 64px 0 52px;
     }
 
-    .eyebrow {
+    .hero-inner {
+      padding: 54px 0 44px;
+    }
+
+    .badge {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
       min-height: 32px;
       padding: 4px 10px;
-      border: 1px solid rgba(255, 255, 255, .48);
+      border: 1px solid rgba(255, 255, 255, .44);
       border-radius: var(--radius);
       background: rgba(255, 255, 255, .14);
-      font-size: .82rem;
-      font-weight: 700;
+      font-weight: 800;
+      font-size: .86rem;
     }
 
     h1 {
       max-width: 650px;
-      margin: 18px 0 14px;
-      font-size: 2.5rem;
-      line-height: 1.25;
+      margin: 16px 0 12px;
+      font-size: 2.45rem;
+      line-height: 1.22;
     }
 
     .hero p {
-      max-width: 620px;
+      max-width: 610px;
       margin: 0;
-      color: rgba(255, 255, 255, .88);
+      color: rgba(255, 255, 255, .9);
       font-size: 1rem;
     }
 
-    .hero-actions {
+    .hero-actions,
+    .tool-actions,
+    .link-row {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      margin-top: 24px;
+      margin-top: 22px;
     }
 
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
       min-height: 42px;
       padding: 9px 14px;
       border: 1px solid transparent;
       border-radius: var(--radius);
       cursor: pointer;
-      font-weight: 800;
+      font-weight: 900;
       text-decoration: none;
-      transition: transform .16s ease, box-shadow .16s ease, background .16s ease;
+      transition: transform .15s ease, box-shadow .15s ease;
     }
 
     .btn:hover {
@@ -147,356 +131,282 @@
       box-shadow: 0 12px 28px rgba(0, 0, 0, .18);
     }
 
-    .btn-secondary {
-      background: rgba(255, 255, 255, .13);
-      color: #fff;
-      border-color: rgba(255, 255, 255, .42);
-    }
-
-    .page-shell {
-      width: min(1120px, calc(100% - 32px));
-      margin: 0 auto;
-      padding: 24px 0 72px;
-    }
-
-    .control-band {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      background: rgba(255, 253, 247, .94);
-      border-bottom: 1px solid rgba(217, 224, 235, .86);
-      backdrop-filter: blur(14px);
-    }
-
-    .control-inner {
-      width: min(1120px, calc(100% - 32px));
-      margin: 0 auto;
-      padding: 12px 0;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 14px;
-      align-items: center;
-    }
-
-    .mode-switch {
-      display: inline-grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4px;
-      padding: 4px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: #fff;
-    }
-
-    .mode-switch button {
-      border: 0;
-      border-radius: calc(var(--radius) - 2px);
-      background: transparent;
-      color: var(--sub);
-      padding: 7px 12px;
-      cursor: pointer;
-      font-size: .9rem;
-      font-weight: 800;
-      min-width: 130px;
-    }
-
-    .mode-switch button.is-active {
+    .btn-dark {
       background: var(--ink);
       color: #fff;
     }
 
-    .quick-nav {
+    .btn-ghost {
+      background: rgba(255, 255, 255, .13);
+      color: #fff;
+      border-color: rgba(255, 255, 255, .4);
+    }
+
+    .btn-line {
+      background: #fff;
+      color: var(--ink);
+      border-color: var(--line);
+    }
+
+    .btn-green {
+      background: #eaf8f5;
+      color: #075f55;
+      border-color: #b8ddd7;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: rgba(255, 253, 247, .94);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(14px);
+    }
+
+    .topbar-inner {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      min-width: 0;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
     }
 
-    .quick-nav a {
-      display: inline-flex;
-      align-items: center;
+    .topbar nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .topbar a,
+    .topbar button {
       min-height: 34px;
       padding: 5px 10px;
       border: 1px solid var(--line);
       border-radius: var(--radius);
       background: #fff;
       color: var(--sub);
-      font-size: .82rem;
-      font-weight: 800;
+      font-size: .84rem;
+      font-weight: 900;
       text-decoration: none;
-      white-space: nowrap;
+      cursor: pointer;
     }
 
-    .section {
-      padding: 34px 0 0;
+    .shell {
+      padding: 28px 0 70px;
     }
 
-    .section-head {
+    .intro {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-columns: minmax(0, 1fr) 340px;
       gap: 18px;
-      align-items: end;
-      margin-bottom: 18px;
+      align-items: stretch;
+      margin-bottom: 28px;
     }
 
-    .section h2 {
-      margin: 0;
-      font-size: 1.55rem;
+    .intro-panel,
+    .quick-help,
+    .tool-panel,
+    .teacher-strip {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: 0 12px 34px rgba(24, 32, 51, .08);
+    }
+
+    .intro-panel {
+      padding: 22px;
+    }
+
+    .intro-panel h2,
+    .tool-panel h2,
+    .examples h2 {
+      margin: 0 0 8px;
+      font-size: 1.45rem;
       line-height: 1.35;
     }
 
-    .section-lead {
-      margin: 8px 0 0;
+    .intro-panel p,
+    .quick-help p,
+    .teacher-strip p {
+      margin: 0;
       color: var(--sub);
-      max-width: 780px;
     }
 
-    .note {
-      border-left: 4px solid var(--blue);
-      padding: 12px 14px;
-      background: #edf4ff;
+    .quick-help {
+      padding: 18px;
+      display: grid;
+      align-content: center;
+      gap: 12px;
+      background: #f2fbf7;
+    }
+
+    .quick-help strong {
+      color: #075f55;
+    }
+
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin: 18px 0 30px;
+    }
+
+    .process-card {
+      display: grid;
+      gap: 8px;
+      min-height: 166px;
+      padding: 18px;
+      border: 2px solid transparent;
       border-radius: var(--radius);
-      color: #17335f;
+      background: #fff;
+      box-shadow: 0 10px 28px rgba(24, 32, 51, .08);
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .process-card.is-active {
+      border-color: var(--accent);
+      box-shadow: 0 16px 42px rgba(24, 32, 51, .14);
+    }
+
+    .process-card .step {
+      color: var(--accent);
+      font-size: .82rem;
+      font-weight: 900;
+    }
+
+    .process-card h3 {
+      margin: 0;
+      font-size: 1.18rem;
+    }
+
+    .process-card p {
+      margin: 0;
+      color: var(--sub);
       font-size: .92rem;
     }
 
-    .insight-grid {
+    .tool-panel {
+      padding: 22px;
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
+      grid-template-columns: minmax(0, 1fr) 360px;
+      gap: 22px;
+      align-items: start;
     }
 
-    .insight {
-      background: var(--panel);
+    .tool-label {
+      display: inline-flex;
+      color: var(--tool-color);
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+
+    .field-grid {
+      display: grid;
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    label {
+      display: grid;
+      gap: 6px;
+      color: var(--ink);
+      font-weight: 900;
+    }
+
+    input,
+    textarea {
+      width: 100%;
       border: 1px solid var(--line);
       border-radius: var(--radius);
-      padding: 18px;
-      min-height: 100%;
+      background: #fff;
+      color: var(--ink);
+      padding: 11px 12px;
     }
 
-    .insight h3 {
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .prompt-preview {
+      background: #f6f8fb;
+      border: 1px dashed #bfcbe0;
+      border-radius: var(--radius);
+      padding: 14px;
+    }
+
+    .prompt-preview h3 {
       margin: 0 0 8px;
       font-size: 1rem;
     }
 
-    .insight p {
+    .prompt-preview pre {
       margin: 0;
-      color: var(--sub);
+      color: #263247;
+      font-family: inherit;
       font-size: .92rem;
-    }
-
-    .library {
-      display: grid;
-      gap: 18px;
-    }
-
-    .prompt-card {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: 0 12px 34px rgba(23, 32, 51, .08);
-      overflow: hidden;
-    }
-
-    .card-top {
-      display: grid;
-      grid-template-columns: 12px minmax(0, 1fr);
-      border-bottom: 1px solid var(--line);
-    }
-
-    .color-strip {
-      background: var(--accent, var(--blue));
-    }
-
-    .card-title {
-      padding: 18px 20px;
-      display: grid;
-      gap: 6px;
-    }
-
-    .step {
-      color: var(--accent, var(--blue));
-      font-size: .78rem;
-      font-weight: 900;
-    }
-
-    .card-title h3 {
-      margin: 0;
-      font-size: 1.22rem;
-      line-height: 1.35;
-    }
-
-    .card-title p {
-      margin: 0;
-      color: var(--sub);
-      font-size: .92rem;
-    }
-
-    .card-body {
-      padding: 20px;
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 280px;
-      gap: 18px;
-    }
-
-    .student-area {
-      min-width: 0;
-    }
-
-    .support-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin: 0 0 14px;
-      padding: 0;
-      list-style: none;
-    }
-
-    .support-list li {
-      border: 1px solid #d5e2f1;
-      background: #f7fbff;
-      color: #25415f;
-      border-radius: var(--radius);
-      padding: 5px 9px;
-      font-size: .82rem;
-      font-weight: 700;
-    }
-
-    .prompt-box {
-      background: #f7f9fc;
-      border: 1px solid #cdd8e6;
-      border-radius: var(--radius);
-      padding: 16px;
-      color: #1f2a3d;
       white-space: pre-wrap;
-      line-height: 1.85;
-      font-size: .96rem;
-      overflow-wrap: anywhere;
     }
 
-    .prompt-box strong {
-      background: #fff1b8;
-      color: #744006;
-      padding: 1px 4px;
-      border-radius: 4px;
-    }
-
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
+    .talk-box {
       margin-top: 14px;
-    }
-
-    .copy-btn {
-      background: var(--accent, var(--blue));
-      color: #fff;
-    }
-
-    .copy-btn.is-copied {
-      background: var(--green);
-    }
-
-    .open-btn {
-      background: #ffffff;
-      color: var(--ink);
-      border-color: var(--line);
-    }
-
-    .dictionary-btn {
-      background: #eef8f6;
-      color: #075f55;
-      border-color: #b8ddd7;
-    }
-
-    .teacher-area {
-      display: grid;
-      gap: 12px;
-      align-content: start;
-    }
-
-    .teacher-box {
-      border: 1px solid #e2e7ef;
+      padding: 14px;
+      border-left: 4px solid var(--tool-color);
       border-radius: var(--radius);
-      padding: 12px;
       background: #fffdfa;
     }
 
-    .teacher-box h4 {
+    .talk-box h3 {
       margin: 0 0 6px;
-      font-size: .9rem;
+      font-size: 1rem;
     }
 
-    .teacher-box ul {
-      margin: 0;
-      padding-left: 18px;
-      color: var(--sub);
-      font-size: .88rem;
-    }
-
-    .teacher-box li {
-      margin: 4px 0;
-    }
-
-    .feedback-btn {
-      width: 100%;
-      background: #f7f1ff;
-      border-color: #d7c4f7;
-      color: #563493;
-    }
-
-    .guide-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-    }
-
-    .guide {
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 18px;
-      background: #fff;
-    }
-
-    .guide h3 {
-      margin: 0 0 10px;
-      font-size: 1.02rem;
-    }
-
-    .guide ul {
+    .talk-box ul {
       margin: 0;
       padding-left: 20px;
       color: var(--sub);
     }
 
-    .guide li {
-      margin: 6px 0;
-    }
-
-    .feedback-panel {
+    .teacher-strip {
+      margin-top: 26px;
+      padding: 18px;
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
-      gap: 20px;
+      gap: 14px;
       align-items: center;
-      background: #152238;
-      color: #fff;
-      padding: 24px;
+      background: #f8fbff;
+    }
+
+    .examples {
+      margin-top: 30px;
+    }
+
+    .example-links {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .example-card {
+      padding: 16px;
+      border: 1px solid var(--line);
       border-radius: var(--radius);
+      background: #fff;
+      text-decoration: none;
+      box-shadow: 0 10px 28px rgba(24, 32, 51, .07);
     }
 
-    .feedback-panel h2 {
-      color: #fff;
+    .example-card strong {
+      display: block;
+      margin-bottom: 6px;
     }
 
-    .feedback-panel p {
-      color: rgba(255, 255, 255, .78);
-      margin: 8px 0 0;
-    }
-
-    .feedback-panel .btn-primary {
-      color: #152238;
-      white-space: nowrap;
+    .example-card span {
+      color: var(--sub);
+      font-size: .9rem;
     }
 
     .manual-modal[hidden] {
@@ -506,75 +416,69 @@
     .manual-modal {
       position: fixed;
       inset: 0;
-      z-index: 1500;
+      z-index: 1000;
       display: grid;
       align-items: center;
       padding: 24px;
       background: rgba(12, 20, 35, .72);
-      overflow-y: auto;
     }
 
     .manual-dialog {
-      width: min(1040px, 100%);
-      max-height: min(860px, calc(100vh - 48px));
-      margin: auto;
+      width: min(940px, 100%);
+      max-height: calc(100vh - 48px);
       display: grid;
       grid-template-rows: auto minmax(0, 1fr);
-      background: var(--panel);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
+      margin: auto;
       overflow: hidden;
+      border-radius: var(--radius);
+      background: #fff;
+      box-shadow: var(--shadow);
     }
 
     .manual-header {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
-      gap: 16px;
-      align-items: start;
-      padding: 20px 24px;
+      gap: 14px;
+      padding: 18px 22px;
       border-bottom: 1px solid var(--line);
       background: #f8fbff;
     }
 
     .manual-header h2 {
       margin: 0;
-      font-size: 1.35rem;
-      line-height: 1.35;
+      font-size: 1.28rem;
     }
 
     .manual-header p {
-      margin: 6px 0 0;
+      margin: 4px 0 0;
       color: var(--sub);
-      font-size: .94rem;
     }
 
     .manual-close {
-      min-width: 42px;
-      min-height: 42px;
+      width: 42px;
+      height: 42px;
       border: 1px solid var(--line);
       border-radius: var(--radius);
       background: #fff;
-      color: var(--ink);
       cursor: pointer;
       font-size: 1.25rem;
       font-weight: 900;
     }
 
     .manual-body {
-      padding: 22px 24px 26px;
+      padding: 20px 22px;
       overflow-y: auto;
     }
 
-    .manual-flow {
+    .manual-steps {
       display: grid;
-      gap: 18px;
+      gap: 16px;
     }
 
     .manual-step {
       display: grid;
-      grid-template-columns: minmax(230px, .72fr) minmax(0, 1fr);
-      gap: 18px;
-      align-items: start;
+      grid-template-columns: minmax(0, .65fr) minmax(0, 1fr);
+      gap: 16px;
       padding: 16px;
       border: 1px solid var(--line);
       border-radius: var(--radius);
@@ -583,25 +487,11 @@
 
     .manual-step h3 {
       margin: 0 0 8px;
-      font-size: 1.02rem;
     }
 
-    .manual-step p {
-      margin: 0 0 10px;
-      color: var(--sub);
-      font-size: .92rem;
-    }
-
-    .manual-step ol,
-    .manual-step ul {
-      margin: 0;
-      padding-left: 20px;
-      color: var(--sub);
-      font-size: .9rem;
-    }
-
+    .manual-step p,
     .manual-step li {
-      margin: 5px 0;
+      color: var(--sub);
     }
 
     .manual-shot {
@@ -610,25 +500,14 @@
       border: 1px solid #ccd6e4;
       border-radius: var(--radius);
       background: #f4f7fb;
-      box-shadow: 0 10px 28px rgba(23, 32, 51, .1);
-    }
-
-    .manual-note {
-      margin-top: 18px;
-      padding: 14px 16px;
-      border: 1px solid #f2d993;
-      border-radius: var(--radius);
-      background: #fff8df;
-      color: #5d4208;
-      font-size: .92rem;
     }
 
     footer {
       padding: 30px 16px 38px;
       border-top: 1px solid var(--line);
-      color: var(--muted);
+      color: var(--sub);
       text-align: center;
-      font-size: .82rem;
+      font-size: .86rem;
     }
 
     #toast {
@@ -636,15 +515,15 @@
       left: 50%;
       bottom: 24px;
       z-index: 2000;
-      transform: translate(-50%, 80px);
+      transform: translate(-50%, 70px);
       opacity: 0;
       background: var(--ink);
       color: #fff;
-      border-radius: var(--radius);
       padding: 10px 14px;
+      border-radius: var(--radius);
       box-shadow: var(--shadow);
-      font-weight: 800;
-      transition: transform .22s ease, opacity .22s ease;
+      font-weight: 900;
+      transition: transform .2s ease, opacity .2s ease;
     }
 
     #toast.is-visible {
@@ -652,63 +531,54 @@
       opacity: 1;
     }
 
-    @media (max-width: 860px) {
-      .hero {
-        min-height: 420px;
-        background:
-          linear-gradient(0deg, rgba(13, 25, 49, .86) 0%, rgba(13, 25, 49, .5) 64%, rgba(13, 25, 49, .14) 100%),
-          url("assets/classroom-ai-social-studies.png") center / cover no-repeat;
-      }
-
-      h1 {
-        font-size: 1.9rem;
-      }
-
-      .control-inner,
-      .section-head,
-      .card-body,
-      .feedback-panel,
+    @media (max-width: 900px) {
+      .intro,
+      .tool-panel,
+      .teacher-strip,
       .manual-step {
         grid-template-columns: 1fr;
       }
 
-      .mode-switch {
-        width: 100%;
-      }
-
-      .mode-switch button {
-        min-width: 0;
-      }
-
-      .insight-grid,
-      .guide-grid {
-        grid-template-columns: 1fr;
+      .process-grid,
+      .example-links {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
 
-    @media (max-width: 520px) {
-      .hero-inner {
+    @media (max-width: 560px) {
+      .hero {
+        min-height: 430px;
+        background:
+          linear-gradient(0deg, rgba(12, 23, 45, .86), rgba(12, 23, 45, .55) 64%, rgba(12, 23, 45, .18)),
+          url("assets/classroom-ai-social-studies.png") center / cover no-repeat;
+      }
+
+      .hero-inner,
+      .shell,
+      .topbar-inner {
         width: min(100% - 24px, 1120px);
-        padding: 46px 0 36px;
       }
 
-      .page-shell,
-      .control-inner {
-        width: min(100% - 24px, 1120px);
+      h1 {
+        font-size: 1.8rem;
       }
 
-      .quick-nav {
-        overflow-x: auto;
-        flex-wrap: nowrap;
-        padding-bottom: 2px;
+      .process-grid,
+      .example-links {
+        grid-template-columns: 1fr;
       }
 
-      .btn {
+      .hero-actions .btn,
+      .tool-actions .btn,
+      .link-row .btn {
         width: 100%;
       }
 
-      .hero-actions .btn {
-        width: auto;
+      .topbar nav {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        width: 100%;
+        padding-bottom: 2px;
       }
 
       .manual-modal {
@@ -718,198 +588,157 @@
       .manual-dialog {
         max-height: calc(100vh - 24px);
       }
-
-      .manual-header,
-      .manual-body {
-        padding: 16px;
-      }
-
-      .card-title,
-      .card-body {
-        padding: 16px;
-      }
     }
   </style>
 </head>
 <body>
-  <a class="skip-link" href="#library">プロンプト一覧へ移動</a>
-
   <header class="hero">
     <div class="hero-inner">
-      <span class="eyebrow">社会科 × 子どもが使えるAIプロンプト</span>
-      <h1>「わからない」から始められる、子どものためのプロンプトライブラリ</h1>
-      <p>読み書きが得意な子だけの道具にしないために、短く書けるプロンプト、選べる足場かけ、先生の見取りポイントをセットにしました。</p>
+      <span class="badge">小4以上 | 社会科AIおたすけ</span>
+      <h1>読まなくても、まず押せる。社会の学習をAIに手伝ってもらおう。</h1>
+      <p>「つかむ・調べる・まとめる・いかす」の中から、今やりたいことを選んでください。AIは答えを写すためではなく、考えるために使います。</p>
       <div class="hero-actions">
-        <a class="btn btn-primary" href="#library">プロンプトを使う</a>
-        <button class="btn btn-secondary" type="button" data-open-manual>使い方を見る</button>
-        <a class="btn btn-secondary" href="https://a-tozak.github.io/shakai-kotoba-jiten/" target="_blank" rel="noopener">言葉辞典を開く</a>
-        <a class="btn btn-secondary" href="#teacher-guide">先生用ガイドを見る</a>
+        <a class="btn btn-primary" href="#tools">今すぐ使う</a>
+        <button class="btn btn-ghost" type="button" data-open-manual>使い方を見る</button>
+        <a class="btn btn-ghost" href="https://a-tozak.github.io/shakai-kotoba-jiten/" target="_blank" rel="noopener">言葉辞典</a>
       </div>
     </div>
   </header>
 
-  <div class="control-band" aria-label="表示切り替えと場面ナビゲーション">
-    <div class="control-inner">
-      <nav class="quick-nav" id="quickNav" aria-label="学習場面"></nav>
-      <div class="mode-switch" aria-label="プロンプトの難しさ">
-        <button type="button" class="is-active" data-mode="easy">やさしい版</button>
-        <button type="button" data-mode="challenge">しっかり版</button>
-      </div>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <nav aria-label="ページ内リンク">
+        <a href="#tools">使う</a>
+        <a href="cases/">事例</a>
+        <a href="teacher/">先生向け</a>
+        <a href="https://a-tozak.github.io/shakai-kotoba-jiten/" target="_blank" rel="noopener">言葉辞典</a>
+      </nav>
+      <button type="button" data-open-manual>使い方</button>
     </div>
   </div>
 
-  <main class="page-shell">
-    <section class="section" aria-labelledby="assessment-title">
-      <div class="section-head">
-        <div>
-          <h2 id="assessment-title">教師・子どもの視点で見た課題</h2>
-          <p class="section-lead">最初の版は学習場面の並びはよい一方で、子どもが迷ったときに最初の一文を書ける支援が不足していました。</p>
-        </div>
+  <main class="shell">
+    <section class="intro" aria-label="使い始め">
+      <div class="intro-panel">
+        <h2>いま、なにをしたい？</h2>
+        <p>下の4つから選ぶだけです。何を書けばよいかわからないときは、「つかむ」から始めます。</p>
       </div>
-      <div class="insight-grid">
-        <article class="insight">
-          <h3>子ども視点</h3>
-          <p>入力する量が多いと、学力差より先に「何を書けばいいかわからない」で止まります。そこで、テーマだけ・気づき一つだけでも始められる形にしました。</p>
-        </article>
-        <article class="insight">
-          <h3>教師視点</h3>
-          <p>AIの答えを写す使い方になりやすいので、AIには答えを出し切らせず、問い返し・選択肢・理由づけを促すプロンプトにしています。</p>
-        </article>
-        <article class="insight">
-          <h3>改善方針</h3>
-          <p>各カードを「子どもが送る文」「書けない子への支え」「先生の見るところ」で構成し、授業中にすぐ使える教材へ寄せました。</p>
-        </article>
+      <div class="quick-help">
+        <strong>わからない言葉が出てきたら</strong>
+        <p>AIに聞く前に、社会科の言葉辞典で調べてもOKです。</p>
+        <a class="btn btn-green" href="https://a-tozak.github.io/shakai-kotoba-jiten/" target="_blank" rel="noopener">言葉辞典を開く</a>
       </div>
     </section>
 
-    <section class="section" aria-labelledby="howto-title">
-      <div class="section-head">
+    <section id="tools" aria-label="学習過程別おたすけ">
+      <div class="process-grid" id="processGrid"></div>
+
+      <section class="tool-panel" id="toolPanel" aria-live="polite">
         <div>
-          <h2 id="howto-title">授業中の使い方</h2>
-          <p class="section-lead">子どもはカードを選んでコピーし、太字のところだけ自分の言葉に変えてAIへ送ります。書けないところは「わからない」のままでも大丈夫です。</p>
+          <span class="tool-label" id="toolStep"></span>
+          <h2 id="toolTitle"></h2>
+          <p id="toolBenefit"></p>
+          <div class="field-grid">
+            <label>
+              <span id="themeLabel"></span>
+              <input id="themeInput" type="text" autocomplete="off">
+            </label>
+            <label>
+              <span id="memoLabel"></span>
+              <textarea id="memoInput"></textarea>
+            </label>
+          </div>
+          <div class="tool-actions">
+            <button class="btn btn-dark" type="button" id="copyPromptButton">AIに送る文をコピー</button>
+            <a class="btn btn-line" href="https://gemini.google.com/" target="_blank" rel="noopener">Geminiを開く</a>
+            <a class="btn btn-line" href="https://notebooklm.google.com/" target="_blank" rel="noopener">NotebookLMを開く</a>
+          </div>
         </div>
-        <div class="note">おすすめ: まずは「やさしい版」で考えを出し、発表やまとめ前だけ「しっかり版」に切り替えます。</div>
+        <aside>
+          <div class="prompt-preview">
+            <h3>コピーされる文</h3>
+            <pre id="promptPreview"></pre>
+          </div>
+          <div class="talk-box">
+            <h3>話し合うなら</h3>
+            <ul id="talkList"></ul>
+          </div>
+        </aside>
+      </section>
+    </section>
+
+    <section class="teacher-strip">
+      <div>
+        <h2>先生へ</h2>
+        <p>このトップは子ども用です。単元内での使い方、写真資料の扱い、指導案を参考にした活用事例は別ページにまとめました。</p>
+      </div>
+      <div class="link-row">
+        <a class="btn btn-line" href="teacher/">先生向けページ</a>
+        <a class="btn btn-line" href="cases/">活用事例を見る</a>
       </div>
     </section>
 
-    <section class="section" id="library" aria-labelledby="library-title">
-      <div class="section-head">
-        <div>
-          <h2 id="library-title">子どもがそのまま使えるプロンプト</h2>
-          <p class="section-lead">どのプロンプトも、小学生への短い返答、むずかしい言葉の言いかえ、答えを丸写しにしない助言をAIに求める形にしています。</p>
-        </div>
-      </div>
-      <div class="library" id="promptLibrary"></div>
-    </section>
-
-    <section class="section" id="teacher-guide" aria-labelledby="teacher-guide-title">
-      <div class="section-head">
-        <div>
-          <h2 id="teacher-guide-title">先生用ガイド</h2>
-          <p class="section-lead">学力が低い子にAIを渡すときほど、入力前と出力後の見取りが大切です。AIの操作力ではなく、問い・根拠・見直しを評価します。</p>
-        </div>
-      </div>
-      <div class="guide-grid">
-        <article class="guide">
-          <h3>支援が必要な子への配慮</h3>
-          <ul>
-            <li>入力は一文でよい。空欄は「わからない」と書いてよい。</li>
-            <li>音声入力や友だちとの相談を認め、AIへの質問文づくりを共同作業にする。</li>
-            <li>AIの返事は「わかったこと」「まだわからないこと」に色分けして読む。</li>
-            <li>答えを写す前に、必ず教科書・資料・ノートのどこに根拠があるか確認する。</li>
-          </ul>
-        </article>
-        <article class="guide">
-          <h3>授業での評価ポイント</h3>
-          <ul>
-            <li>問いが「なぜ」「どのように」「何が変わったか」になっているか。</li>
-            <li>資料から読める事実と、自分の予想を分けて書けているか。</li>
-            <li>人・場所・時代のつながりに目を向けられているか。</li>
-            <li>AIの助言を受けて、自分の言葉で直した跡があるか。</li>
-          </ul>
-        </article>
-      </div>
-    </section>
-
-    <section class="section" id="feedback" aria-labelledby="feedback-title">
-      <div class="feedback-panel">
-        <div>
-          <h2 id="feedback-title">フィードバックを集める</h2>
-          <p>授業で使って気づいたことをGoogleフォームで送れます。子どもにとって使いにくい言葉、足りない支援、追加したい場面を集めて改善につなげます。</p>
-        </div>
-        <a class="btn btn-primary" id="feedbackTopButton" href="https://docs.google.com/forms/d/e/1FAIpQLSfyw3Alsnns-Zy_L-aO4uw1-FHgvkFMe-s3refbxZAsZ2U-1Q/viewform" target="_blank" rel="noopener">フォームを開く</a>
+    <section class="examples" aria-label="事例への入口">
+      <h2>事例を少しだけ見る</h2>
+      <div class="example-links">
+        <a class="example-card" href="cases/#tsukamu">
+          <strong>つかむ</strong>
+          <span>小4「水はどこから」問いをつくる</span>
+        </a>
+        <a class="example-card" href="cases/#shiraberu">
+          <strong>調べる</strong>
+          <span>小5「米づくり」資料から読み取る</span>
+        </a>
+        <a class="example-card" href="cases/#ikasu">
+          <strong>いかす</strong>
+          <span>小6「政治」「歴史」話し合う</span>
+        </a>
       </div>
     </section>
   </main>
 
   <footer>
-    <p>子どものためのプロンプトライブラリ | 社会科</p>
+    <p>社会科AIおたすけ | 小4以上</p>
     <p>AIの答えは、教科書・資料・先生の話と照らし合わせて使いましょう。</p>
   </footer>
 
-  <div id="toast" role="status" aria-live="polite"></div>
-
   <div class="manual-modal" id="manualModal" hidden aria-hidden="true">
-    <div class="manual-dialog" role="dialog" aria-modal="true" aria-labelledby="manualTitle" aria-describedby="manualLead">
+    <div class="manual-dialog" role="dialog" aria-modal="true" aria-labelledby="manualTitle">
       <div class="manual-header">
         <div>
-          <h2 id="manualTitle">プロンプトの使い方マニュアル</h2>
-          <p id="manualLead">授業中に子どもが迷わないよう、カード選びからAIへの貼り付けまでをスクショ付きで確認できます。</p>
+          <h2 id="manualTitle">使い方</h2>
+          <p>読むところは少なくしました。選んで、入れて、コピーします。</p>
         </div>
-        <button class="manual-close" type="button" data-close-manual aria-label="マニュアルを閉じる">×</button>
+        <button class="manual-close" type="button" data-close-manual aria-label="閉じる">×</button>
       </div>
       <div class="manual-body">
-        <div class="manual-flow">
+        <div class="manual-steps">
           <article class="manual-step">
             <div>
-              <h3>1. 学習場面に合うカードを選ぶ</h3>
-              <p>上のナビゲーションから「問い」「困った」「予想」などを選びます。迷った子は、まず「困った」カードから始めます。</p>
-              <ol>
-                <li>今の学習場面に近い言葉を押します。</li>
-                <li>カードのタイトルと説明を読みます。</li>
-                <li>書けそうなら、そのカードを使います。</li>
-              </ol>
+              <h3>1. 今やることを選ぶ</h3>
+              <p>「つかむ・調べる・まとめる・いかす」から、今の授業に近いものを押します。</p>
             </div>
-            <img class="manual-shot" src="assets/manual-step-choose.png" alt="プロンプトカードを選ぶ画面のスクリーンショット">
+            <img class="manual-shot" src="assets/manual-new-home.png" alt="学習過程から選ぶ画面">
           </article>
-
           <article class="manual-step">
             <div>
-              <h3>2. やさしい版・しっかり版を選ぶ</h3>
-              <p>最初は「やさしい版」で大丈夫です。発表やまとめの前に、考えを広げたいときだけ「しっかり版」に切り替えます。</p>
+              <h3>2. 二つだけ入力する</h3>
+              <p>テーマと、気づいたことや困っていることを一つ入れます。空欄でもコピーできます。</p>
+            </div>
+            <img class="manual-shot" src="assets/manual-new-tool.png" alt="テーマと気づきを入力してコピーする画面">
+          </article>
+          <article class="manual-step">
+            <div>
+              <h3>3. AIに貼って、自分の言葉で直す</h3>
+              <p>AIの返事をそのまま写さず、教科書や資料で確かめてからノートに書きます。</p>
+            </div>
+            <div class="talk-box">
+              <h3>写真を使うとき</h3>
               <ul>
-                <li>やさしい版: テーマや気づき一つで始められます。</li>
-                <li>しっかり版: 理由、資料、立場のちがいまで考えます。</li>
+                <li>先生のOKがあるときだけ使います。</li>
+                <li>AIには「資料からわかることだけ」と聞きます。</li>
+                <li>教科書や学校のルールに合わせます。</li>
               </ul>
-            </div>
-            <img class="manual-shot" src="assets/manual-step-switch.png" alt="やさしい版としっかり版を切り替える画面のスクリーンショット">
-          </article>
-
-          <article class="manual-step">
-            <div>
-              <h3>3. コピーして、太字のところを直す</h3>
-              <p>「コピーする」を押すと、プロンプトがコピーされます。AIへ貼る前に、太字だった部分を自分の言葉へ変えます。</p>
-              <ol>
-                <li>「コピーする」を押します。</li>
-                <li>Gemini または NotebookLM を開きます。</li>
-                <li>貼り付けたあと、テーマや気づきを自分の内容に直します。</li>
-              </ol>
-            </div>
-            <img class="manual-shot" src="assets/manual-step-copy.png" alt="コピーするボタンを押したあとの画面のスクリーンショット">
-          </article>
-
-          <article class="manual-step">
-            <div>
-              <h3>4. AIの返事をそのまま写さない</h3>
-              <p>AIの返事は、考えるためのヒントです。最後は教科書・資料・ノートと照らし合わせ、自分の言葉で直します。</p>
-              <ul>
-                <li>資料から本当に言えることに線を引きます。</li>
-                <li>わからない言葉は、AIに「小学生向けに言いかえて」と聞くか、社会科の言葉辞典で調べます。</li>
-                <li>先生に見せる前に、自分の考えが一文入っているか確認します。</li>
-              </ul>
-            </div>
-            <div class="manual-note">
-              授業での合言葉: AIは「答えを書く人」ではなく、「考えるために質問してくれる人」として使います。
             </div>
           </article>
         </div>
@@ -917,469 +746,168 @@
     </div>
   </div>
 
+  <div id="toast" role="status" aria-live="polite"></div>
+
   <script>
     const KOTOBA_JITEN_URL = "https://a-tozak.github.io/shakai-kotoba-jiten/";
-    const FEEDBACK_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSfyw3Alsnns-Zy_L-aO4uw1-FHgvkFMe-s3refbxZAsZ2U-1Q/viewform";
 
-    const prompts = [
-      {
-        id: "question",
-        accent: "var(--orange)",
-        short: "問い",
-        step: "Step 1",
-        title: "学習の問いをつくる",
-        scene: "単元のはじめ、資料を見た直後",
-        childGoal: "「なぜ？」を一つ見つける",
-        supports: ["テーマだけで開始", "問いの例をもらう", "短い返事"],
-        easy: `あなたは小学生の社会の学習を助ける先生です。
+    const tools = {
+      tsukamu: {
+        step: "つかむ",
+        color: "var(--orange)",
+        title: "ふしぎを見つけて、問いにする",
+        benefit: "何を調べるか決まらないときに使います。",
+        themeLabel: "学習していること",
+        memoLabel: "気になったことを一つ",
+        themePlaceholder: "例: 水はどこから来るのか",
+        memoPlaceholder: "例: じゃ口をひねると水が出るのがふしぎ",
+        talks: ["なぜそうなっているのか", "だれが関わっているのか", "昔と今で変わったことはあるか"],
+        prompt(theme, memo) {
+          return `あなたは小学校4年生以上の社会科の学習を助ける先生です。
 
-今、<strong>学習しているテーマ</strong>について考えています。
-わたしが気になったことは、<strong>気になったことを一つ</strong>です。
+学習していること: ${theme || "まだ決まっていません"}
+気になったこと: ${memo || "まだうまく書けません"}
 
-この気になることから、社会の学習で使える「問い」を3つ作ってください。
-問いは、短く、わかりやすくしてください。
-むずかしい言葉は使わないでください。
-最後に「この中で一番調べやすい問い」を一つえらんで、その理由も教えてください。`,
-        challenge: `あなたは小学生の社会科の学習パートナーです。答えを全部教えるのではなく、問いをよくする手伝いをしてください。
-
-学習しているテーマ: <strong>テーマ</strong>
-今わかっていること:
-・<strong>知っていること1</strong>
-・<strong>知っていること2</strong>
-気になること: <strong>気になること</strong>
-
-わたしの問いは「<strong>問いの文</strong>」です。
-この問いを、次の観点でよくしてください。
-1. なぜ・どのように・何が変わったかが考えられるか
-2. 場所や地域のちがいを調べられるか
-3. 関係する人の立場を考えられるか
-
-小学生にわかる短い文で、直した問いの例を3つ出してください。`,
-        teacherTips: ["問いが事実確認だけで終わっていないか見る", "問いを選ばせる前に、子どもの気づきを一つ言語化させる", "書けない子には写真や資料の指さしから始める"]
+この気づきから、社会科で調べやすい問いを3つ作ってください。
+問いは短くしてください。
+最後に、いちばん調べやすい問いを一つ選び、なぜ調べやすいのかを教えてください。
+答えを全部教えるのではなく、次に見る資料も教えてください。`;
+        }
       },
-      {
-        id: "stuck",
-        accent: "var(--teal)",
-        short: "困った",
-        step: "Step 2",
-        title: "何を書けばよいか相談する",
-        scene: "手が止まったとき、空欄が埋まらないとき",
-        childGoal: "「わからない」を学習の出発点にする",
-        supports: ["わからないOK", "選択肢で返答", "最初の一文"],
-        easy: `あなたは小学生にやさしく教える先生です。
+      shiraberu: {
+        step: "調べる",
+        color: "var(--blue)",
+        title: "資料・写真からわかることを出す",
+        benefit: "教科書、写真、地図、グラフを見て考えたいときに使います。",
+        themeLabel: "資料の名前や単元",
+        memoLabel: "見て気づいたこと",
+        themePlaceholder: "例: 米づくりのグラフ",
+        memoPlaceholder: "例: 地域によって米の量がちがう",
+        talks: ["資料から本当に言えることは何か", "まだ資料だけでは言えないことは何か", "ほかにどんな資料を見ればよいか"],
+        prompt(theme, memo) {
+          return `あなたは小学校4年生以上の社会科の資料読み取りを助ける先生です。
 
-社会の学習で、<strong>テーマ</strong>について考えています。
-でも、何を書けばいいかわかりません。
+資料や単元: ${theme || "資料名はまだありません"}
+わたしの気づき: ${memo || "まだうまく書けません"}
 
-わたしに、次の3つを教えてください。
-1. まず見るとよいところ
-2. 使えそうな言葉を5つ
-3. そのまままねして書ける一文
-
-答えは短くしてください。
-わたしに質問するときは、一度に一つだけにしてください。`,
-        challenge: `あなたは小学生の考えを引き出す学習パートナーです。
-
-テーマ: <strong>テーマ</strong>
-今困っていること: <strong>困っていること</strong>
-使っている資料: <strong>教科書・地図・グラフ・写真など</strong>
-
-わたしが自分で考えられるように、答えをそのまま書かずに助けてください。
-次の形で返してください。
-・最初に見るポイントを3つ
-・考え始めるための文の型を3つ
-・わたしへの質問を一つ
-・調べるとよいキーワードを5つ`,
-        teacherTips: ["低学力の子にはこのカードを最初に使わせる", "AIの出した文を丸写しせず、自分の資料名を入れさせる", "一問一答ではなく、次の行動が決まったかを見る"]
-      },
-      {
-        id: "hypothesis",
-        accent: "var(--green)",
-        short: "予想",
-        step: "Step 3",
-        title: "自分の予想をつくる",
-        scene: "調べる前、授業の問いに出会ったあと",
-        childGoal: "理由つきの予想を一文で書く",
-        supports: ["文の型あり", "理由を選ぶ", "別の立場"],
-        easy: `あなたは小学生の社会の学習を助ける先生です。
-
-問い: <strong>授業の問い</strong>
-わたしの予想: <strong>自分の予想</strong>
-
-この予想を、理由がある文に直したいです。
-「わたしは、＿＿だと思います。理由は、＿＿だからです。」
-の形で、書き方の例を2つ見せてください。
-
-そのあと、どんな資料を見ればこの予想をたしかめられるか、3つ教えてください。`,
-        challenge: `あなたは小学生の社会科の学習パートナーです。
-
-問い: <strong>授業の問い</strong>
-わたしの予想: <strong>予想</strong>
-そう思った理由: <strong>理由</strong>
-
-この予想を読んで、次のことを教えてください。
-1. よいところ
-2. まだ弱いところ
-3. ほかの立場の人ならどう考えそうか
-4. 予想を確かめるために見る資料
-
-最後に、わたしが自分で書き直せるように、文の型を一つください。`,
-        teacherTips: ["予想と根拠が混ざっていないか確認する", "根拠が経験だけなら、資料で確かめる方向へ促す", "違う立場を出すことで単線的な見方を広げる"]
-      },
-      {
-        id: "research",
-        accent: "var(--blue)",
-        short: "調べ方",
-        step: "Step 4",
-        title: "調べ方を決める",
-        scene: "調査活動に入る前",
-        childGoal: "見る資料と順番を決める",
-        supports: ["手順化", "資料を選ぶ", "インタビュー案"],
-        easy: `あなたは小学生の社会の調べ学習を助ける先生です。
-
-調べたいこと: <strong>調べたいこと</strong>
-使えそうなもの: <strong>教科書・地図・グラフ・写真・本など</strong>
-
-わたしが迷わないように、調べる順番を3つにしてください。
-それぞれで「何を見るか」「何をメモするか」を短く教えてください。
-むずかしい言葉は使わないでください。`,
-        challenge: `あなたは小学生の調査計画を助ける学習パートナーです。
-
-調べたいテーマ: <strong>テーマ</strong>
-わたしの予想: <strong>予想</strong>
-使える資料: <strong>資料名</strong>
-
-この予想を確かめるための調べ方を考えてください。
-次の観点で整理してください。
-・昔と今の変化
-・地域や場所のちがい
-・関係する人や仕事
-・インタビューするなら聞く相手と質問
-
-最後に、今日の45分でできる調べる順番を作ってください。`,
-        teacherTips: ["調べる対象が広すぎる場合は一時間でできる範囲に狭める", "資料を『見る』だけでなく何を記録するかまで決めさせる", "インタビューは相手と質問をセットで考えさせる"]
-      },
-      {
-        id: "read",
-        accent: "var(--violet)",
-        short: "資料",
-        step: "Step 5",
-        title: "地図・グラフ・写真を読み取る",
-        scene: "資料から気づきを出すとき",
-        childGoal: "見えることと考えたことを分ける",
-        supports: ["見る場所を指定", "事実と考えを分ける", "語彙支援"],
-        easy: `あなたは小学生の資料読み取りを助ける先生です。
-
-資料の名前: <strong>資料の名前</strong>
-見て気づいたこと: <strong>気づいたことを一つ</strong>
-
-この資料から読み取れることを、次の形で教えてください。
-1. 資料に書いてあること
+次の3つに分けて、短く教えてください。
+1. 資料からわかること
 2. そこから考えられること
-3. まだ資料だけではわからないこと
+3. まだ資料だけでは言えないこと
 
-短い文でお願いします。
-むずかしい言葉には、かっこで意味をつけてください。`,
-        challenge: `あなたは小学生の社会科の資料読み取りを助ける学習パートナーです。
-
-資料: <strong>資料名</strong>
-わたしの気づき:
-・<strong>気づき1</strong>
-・<strong>気づき2</strong>
-疑問: <strong>疑問</strong>
-
-次の4つに分けて、資料から読み取れることを整理してください。
-・事実として読み取れること
-・変化していること
-・地域や場所によるちがい
-・考えられる理由
-
-資料だけでは言えないことは「まだ言えない」とはっきり書いてください。`,
-        teacherTips: ["AIの推測と資料から読める事実を区別させる", "数値・方位・時期などの根拠を一つ言わせる", "写真資料では『見えるもの』から始める"]
+もし写真や教科書の資料を見せた場合は、資料から読み取れることだけをもとにしてください。
+むずかしい言葉は小学生向けに言いかえてください。`;
+        }
       },
-      {
-        id: "compare",
-        accent: "var(--rose)",
-        short: "くらべる",
-        step: "Step 6",
-        title: "二つの地域・時代・仕事をくらべる",
-        scene: "比較表や発表準備の前",
-        childGoal: "似ている点と違う点を整理する",
-        supports: ["表で整理", "観点を選ぶ", "理由づけ"],
-        easy: `あなたは小学生の社会の学習を助ける先生です。
+      matomeru: {
+        step: "まとめる",
+        color: "var(--green)",
+        title: "ノートの文を3文まとめにする",
+        benefit: "調べたことを、先生に出せる文にしたいときに使います。",
+        themeLabel: "まとめたいテーマ",
+        memoLabel: "ノートに書いたこと",
+        themePlaceholder: "例: 工業生産を支える人々",
+        memoPlaceholder: "例: 工場ではたくさんの人が分担している",
+        talks: ["問いへの答えになっているか", "資料からわかったことが入っているか", "自分の考えが一文あるか"],
+        prompt(theme, memo) {
+          return `あなたは小学校4年生以上の社会科のまとめを助ける先生です。
 
-くらべるもの1: <strong>一つ目</strong>
-くらべるもの2: <strong>二つ目</strong>
-わたしが気づいたちがい: <strong>ちがいを一つ</strong>
-
-次の表の形で、短く整理してください。
-・にているところ
-・ちがうところ
-・なぜちがうのか
-・もっと調べるとよいこと
-
-わたしがノートに書ける一文もください。`,
-        challenge: `あなたは小学生の比較を助ける学習パートナーです。
-
-くらべるもの1: <strong>一つ目</strong>
-くらべるもの2: <strong>二つ目</strong>
-観点: <strong>人口・産業・土地・時代・生活など</strong>
-
-次の観点で整理してください。
-1. にているところ
-2. ちがうところ
-3. ちがいが生まれた理由
-4. それぞれのよさや困りごと
-5. 自分の考えを書くための文の型
-
-小学生にわかる言葉で、表のように見やすく返してください。`,
-        teacherTips: ["比較の観点を一つに絞ると書きやすくなる", "違いの列だけで終わらず、理由の列を作らせる", "優劣ではなく条件の違いとして捉えさせる"]
-      },
-      {
-        id: "cause",
-        accent: "var(--yellow)",
-        short: "理由",
-        step: "Step 7",
-        title: "原因と結果のつながりを考える",
-        scene: "なぜそうなったかを説明したいとき",
-        childGoal: "理由を一つから複数へ広げる",
-        supports: ["原因を分ける", "つながり図", "決めつけ防止"],
-        easy: `あなたは小学生にやさしく教える先生です。
-
-考えたいこと: <strong>なぜ知りたいこと</strong>
-わたしの予想する理由: <strong>理由</strong>
-
-この理由だけでよいか考えたいです。
-ほかにありそうな理由を3つ、短く教えてください。
-その理由を、次の3つに分けてください。
-・人のこと
-・場所のこと
-・昔からの変化
-
-最後に、ノートに書ける一文をください。`,
-        challenge: `あなたは小学生の社会科の考えを深める学習パートナーです。
-
-考えたい問い: <strong>問い</strong>
-今の説明: <strong>自分の説明</strong>
-
-この説明を、原因と結果のつながりが見えるように直す手伝いをしてください。
-次の形で返してください。
-・原因として考えられること
-・その結果起きたこと
-・関係する人や場所
-・まだ確かめる必要があること
-・書き直しの例
-
-決めつけになっているところがあれば、やさしく教えてください。`,
-        teacherTips: ["原因を一つに決めつけていないか見る", "社会的事象を人・場所・制度・時代の複数要因で考えさせる", "資料で確かめられる部分に印をつけさせる"]
-      },
-      {
-        id: "note",
-        accent: "#6c7a23",
-        short: "ノート",
-        step: "Step 8",
-        title: "ノートの考えを直す",
-        scene: "授業の後半、まとめを書く前",
-        childGoal: "自分の言葉を残したまま直す",
-        supports: ["よい所から返す", "一文ずつ改善", "書き直し例"],
-        easy: `あなたは小学生のノートをよくする先生です。
-
-わたしのノート:
-「<strong>ノートに書いた文</strong>」
-
-このノートを読んで、次の3つを短く教えてください。
-1. よく書けているところ
-2. もう少し足すとよいところ
-3. 書き直すならどう書けるか
-
-わたしの考えを消さないで、少しだけよくしてください。`,
-        challenge: `あなたは小学生の社会科ノートを改善する学習パートナーです。
-
-ノートの文:
-「<strong>ノートの文</strong>」
-
-この文を、社会科の考えが見えるように改善してください。
-次の観点で見てください。
-・資料からわかった事実があるか
-・自分の考えや理由があるか
-・人、場所、時代のつながりがあるか
-・読み手に伝わる順番になっているか
-
-最後に、書き直し例を一つ出してください。ただし、わたしが使っていない難しい言葉を増やしすぎないでください。`,
-        teacherTips: ["添削ではなく、子どもの考えを残す改善にする", "よいところを先に見せることで書く抵抗を下げる", "AIの書き直し例をそのまま写させず、残す言葉を選ばせる"]
-      },
-      {
-        id: "summary",
-        accent: "#b64025",
-        short: "まとめ",
-        step: "Step 9",
-        title: "学習のまとめをつくる",
-        scene: "単元末、発表・新聞・レポート前",
-        childGoal: "わかったことを自分の言葉でまとめる",
-        supports: ["三文構成", "キーワード", "発表準備"],
-        easy: `あなたは小学生のまとめ作りを助ける先生です。
-
-学習したテーマ: <strong>テーマ</strong>
-わかったこと:
-・<strong>わかったこと1</strong>
-・<strong>わかったこと2</strong>
+テーマ: ${theme || "テーマはまだありません"}
+ノートに書いたこと: ${memo || "まだうまく書けません"}
 
 この内容を、3文のまとめにする手伝いをしてください。
-文の形は、次のようにしてください。
 1文目: 何について学んだか
-2文目: いちばん大事だと思ったこと
-3文目: 自分のくらしや社会とのつながり
+2文目: 資料や調べたことからわかったこと
+3文目: 自分の考えやくらしとのつながり
 
-わたしが自分で書けるように、空欄つきの形で出してください。`,
-        challenge: `あなたは小学生の社会科のまとめを助ける学習パートナーです。
-
-単元: <strong>単元名</strong>
-学んだこと:
-・<strong>学んだこと1</strong>
-・<strong>学んだこと2</strong>
-・<strong>学んだこと3</strong>
-今のまとめ:
-「<strong>まとめの文</strong>」
-
-このまとめを読んで、次のことを教えてください。
-・よいところ
-・足りない観点
-・入れるとよいキーワード
-・自分のくらしや社会とのつながりを入れる方法
-・書き直し例
-
-小学生にわかる言葉で、長すぎない文にしてください。`,
-        teacherTips: ["まとめは知識の羅列ではなく、単元の問いへの答えになっているか見る", "自分のくらしとの接続を一文入れる", "キーワードを入れすぎて不自然にならないよう調整する"]
+わたしの言葉を残しながら、短く直してください。`;
+        }
       },
-      {
-        id: "reflect",
-        accent: "#7a5a12",
-        short: "ふり返り",
-        step: "Step 10",
-        title: "学習をふり返る",
-        scene: "授業の終わり、単元の終わり",
-        childGoal: "考えの変化と次の問いを書く",
-        supports: ["短い文でOK", "次の問い", "自己評価"],
-        easy: `あなたは小学生のふり返りを助ける先生です。
+      ikasu: {
+        step: "いかす",
+        color: "var(--purple)",
+        title: "話し合いのテーマをつくる",
+        benefit: "友だちと何について話し合えばよいか迷ったときに使います。",
+        themeLabel: "話し合いたい単元",
+        memoLabel: "自分の考えや迷っていること",
+        themePlaceholder: "例: 日本国憲法と政治",
+        memoPlaceholder: "例: みんなの意見を政治に生かすにはどうしたらいいか",
+        talks: ["立場を変えると考えは変わるか", "よりよい社会にするには何が必要か", "根拠になる資料はどれか"],
+        prompt(theme, memo) {
+          return `あなたは小学校4年生以上の社会科の話し合いを助ける先生です。
 
-今日学んだこと: <strong>学んだこと</strong>
-まだわからないこと: <strong>わからないこと</strong>
+単元: ${theme || "単元はまだありません"}
+自分の考えや迷っていること: ${memo || "まだうまく書けません"}
 
-ふり返りを2文で書きたいです。
-次の形で、空欄つきの例を作ってください。
-1文目: 今日わかったこと
-2文目: 次に考えたいこと
-
-短く、やさしい言葉でお願いします。`,
-        challenge: `あなたは小学生の社会科のふり返りを助ける学習パートナーです。
-
-今日学んだこと:
-「<strong>学んだこと</strong>」
-はじめの予想と変わったこと:
-「<strong>変わったこと</strong>」
-もっと知りたいこと:
-「<strong>次の疑問</strong>」
-
-このふり返りを読んで、次のことを教えてください。
-・よいところ
-・考えの変化が書けているか
-・社会や自分のくらしとのつながりがあるか
-・次の学習につながる問い
-
-最後に、わたしが自分で直せるように文の型を一つください。`,
-        teacherTips: ["『楽しかった』だけで終わらないよう、学びの中身を一つ入れる", "考えが変わらなかった場合も、その理由を書ければ評価する", "次の問いが次時の導入になる"]
+友だちと話し合うテーマを3つ作ってください。
+それぞれについて、話し合うときのポイントを2つずつ教えてください。
+答えを一つに決めつけず、立場のちがい・理由・資料の根拠を考えられるようにしてください。`;
+        }
       }
-    ];
+    };
 
-    let currentMode = "easy";
+    let currentTool = "tsukamu";
 
-    function stripMarkup(text) {
-      const template = document.createElement("template");
-      template.innerHTML = text;
-      return template.content.textContent.trim();
+    function renderProcessCards() {
+      const grid = document.getElementById("processGrid");
+      grid.innerHTML = Object.entries(tools).map(([id, tool]) => `
+        <button class="process-card ${id === currentTool ? "is-active" : ""}" type="button" data-tool="${id}" style="--accent:${tool.color}">
+          <span class="step">${tool.step}</span>
+          <h3>${tool.title}</h3>
+          <p>${tool.benefit}</p>
+        </button>
+      `).join("");
     }
 
-    function renderNav() {
-      const nav = document.getElementById("quickNav");
-      nav.innerHTML = prompts.map((prompt) => (
-        `<a href="#${prompt.id}">${prompt.short}</a>`
-      )).join("");
+    function renderTool() {
+      const tool = tools[currentTool];
+      document.getElementById("toolPanel").style.setProperty("--tool-color", tool.color);
+      document.getElementById("toolStep").textContent = tool.step;
+      document.getElementById("toolTitle").textContent = tool.title;
+      document.getElementById("toolBenefit").textContent = tool.benefit;
+      document.getElementById("themeLabel").textContent = tool.themeLabel;
+      document.getElementById("memoLabel").textContent = tool.memoLabel;
+      document.getElementById("themeInput").placeholder = tool.themePlaceholder;
+      document.getElementById("memoInput").placeholder = tool.memoPlaceholder;
+      document.getElementById("talkList").innerHTML = tool.talks.map((item) => `<li>${item}</li>`).join("");
+      updatePromptPreview();
     }
 
-    function renderLibrary() {
-      const library = document.getElementById("promptLibrary");
-      library.innerHTML = prompts.map((prompt) => {
-        const promptText = prompt[currentMode];
-        return `
-          <article class="prompt-card" id="${prompt.id}" style="--accent:${prompt.accent}">
-            <div class="card-top">
-              <div class="color-strip" aria-hidden="true"></div>
-              <div class="card-title">
-                <span class="step">${prompt.step} | ${prompt.scene}</span>
-                <h3>${prompt.title}</h3>
-                <p>${prompt.childGoal}</p>
-              </div>
-            </div>
-            <div class="card-body">
-              <div class="student-area">
-                <ul class="support-list">
-                  ${prompt.supports.map((item) => `<li>${item}</li>`).join("")}
-                </ul>
-                <div class="prompt-box" id="prompt-${prompt.id}">${promptText}</div>
-                <div class="actions">
-                  <button class="btn copy-btn" type="button" data-copy="${prompt.id}">コピーする</button>
-                  <a class="btn open-btn" href="https://gemini.google.com/" target="_blank" rel="noopener">Gemini</a>
-                  <a class="btn open-btn" href="https://notebooklm.google.com/" target="_blank" rel="noopener">NotebookLM</a>
-                  <a class="btn dictionary-btn" href="${KOTOBA_JITEN_URL}" target="_blank" rel="noopener">言葉辞典</a>
-                </div>
-              </div>
-              <aside class="teacher-area" aria-label="教師用メモ">
-                <div class="teacher-box">
-                  <h4>先生の見るところ</h4>
-                  <ul>
-                    ${prompt.teacherTips.map((item) => `<li>${item}</li>`).join("")}
-                  </ul>
-                </div>
-                <a class="btn feedback-btn" href="${FEEDBACK_FORM_URL}" target="_blank" rel="noopener">このカードの感想を送る</a>
-              </aside>
-            </div>
-          </article>
-        `;
-      }).join("");
+    function updatePromptPreview() {
+      const tool = tools[currentTool];
+      const theme = document.getElementById("themeInput").value.trim();
+      const memo = document.getElementById("memoInput").value.trim();
+      document.getElementById("promptPreview").textContent = tool.prompt(theme, memo);
     }
 
-    async function copyPrompt(id, button) {
-      const source = document.getElementById(`prompt-${id}`);
-      const text = source.textContent.trim();
+    async function copyPrompt() {
+      const text = document.getElementById("promptPreview").textContent;
       try {
         await navigator.clipboard.writeText(text);
       } catch (error) {
-        const range = document.createRange();
-        range.selectNodeContents(source);
-        const selection = window.getSelection();
-        selection.removeAllRanges();
-        selection.addRange(range);
+        const area = document.createElement("textarea");
+        area.value = text;
+        document.body.appendChild(area);
+        area.select();
         document.execCommand("copy");
-        selection.removeAllRanges();
+        area.remove();
       }
-      button.classList.add("is-copied");
-      button.textContent = "コピーしました";
-      showToast("コピーしました。太字のところを自分の言葉に変えて使いましょう。");
-      window.setTimeout(() => {
-        button.classList.remove("is-copied");
-        button.textContent = "コピーする";
-      }, 1800);
+      showToast("コピーしました。AIに貼り付けて使いましょう。");
     }
 
-    function openFeedback(promptTitle) {
-      if (!FEEDBACK_FORM_URL) {
-        showToast("GASでフォームを作成し、URLを設定すると使えます。");
-        return;
-      }
-      const url = new URL(FEEDBACK_FORM_URL);
-      url.searchParams.set("usp", "pp_url");
-      url.searchParams.set("entry.prompt", promptTitle);
-      window.open(url.toString(), "_blank", "noopener");
+    function openManual() {
+      const modal = document.getElementById("manualModal");
+      modal.hidden = false;
+      modal.setAttribute("aria-hidden", "false");
+      document.body.classList.add("is-modal-open");
+      modal.querySelector("[data-close-manual]").focus();
+    }
+
+    function closeManual() {
+      const modal = document.getElementById("manualModal");
+      modal.hidden = true;
+      modal.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("is-modal-open");
     }
 
     function showToast(message) {
@@ -1390,33 +918,29 @@
       showToast.timer = window.setTimeout(() => toast.classList.remove("is-visible"), 2600);
     }
 
-    function openManual() {
-      const modal = document.getElementById("manualModal");
-      modal.hidden = false;
-      modal.setAttribute("aria-hidden", "false");
-      document.body.classList.add("is-modal-open");
-      const closeButton = modal.querySelector("[data-close-manual]");
-      closeButton.focus();
-    }
-
-    function closeManual() {
-      const modal = document.getElementById("manualModal");
-      modal.hidden = true;
-      modal.setAttribute("aria-hidden", "true");
-      document.body.classList.remove("is-modal-open");
-      const opener = document.querySelector("[data-open-manual]");
-      if (opener) opener.focus();
-    }
-
     document.addEventListener("click", (event) => {
-      const openManualButton = event.target.closest("[data-open-manual]");
-      if (openManualButton) {
+      const toolButton = event.target.closest("[data-tool]");
+      if (toolButton) {
+        currentTool = toolButton.dataset.tool;
+        document.getElementById("themeInput").value = "";
+        document.getElementById("memoInput").value = "";
+        renderProcessCards();
+        renderTool();
+        document.getElementById("toolPanel").scrollIntoView({ behavior: "smooth", block: "start" });
+        return;
+      }
+
+      if (event.target.closest("#copyPromptButton")) {
+        copyPrompt();
+        return;
+      }
+
+      if (event.target.closest("[data-open-manual]")) {
         openManual();
         return;
       }
 
-      const closeManualButton = event.target.closest("[data-close-manual]");
-      if (closeManualButton) {
+      if (event.target.closest("[data-close-manual]")) {
         closeManual();
         return;
       }
@@ -1424,30 +948,12 @@
       const modal = document.getElementById("manualModal");
       if (!modal.hidden && event.target === modal) {
         closeManual();
-        return;
       }
+    });
 
-      const modeButton = event.target.closest("[data-mode]");
-      if (modeButton) {
-        currentMode = modeButton.dataset.mode;
-        document.querySelectorAll("[data-mode]").forEach((button) => {
-          button.classList.toggle("is-active", button.dataset.mode === currentMode);
-        });
-        renderLibrary();
-        showToast(currentMode === "easy" ? "やさしい版に切り替えました。" : "しっかり版に切り替えました。");
-        return;
-      }
-
-      const copyButton = event.target.closest("[data-copy]");
-      if (copyButton) {
-        copyPrompt(copyButton.dataset.copy, copyButton);
-        return;
-      }
-
-      const feedbackButton = event.target.closest("[data-feedback]");
-      if (feedbackButton) {
-        openFeedback(feedbackButton.dataset.feedback);
-        return;
+    document.addEventListener("input", (event) => {
+      if (event.target.matches("#themeInput, #memoInput")) {
+        updatePromptPreview();
       }
     });
 
@@ -1458,8 +964,8 @@
       }
     });
 
-    renderNav();
-    renderLibrary();
+    renderProcessCards();
+    renderTool();
   </script>
 </body>
 </html>

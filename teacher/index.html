@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>先生向けガイド | 社会科AIおたすけ</title>
+  <meta name="description" content="小学校4年生以上の社会科AI活用を、学習過程・話し合い・資料活用の観点から整理した先生向けガイド。">
+  <style>
+    :root {
+      --ink: #182033;
+      --sub: #526071;
+      --paper: #fffdf7;
+      --panel: #ffffff;
+      --line: #d8e1ee;
+      --blue: #245bd6;
+      --green: #0d7c66;
+      --orange: #be5a1d;
+      --purple: #6b4bc4;
+      --shadow: 0 16px 42px rgba(24, 32, 51, .1);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+      line-height: 1.75;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    header {
+      background: #152238;
+      color: #fff;
+    }
+
+    .shell {
+      width: min(1040px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 38px 0;
+    }
+
+    header .shell {
+      padding: 42px 0;
+    }
+
+    .badge {
+      display: inline-flex;
+      padding: 4px 10px;
+      border: 1px solid rgba(255, 255, 255, .44);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, .12);
+      font-size: .86rem;
+      font-weight: 900;
+    }
+
+    h1 {
+      margin: 14px 0 10px;
+      font-size: 2rem;
+      line-height: 1.3;
+    }
+
+    header p {
+      max-width: 760px;
+      margin: 0;
+      color: rgba(255, 255, 255, .84);
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      color: var(--ink);
+      font-weight: 900;
+      text-decoration: none;
+    }
+
+    header .btn {
+      background: rgba(255, 255, 255, .14);
+      color: #fff;
+      border-color: rgba(255, 255, 255, .35);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .card,
+    .wide {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      padding: 20px;
+    }
+
+    .wide {
+      margin-top: 16px;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 1.35rem;
+    }
+
+    h3 {
+      margin: 16px 0 6px;
+      font-size: 1rem;
+    }
+
+    p {
+      color: var(--sub);
+    }
+
+    ul,
+    ol {
+      margin: 0;
+      padding-left: 22px;
+      color: var(--sub);
+    }
+
+    li {
+      margin: 6px 0;
+    }
+
+    .process {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .process div {
+      border-left: 4px solid var(--accent);
+      border-radius: var(--radius);
+      background: #f8fbff;
+      padding: 12px;
+    }
+
+    .source-list a {
+      color: #1d4ed8;
+    }
+
+    footer {
+      padding: 28px 16px 36px;
+      border-top: 1px solid var(--line);
+      color: var(--sub);
+      text-align: center;
+      font-size: .86rem;
+    }
+
+    @media (max-width: 780px) {
+      .grid,
+      .process {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell">
+      <span class="badge">先生向け</span>
+      <h1>AIを「答えを出す道具」ではなく、社会科の考えを促す道具にする</h1>
+      <p>子ども用トップは小4以上が押して使えることを優先しています。このページでは、授業者向けに学習過程、話し合い、資料写真の扱い、評価の見取りを整理します。</p>
+      <nav>
+        <a class="btn" href="../">子ども用トップ</a>
+        <a class="btn" href="../cases/">活用事例</a>
+        <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSfyw3Alsnns-Zy_L-aO4uw1-FHgvkFMe-s3refbxZAsZ2U-1Q/viewform" target="_blank" rel="noopener">フィードバック</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="grid" aria-label="運用方針">
+      <article class="card">
+        <h2>対象は小4以上</h2>
+        <p>小3以下にAI操作を求めると、学習内容より操作や読解で止まりやすくなります。小4以上でも、最初は教師が使い方を一緒に確認する前提です。</p>
+        <ul>
+          <li>小4: 教師が場面を選び、子どもは短い入力から始める。</li>
+          <li>小5: 資料の読み取り、ノート改善に広げる。</li>
+          <li>小6: 政治・歴史で立場や根拠をもとに話し合う。</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h2>子どもに見せるのは最小限</h2>
+        <p>子どもは「プロンプト」を選びたいのではなく、今困っていることを解決したいだけです。トップでは説明を削り、学習過程のボタンに集約しています。</p>
+        <ul>
+          <li>つかむ: 問いをつくる</li>
+          <li>調べる: 資料からわかることを分ける</li>
+          <li>まとめる: ノートを短く整える</li>
+          <li>いかす: 話し合いテーマをつくる</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="wide" aria-label="学習過程">
+      <h2>学習過程の中でAIを入れる場所</h2>
+      <p>教育出版系の「つかむ・調べる・まとめる・いかす」に合わせ、AIの役割を限定します。AIの出力そのものを成果物にせず、問い・根拠・話し合いの足場にします。</p>
+      <div class="process">
+        <div style="--accent:var(--orange)">
+          <strong>つかむ</strong>
+          <p>気づきを問いにする。話し合う視点を出す。</p>
+        </div>
+        <div style="--accent:var(--blue)">
+          <strong>調べる</strong>
+          <p>資料から言えることと、まだ言えないことを分ける。</p>
+        </div>
+        <div style="--accent:var(--green)">
+          <strong>まとめる</strong>
+          <p>ノートの文を短く整え、根拠と考えを分ける。</p>
+        </div>
+        <div style="--accent:var(--purple)">
+          <strong>いかす</strong>
+          <p>立場・根拠・よりよい社会の観点で話し合う。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="wide" aria-label="話し合い">
+      <h2>話し合い支援のポイント</h2>
+      <p>「何について話し合うか」が曖昧なままでは、調べたことの発表会で終わりがちです。AIには、答えではなく話し合いテーマと観点を出させます。</p>
+      <ul>
+        <li>立場を変える: 住民、働く人、行政、消費者、生産者など。</li>
+        <li>根拠を求める: どの資料から言えるか、どこからは言えないか。</li>
+        <li>選択・判断にする: どちらがよいか、何を優先するか。</li>
+        <li>いかすに向ける: 自分たちのくらしや地域にどうつなげるか。</li>
+      </ul>
+    </section>
+
+    <section class="wide" aria-label="写真資料">
+      <h2>教科書写真・資料写真を使うとき</h2>
+      <p>授業中に教科書や資料を見ながらAIに相談する場面は現実的です。ただし、子どもには「先生のOKがあるときだけ」と明示し、学校・自治体・利用サービスのルールに合わせます。</p>
+      <ul>
+        <li>AIへの指示は「この資料から読み取れることだけ」に限定する。</li>
+        <li>資料から言える事実と、AIの推測を分けて読む。</li>
+        <li>個人情報、児童の顔、学校内の掲示物が写らないようにする。</li>
+        <li>外部サービスの利用規約や学校アカウントの設定を確認する。</li>
+      </ul>
+    </section>
+
+    <section class="wide source-list" aria-label="参考">
+      <h2>参考にした公開資料</h2>
+      <p>本文の転載ではなく、公開されている指導アイデアの単元構成・学習活動の型を参考にして、独自のAI活用例へ置き換えています。</p>
+      <ul>
+        <li><a href="https://www.kyoiku-shuppan.co.jp/r6shou/shakai/index.html" target="_blank" rel="noopener">教育出版 令和6年度版 小学校社会</a></li>
+        <li><a href="https://kyoiku.sho.jp/79449/" target="_blank" rel="noopener">小4社会「水はどこから」指導アイデア</a></li>
+        <li><a href="https://kyoiku.sho.jp/308123/" target="_blank" rel="noopener">小5社会「米づくりのさかんな地域」指導アイデア</a></li>
+        <li><a href="https://kyoiku.sho.jp/59545/" target="_blank" rel="noopener">小5社会「自動車工業のさかんな地域」指導アイデア</a></li>
+        <li><a href="https://kyoiku.sho.jp/79816/" target="_blank" rel="noopener">小6社会「日本国憲法とわたしたちの生活」指導アイデア</a></li>
+        <li><a href="https://kyoiku.sho.jp/59608/" target="_blank" rel="noopener">小6社会「明治維新と新しい国づくり」指導アイデア</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>社会科AIおたすけ | 先生向けガイド</p>
+  </footer>
+</body>
+</html>

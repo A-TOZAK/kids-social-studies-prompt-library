@@ -3,500 +3,321 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>活用事例 | 社会科AIおたすけ</title>
-  <meta name="description" content="小4以上の社会科学習で、つかむ・調べる・まとめる・いかすの学習過程にAIを入れる活用事例。">
+  <title>使った れい | 社会科AIおたすけ</title>
+  <meta name="description" content="小4〜小6の社会科で、つかむ・調べる・まとめる・いかすの場面にAIを入れた活用れい。水・米づくり・工業・政治・歴史。">
   <style>
     :root {
-      --ink: #182033;
-      --sub: #526071;
-      --paper: #fffdf7;
+      --ink: #2b3047;
+      --sub: #606b80;
+      --paper: #fff7ec;
       --panel: #ffffff;
-      --line: #d8e1ee;
-      --blue: #245bd6;
-      --green: #0d7c66;
-      --orange: #be5a1d;
-      --purple: #6b4bc4;
-      --shadow: 0 16px 42px rgba(24, 32, 51, .1);
-      --radius: 8px;
+      --line: #efe2d2;
+      --orange: #f5832b;  --orange-soft: #fff0e1;
+      --blue:   #2e9ee6;  --blue-soft:   #e6f4fd;
+      --green:  #1fae7e;  --green-soft:  #e2f6ef;
+      --purple: #9061e0;  --purple-soft: #f1eafe;
+      --brown:  #b5731e;  --brown-soft:  #f6ecd9;
+      --radius: 22px;
+      --radius-sm: 16px;
+      --shadow: 0 14px 34px rgba(120, 96, 60, .14);
+      --shadow-sm: 0 8px 20px rgba(120, 96, 60, .10);
     }
-
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
-      margin: 0;
-      color: var(--ink);
-      background: var(--paper);
-      font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
-      line-height: 1.75;
+      margin: 0; color: var(--ink); background: var(--paper);
+      font-family: "Hiragino Maru Gothic ProN", "ヒラギノ丸ゴ ProN W4", "Hiragino Maru Gothic Pro", "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+      line-height: 1.85; -webkit-font-smoothing: antialiased;
     }
-
-    a {
-      color: inherit;
-    }
-
-    header {
-      background:
-        linear-gradient(90deg, rgba(18, 31, 56, .9), rgba(18, 31, 56, .68)),
-        url("../assets/classroom-ai-social-studies.png") center right / cover no-repeat;
-      color: #fff;
-    }
-
-    .shell {
-      width: min(1080px, calc(100% - 32px));
-      margin: 0 auto;
-      padding: 36px 0;
-    }
-
-    header .shell {
-      padding: 48px 0;
-    }
-
-    .badge {
-      display: inline-flex;
-      padding: 4px 10px;
-      border: 1px solid rgba(255, 255, 255, .44);
-      border-radius: var(--radius);
-      background: rgba(255, 255, 255, .12);
-      font-weight: 900;
-    }
-
-    h1 {
-      max-width: 720px;
-      margin: 14px 0 10px;
-      font-size: 2.15rem;
-      line-height: 1.28;
-    }
-
-    header p {
-      max-width: 760px;
-      margin: 0;
-      color: rgba(255, 255, 255, .86);
-    }
-
-    nav {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 20px;
-    }
+    a { color: inherit; }
+    .wrap { width: min(1040px, calc(100% - 32px)); margin: 0 auto; }
 
     .btn {
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 40px;
-      padding: 8px 12px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: #fff;
-      color: var(--ink);
-      font-weight: 900;
-      text-decoration: none;
+      display: inline-flex; align-items: center; gap: 8px;
+      min-height: 50px; padding: 10px 20px;
+      border: none; border-radius: 999px;
+      background: #fff; color: var(--ink);
+      font-weight: 800; text-decoration: none; cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: transform .12s ease;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn svg { width: 20px; height: 20px; }
+
+    /* ヘッダー */
+    header {
+      background:
+        radial-gradient(120% 90% at 85% 0%, #fff3cf 0%, rgba(255,243,207,0) 48%),
+        linear-gradient(180deg, #cfeeff 0%, #e8f6ff 42%, var(--paper) 100%);
+    }
+    header .wrap { padding: 28px 0 36px; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 7px 16px; border-radius: 999px;
+      background: #fff; color: var(--blue);
+      font-weight: 800; font-size: .9rem; box-shadow: var(--shadow-sm);
+    }
+    .badge .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--blue); }
+    h1 { margin: 14px 0 10px; font-size: clamp(1.7rem, 4vw, 2.4rem); line-height: 1.34; }
+    header p.lead { margin: 0; max-width: 40em; color: #4d5871; }
+    nav.top { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+
+    main { padding-bottom: 70px; }
+
+    .notice {
+      margin-top: 24px; padding: 16px 20px;
+      border-radius: var(--radius-sm);
+      background: var(--orange-soft); color: #8a5320;
+      font-weight: 700;
     }
 
-    header .btn {
-      background: rgba(255, 255, 255, .14);
-      color: #fff;
-      border-color: rgba(255, 255, 255, .35);
-    }
-
-    .notice,
+    /* 事例カード */
     .case {
-      border: 1px solid var(--line);
+      margin-top: 22px;
       border-radius: var(--radius);
       background: var(--panel);
       box-shadow: var(--shadow);
-    }
-
-    .notice {
-      padding: 18px;
-      margin-bottom: 18px;
-    }
-
-    .notice p {
-      margin: 0;
-      color: var(--sub);
-    }
-
-    .case {
-      margin-top: 18px;
       overflow: hidden;
+      scroll-margin-top: 16px;
     }
-
     .case-head {
-      display: grid;
-      grid-template-columns: 12px minmax(0, 1fr);
-      border-bottom: 1px solid var(--line);
+      display: flex; align-items: center; gap: 16px;
+      padding: 20px 24px;
+      background: var(--c-soft);
+      border-bottom: 2px dashed var(--c);
     }
-
-    .strip {
-      background: var(--accent);
+    .case-icon {
+      display: grid; place-items: center;
+      width: 56px; height: 56px; flex: none;
+      border-radius: 16px; background: #fff; color: var(--c);
     }
-
-    .case-title {
-      padding: 18px 20px;
-    }
-
-    .case-title span {
-      color: var(--accent);
-      font-size: .84rem;
-      font-weight: 900;
-    }
-
-    h2 {
-      margin: 4px 0 6px;
-      font-size: 1.45rem;
-      line-height: 1.35;
-    }
-
-    .case-title p {
-      margin: 0;
-      color: var(--sub);
-    }
+    .case-icon svg { width: 32px; height: 32px; }
+    .case-head .tag { color: var(--c); font-weight: 800; font-size: .9rem; }
+    .case-head h2 { margin: 0; font-size: 1.42rem; line-height: 1.3; }
+    .case-head p { margin: 2px 0 0; color: var(--sub); font-size: .95rem; }
 
     .case-body {
-      padding: 20px;
+      padding: 22px 24px 24px;
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 330px;
+      grid-template-columns: minmax(0, 1fr) 320px;
       gap: 18px;
     }
-
-    .flow {
-      display: grid;
-      gap: 12px;
-    }
-
-    .flow section,
-    .side-box {
-      border: 1px solid #e4e9f2;
-      border-radius: var(--radius);
-      padding: 14px;
+    .flow { display: grid; gap: 14px; }
+    .block {
+      border: 2px solid var(--line);
+      border-radius: var(--radius-sm);
+      padding: 16px 18px;
       background: #fffdfa;
     }
-
-    h3 {
-      margin: 0 0 6px;
-      font-size: 1rem;
+    .block h3 {
+      margin: 0 0 6px; font-size: 1.04rem;
+      display: flex; align-items: center; gap: 8px;
     }
-
-    p,
-    li {
-      color: var(--sub);
+    .block h3 .n {
+      display: grid; place-items: center;
+      width: 26px; height: 26px; flex: none;
+      border-radius: 50%; background: var(--c); color: #fff;
+      font-size: .85rem; font-weight: 800;
     }
-
-    p {
-      margin: 0;
-    }
-
-    ul {
-      margin: 0;
-      padding-left: 20px;
-    }
-
-    li {
-      margin: 5px 0;
-    }
-
-    .prompt {
+    .block p, .block li { margin: 0; color: var(--sub); }
+    .input-ex {
       white-space: pre-wrap;
-      background: #f6f8fb;
-      border: 1px dashed #bfcbe0;
-      border-radius: var(--radius);
-      padding: 12px;
-      color: #263247;
-      font-family: inherit;
-      font-size: .92rem;
+      background: var(--c-soft);
+      border-radius: 12px;
+      padding: 12px 14px;
+      color: #3b4761;
+      font-size: .95rem;
     }
+    .block ul { margin: 0; padding-left: 20px; color: var(--sub); }
+    .block li { margin: 4px 0; }
 
-    .side {
-      display: grid;
-      gap: 12px;
-      align-content: start;
+    aside.side { display: grid; gap: 14px; align-content: start; }
+    .side-box {
+      border-radius: var(--radius-sm);
+      padding: 16px 18px;
+      background: #fffaf0;
+      border: 2px solid #ffe6b3;
     }
-
-    .source a {
-      color: #1d4ed8;
-    }
+    .side-box h3 { margin: 0 0 6px; font-size: 1rem; display: flex; align-items: center; gap: 8px; }
+    .side-box h3 svg { width: 20px; height: 20px; color: #e6a417; }
+    .side-box ul { margin: 0; padding-left: 20px; color: var(--sub); }
+    .side-box li { margin: 4px 0; }
+    .side-box.src { background: var(--blue-soft); border-color: #bfe3fb; }
+    .side-box.src h3 svg { color: var(--blue); }
+    .side-box.src a { color: #1d6fb8; font-weight: 700; word-break: break-all; }
 
     footer {
-      padding: 28px 16px 36px;
-      border-top: 1px solid var(--line);
-      color: var(--sub);
-      text-align: center;
-      font-size: .86rem;
+      margin-top: 60px; padding: 32px 16px 42px;
+      background: #fffdf9; border-top: 2px solid var(--line);
+      text-align: center; color: var(--sub);
     }
 
-    @media (max-width: 820px) {
-      .case-body {
-        grid-template-columns: 1fr;
-      }
+    @media (max-width: 800px) {
+      .case-body { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      nav.top .btn { width: 100%; }
     }
   </style>
 </head>
 <body>
   <header>
-    <div class="shell">
-      <span class="badge">小4以上 | 活用事例</span>
-      <h1>事例は増やしすぎず、学習過程の中で「どこにAIを入れるか」を見せる</h1>
-      <p>公開指導案・指導アイデアの学習活動を参考に、つかむ・調べる・まとめる・いかすの場面で使えるAI活用例に置き換えています。</p>
-      <nav>
-        <a class="btn" href="../">子ども用トップ</a>
-        <a class="btn" href="../teacher/">先生向け</a>
-        <a class="btn" href="https://a-tozak.github.io/shakai-kotoba-jiten/" target="_blank" rel="noopener">言葉辞典</a>
+    <div class="wrap">
+      <span class="badge"><span class="dot"></span>小4〜小6｜使った れい</span>
+      <h1>どの場面で、どうAIを使うの？</h1>
+      <p class="lead">「つかむ・調べる・まとめる・いかす」のどこでAIを使うのかを、学年べつの れいで見せます。そのまま使うのではなく、自分の単元や地いきの資料に合わせてね。</p>
+      <nav class="top">
+        <a class="btn" href="../">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+          子ども用トップ
+        </a>
+        <a class="btn" href="../teacher/">先生むけ</a>
+        <a class="btn" href="https://a-tozak.github.io/shakai-kotoba-jiten/" target="_blank" rel="noopener">言葉じてん</a>
       </nav>
     </div>
   </header>
 
-  <main class="shell">
-    <section class="notice">
-      <p>事例はそのまま授業案として使うのではなく、単元や地域の資料に合わせて調整してください。生成例は独自作成です。</p>
-    </section>
+  <main class="wrap">
+    <div class="notice">れいはそのまま授業案として使うのではなく、単元や地いきの資料に合わせて調整してください。生成れいは独自作成です。</div>
 
-    <article class="case" id="tsukamu" style="--accent:var(--orange)">
+    <!-- つかむ -->
+    <article class="case" id="tsukamu" style="--c:var(--orange);--c-soft:var(--orange-soft)">
       <div class="case-head">
-        <div class="strip" aria-hidden="true"></div>
-        <div class="case-title">
-          <span>つかむ | 小4</span>
+        <span class="case-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M16 16l5 5"/><path d="M8.6 9a2 2 0 113.4 1.7c-.7.4-1 .8-1 1.6"/><path d="M11 14.2h.01"/></svg></span>
+        <div>
+          <span class="tag">つかむ｜小4</span>
           <h2>「水はどこから」問いをつくる</h2>
-          <p>水の使用量や水が届く経路への疑問から、単元を貫く問いをつくる場面。</p>
+          <p>水の使用量や、水が届く道すじへの疑問から、単元をつらぬく問いをつくる場面。</p>
         </div>
       </div>
       <div class="case-body">
         <div class="flow">
-          <section>
-            <h3>授業場面</h3>
-            <p>学校や家庭で水を使う場面を出し合ったあと、「なぜいつでも水が出るのか」に疑問を向ける。</p>
-          </section>
-          <section>
-            <h3>子どもの入力例</h3>
-            <div class="prompt">学習していること: 水はどこから来るのか
-気になったこと: じゃ口をひねるといつも水が出るのがふしぎ</div>
-          </section>
-          <section>
-            <h3>AIに期待する返答例</h3>
-            <p>「水はどこで、どのようにきれいにされて、だれの仕事で家や学校まで届くのだろう」のような問いを複数出し、調べる資料として地図、浄水場の写真、水道局の資料を提案する。</p>
-          </section>
-          <section>
-            <h3>話し合いテーマ</h3>
-            <ul>
-              <li>水を安全に届けるために、どんな人や場所が関わっているか。</li>
-              <li>水が足りなくなると、くらしはどう変わるか。</li>
-            </ul>
-          </section>
+          <div class="block"><h3><span class="n">1</span>授業の場面</h3><p>学校や家で水を使う場面を出し合ったあと、「なぜいつでも水が出るのか」に疑問を向ける。</p></div>
+          <div class="block"><h3><span class="n">2</span>子どもの入力れい</h3><div class="input-ex">学習していること: 水はどこから来るのか
+気になったこと: じゃ口をひねるといつも水が出るのがふしぎ</div></div>
+          <div class="block"><h3><span class="n">3</span>AIに期待する返事のれい</h3><p>「水はどこで、どのようにきれいにされて、だれの仕事で家や学校まで届くのだろう」のような問いを複数出し、調べる資料として地図・浄水場の写真・水道局の資料を提案する。</p></div>
         </div>
         <aside class="side">
           <div class="side-box">
-            <h3>見るところ</h3>
-            <ul>
-              <li>疑問が「だれ・どこ・どのように」へ広がっているか。</li>
-              <li>次に見る資料が決まっているか。</li>
-            </ul>
+            <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>見るところ</h3>
+            <ul><li>疑問が「だれ・どこ・どのように」へ広がっているか。</li><li>次に見る資料が決まっているか。</li></ul>
           </div>
-          <div class="side-box source">
-            <h3>参考</h3>
-            <p><a href="https://kyoiku.sho.jp/79449/" target="_blank" rel="noopener">小4社会「水はどこから」指導アイデア</a></p>
-          </div>
+          <div class="side-box src"><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007 0l2-2a5 5 0 00-7-7l-1 1"/><path d="M14 11a5 5 0 00-7 0l-2 2a5 5 0 007 7l1-1"/></svg>参考</h3><p><a href="https://kyoiku.sho.jp/79449/" target="_blank" rel="noopener">小4社会「水はどこから」指導アイデア</a></p></div>
         </aside>
       </div>
     </article>
 
-    <article class="case" id="shiraberu" style="--accent:var(--blue)">
+    <!-- 調べる -->
+    <article class="case" id="shiraberu" style="--c:var(--blue);--c-soft:var(--blue-soft)">
       <div class="case-head">
-        <div class="strip" aria-hidden="true"></div>
-        <div class="case-title">
-          <span>調べる | 小5</span>
-          <h2>「米づくりのさかんな地域」資料から読み取る</h2>
-          <p>地図、統計、写真から、稲作に関わる人々の工夫や地域の特色を読み取る場面。</p>
+        <span class="case-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5c2.5-1.4 5.5-1.4 8 0v14c-2.5-1.4-5.5-1.4-8 0z"/><path d="M20 5c-2.5-1.4-5.5-1.4-8 0v14c2.5-1.4 5.5-1.4 8 0z"/></svg></span>
+        <div>
+          <span class="tag">調べる｜小5</span>
+          <h2>「米づくりのさかんな地いき」資料から読み取る</h2>
+          <p>地図・統計・写真から、稲作にかかわる人々の工夫や地いきの特色を読み取る場面。</p>
         </div>
       </div>
       <div class="case-body">
         <div class="flow">
-          <section>
-            <h3>授業場面</h3>
-            <p>米の生産量、気候、土地利用、作業の写真を見て、資料から言えることと予想を分ける。</p>
-          </section>
-          <section>
-            <h3>子どもの入力例</h3>
-            <div class="prompt">資料や単元: 米づくりのグラフと写真
-わたしの気づき: 米が多い地域には広い田が多そう</div>
-          </section>
-          <section>
-            <h3>AIに期待する返答例</h3>
-            <p>「資料からわかること」「そこから考えられること」「まだ資料だけでは言えないこと」に分け、追加で見る資料を提案する。</p>
-          </section>
-          <section>
-            <h3>話し合いテーマ</h3>
-            <ul>
-              <li>米づくりがさかんな地域には、どんな自然条件や人の工夫があるか。</li>
-              <li>生産者と消費者、それぞれの立場で大切なことは何か。</li>
-            </ul>
-          </section>
+          <div class="block"><h3><span class="n">1</span>授業の場面</h3><p>米の生産量・気候・土地利用・作業の写真を見て、資料から言えることと予想を分ける。</p></div>
+          <div class="block"><h3><span class="n">2</span>子どもの入力れい</h3><div class="input-ex">資料や単元: 米づくりのグラフと写真
+わたしの気づき: 米が多い地いきには広い田が多そう</div></div>
+          <div class="block"><h3><span class="n">3</span>AIに期待する返事のれい</h3><p>「資料からわかること」「そこから考えられること」「まだ資料だけでは言えないこと」に分け、追加で見る資料を提案する。</p></div>
         </div>
         <aside class="side">
           <div class="side-box">
-            <h3>見るところ</h3>
-            <ul>
-              <li>資料の事実と自分の予想を分けているか。</li>
-              <li>人々の工夫や努力に目を向けているか。</li>
-            </ul>
+            <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>見るところ</h3>
+            <ul><li>資料の事実と、自分の予想を分けているか。</li><li>人々の工夫や努力に目を向けているか。</li></ul>
           </div>
-          <div class="side-box source">
-            <h3>参考</h3>
-            <p><a href="https://kyoiku.sho.jp/308123/" target="_blank" rel="noopener">小5社会「米づくりのさかんな地域」指導アイデア</a></p>
-          </div>
+          <div class="side-box src"><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007 0l2-2a5 5 0 00-7-7l-1 1"/><path d="M14 11a5 5 0 00-7 0l-2 2a5 5 0 007 7l1-1"/></svg>参考</h3><p><a href="https://kyoiku.sho.jp/308123/" target="_blank" rel="noopener">小5社会「米づくりのさかんな地域」指導アイデア</a></p></div>
         </aside>
       </div>
     </article>
 
-    <article class="case" id="matomeru" style="--accent:var(--green)">
+    <!-- まとめる -->
+    <article class="case" id="matomeru" style="--c:var(--green);--c-soft:var(--green-soft)">
       <div class="case-head">
-        <div class="strip" aria-hidden="true"></div>
-        <div class="case-title">
-          <span>まとめる | 小5</span>
+        <span class="case-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="13" height="18" rx="2.5"/><path d="M9 8h6M9 12h6M9 16h3"/><path d="M5 7H3M5 12H3M5 17H3"/></svg></span>
+        <div>
+          <span class="tag">まとめる｜小5</span>
           <h2>「自動車工業」ノートを3文まとめにする</h2>
-          <p>製造工程、工場の協力、消費者の需要への対応を整理し、問いへの答えにする場面。</p>
+          <p>製造の工程・工場の協力・消費者の願いへの対応を整理し、問いへの答えにする場面。</p>
         </div>
       </div>
       <div class="case-body">
         <div class="flow">
-          <section>
-            <h3>授業場面</h3>
-            <p>調べた工程や働く人の工夫を、学習問題に対する答えとしてまとめる。</p>
-          </section>
-          <section>
-            <h3>子どもの入力例</h3>
-            <div class="prompt">テーマ: 自動車工業を支える人々
-ノートに書いたこと: 工場ではたくさんの人が分担して、部品を組み立てている。ほかの工場とも協力している。</div>
-          </section>
-          <section>
-            <h3>AIに期待する返答例</h3>
-            <p>「何について学んだか」「資料からわかったこと」「自分の考え」の3文に整える。ただし、子どもの言葉を残す。</p>
-          </section>
-          <section>
-            <h3>話し合いテーマ</h3>
-            <ul>
-              <li>なぜ一つの工場だけではなく、多くの工場が協力するのか。</li>
-              <li>これからの自動車づくりで大切になる工夫は何か。</li>
-            </ul>
-          </section>
+          <div class="block"><h3><span class="n">1</span>授業の場面</h3><p>調べた工程や働く人の工夫を、学習問題に対する答えとしてまとめる。</p></div>
+          <div class="block"><h3><span class="n">2</span>子どもの入力れい</h3><div class="input-ex">テーマ: 自動車工業を支える人々
+ノートに書いたこと: 工場ではたくさんの人が分担して、部品を組み立てている。ほかの工場とも協力している。</div></div>
+          <div class="block"><h3><span class="n">3</span>AIに期待する返事のれい</h3><p>「何について学んだか」「資料からわかったこと」「自分の考え」の3文に整える。ただし、子どもの言葉を残す。</p></div>
         </div>
         <aside class="side">
           <div class="side-box">
-            <h3>見るところ</h3>
-            <ul>
-              <li>工程の説明だけでなく、人々の工夫に触れているか。</li>
-              <li>問いへの答えとしてまとまっているか。</li>
-            </ul>
+            <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>見るところ</h3>
+            <ul><li>工程の説明だけでなく、人々の工夫に触れているか。</li><li>問いへの答えとしてまとまっているか。</li></ul>
           </div>
-          <div class="side-box source">
-            <h3>参考</h3>
-            <p><a href="https://kyoiku.sho.jp/59545/" target="_blank" rel="noopener">小5社会「自動車工業のさかんな地域」指導アイデア</a></p>
-          </div>
+          <div class="side-box src"><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007 0l2-2a5 5 0 00-7-7l-1 1"/><path d="M14 11a5 5 0 00-7 0l-2 2a5 5 0 007 7l1-1"/></svg>参考</h3><p><a href="https://kyoiku.sho.jp/59545/" target="_blank" rel="noopener">小5社会「自動車工業のさかんな地域」指導アイデア</a></p></div>
         </aside>
       </div>
     </article>
 
-    <article class="case" id="ikasu" style="--accent:var(--purple)">
+    <!-- いかす 政治 -->
+    <article class="case" id="ikasu" style="--c:var(--purple);--c-soft:var(--purple-soft)">
       <div class="case-head">
-        <div class="strip" aria-hidden="true"></div>
-        <div class="case-title">
-          <span>いかす | 小6 政治</span>
+        <span class="case-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h11a2 2 0 012 2v4a2 2 0 01-2 2H8l-4 3v-3a2 2 0 01-1-2V7a2 2 0 010-2z"/><path d="M9 16v1a2 2 0 002 2h6l3 2v-2a2 2 0 001-2v-3a2 2 0 00-2-2h-1"/></svg></span>
+        <div>
+          <span class="tag">いかす｜小6 政治</span>
           <h2>「日本国憲法と政治」話し合いテーマをつくる</h2>
-          <p>国民生活と政治の関わりを、立場や根拠をもとに話し合う場面。</p>
+          <p>国民の生活と政治のかかわりを、立場や根きょをもとに話し合う場面。</p>
         </div>
       </div>
       <div class="case-body">
         <div class="flow">
-          <section>
-            <h3>授業場面</h3>
-            <p>憲法の基本的な考え方、国会・内閣・裁判所の役割を調べたあと、生活とのつながりを考える。</p>
-          </section>
-          <section>
-            <h3>子どもの入力例</h3>
-            <div class="prompt">単元: 日本国憲法と政治
-自分の考えや迷っていること: みんなの意見を政治に生かすにはどうしたらいいか</div>
-          </section>
-          <section>
-            <h3>AIに期待する返答例</h3>
-            <p>「国民の願いを政治に届ける方法」「権利と義務」「三権の役割」など、資料を根拠に話し合えるテーマを出す。</p>
-          </section>
-          <section>
-            <h3>話し合いテーマ</h3>
-            <ul>
-              <li>国民の願いは、どのように政治に反映されるのか。</li>
-              <li>くらしを守るために、国会・内閣・裁判所はそれぞれ何をしているのか。</li>
-            </ul>
-          </section>
+          <div class="block"><h3><span class="n">1</span>授業の場面</h3><p>憲法の基本的な考え方、国会・内閣・裁判所の役わりを調べたあと、生活とのつながりを考える。</p></div>
+          <div class="block"><h3><span class="n">2</span>子どもの入力れい</h3><div class="input-ex">単元: 日本国憲法と政治
+自分の考えや迷っていること: みんなの意見を政治に生かすにはどうしたらいいか</div></div>
+          <div class="block"><h3><span class="n">3</span>AIに期待する返事のれい</h3><p>「国民の願いを政治に届ける方法」「権利と義務」「三権の役わり」など、資料を根きょに話し合えるテーマを出す。</p></div>
         </div>
         <aside class="side">
           <div class="side-box">
-            <h3>見るところ</h3>
-            <ul>
-              <li>制度名の暗記ではなく、生活との関わりで説明しているか。</li>
-              <li>立場や根拠をもとに話し合っているか。</li>
-            </ul>
+            <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>見るところ</h3>
+            <ul><li>制度名の暗記ではなく、生活との関わりで説明しているか。</li><li>立場や根きょをもとに話し合っているか。</li></ul>
           </div>
-          <div class="side-box source">
-            <h3>参考</h3>
-            <p><a href="https://kyoiku.sho.jp/79816/" target="_blank" rel="noopener">小6社会「日本国憲法とわたしたちの生活」指導アイデア</a></p>
-          </div>
+          <div class="side-box src"><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007 0l2-2a5 5 0 00-7-7l-1 1"/><path d="M14 11a5 5 0 00-7 0l-2 2a5 5 0 007 7l1-1"/></svg>参考</h3><p><a href="https://kyoiku.sho.jp/79816/" target="_blank" rel="noopener">小6社会「日本国憲法とわたしたちの生活」指導アイデア</a></p></div>
         </aside>
       </div>
     </article>
 
-    <article class="case" id="history" style="--accent:#7a4f13">
+    <!-- いかす 歴史 -->
+    <article class="case" id="history" style="--c:var(--brown);--c-soft:var(--brown-soft)">
       <div class="case-head">
-        <div class="strip" aria-hidden="true"></div>
-        <div class="case-title">
-          <span>いかす | 小6 歴史</span>
+        <span class="case-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 109-9 9 9 0 00-9 9z"/><path d="M12 7v5l3 2"/><path d="M3 12H1m4-7L3.5 3.5"/></svg></span>
+        <div>
+          <span class="tag">いかす｜小6 歴史</span>
           <h2>「明治維新と新しい国づくり」変化を話し合う</h2>
-          <p>絵図や年表、人物の働きをもとに、社会の変化を複数の視点から考える場面。</p>
+          <p>絵図・年表・人物の働きをもとに、社会の変化を いくつかの見方から考える場面。</p>
         </div>
       </div>
       <div class="case-body">
         <div class="flow">
-          <section>
-            <h3>授業場面</h3>
-            <p>江戸末期から明治にかけての社会の変化を資料で読み取り、何が大きく変わったのかを話し合う。</p>
-          </section>
-          <section>
-            <h3>子どもの入力例</h3>
-            <div class="prompt">単元: 明治維新と新しい国づくり
-自分の考えや迷っていること: 西洋の制度を取り入れて、くらしや政治が大きく変わったと思う</div>
-          </section>
-          <section>
-            <h3>AIに期待する返答例</h3>
-            <p>「政治のしくみ」「身分やくらし」「外国との関係」のように変化を分け、人物の働きや資料の根拠を確かめる観点を出す。</p>
-          </section>
-          <section>
-            <h3>話し合いテーマ</h3>
-            <ul>
-              <li>明治の国づくりで、何がいちばん大きく変わったと言えるか。</li>
-              <li>変化を進めた人々と、変化を受けた人々の立場は同じだったか。</li>
-            </ul>
-          </section>
+          <div class="block"><h3><span class="n">1</span>授業の場面</h3><p>江戸末期から明治にかけての社会の変化を資料で読み取り、何が大きく変わったのかを話し合う。</p></div>
+          <div class="block"><h3><span class="n">2</span>子どもの入力れい</h3><div class="input-ex">単元: 明治維新と新しい国づくり
+自分の考えや迷っていること: 西洋の制度を取り入れて、くらしや政治が大きく変わったと思う</div></div>
+          <div class="block"><h3><span class="n">3</span>AIに期待する返事のれい</h3><p>「政治のしくみ」「身分やくらし」「外国との関係」のように変化を分け、人物の働きや資料の根きょをたしかめる観点を出す。</p></div>
         </div>
         <aside class="side">
           <div class="side-box">
-            <h3>見るところ</h3>
-            <ul>
-              <li>人物名の暗記ではなく、社会の変化と結びつけているか。</li>
-              <li>一つの見方だけでなく、複数の立場で考えているか。</li>
-            </ul>
+            <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>見るところ</h3>
+            <ul><li>人物名の暗記ではなく、社会の変化と結びつけているか。</li><li>一つの見方だけでなく、いくつかの立場で考えているか。</li></ul>
           </div>
-          <div class="side-box source">
-            <h3>参考</h3>
-            <p><a href="https://kyoiku.sho.jp/59608/" target="_blank" rel="noopener">小6社会「明治維新と新しい国づくり」指導アイデア</a></p>
-          </div>
+          <div class="side-box src"><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007 0l2-2a5 5 0 00-7-7l-1 1"/><path d="M14 11a5 5 0 00-7 0l-2 2a5 5 0 007 7l1-1"/></svg>参考</h3><p><a href="https://kyoiku.sho.jp/59608/" target="_blank" rel="noopener">小6社会「明治維新と新しい国づくり」指導アイデア</a></p></div>
         </aside>
       </div>
     </article>
   </main>
 
   <footer>
-    <p>社会科AIおたすけ | 活用事例</p>
+    <p>社会科AIおたすけ｜使った れい</p>
   </footer>
 </body>
 </html>

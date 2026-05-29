@@ -3,199 +3,131 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>先生向けガイド | 社会科AIおたすけ</title>
-  <meta name="description" content="小学校4年生以上の社会科AI活用を、学習過程・話し合い・資料活用の観点から整理した先生向けガイド。">
+  <title>先生むけガイド | 社会科AIおたすけ</title>
+  <meta name="description" content="小学4〜6年生の社会科AI活用を、学習過程・話し合い・資料写真の扱い・評価の見取りから整理した先生向けガイド。">
   <style>
     :root {
-      --ink: #182033;
-      --sub: #526071;
-      --paper: #fffdf7;
+      --ink: #2b3047;
+      --sub: #606b80;
+      --paper: #fff7ec;
       --panel: #ffffff;
-      --line: #d8e1ee;
-      --blue: #245bd6;
-      --green: #0d7c66;
-      --orange: #be5a1d;
-      --purple: #6b4bc4;
-      --shadow: 0 16px 42px rgba(24, 32, 51, .1);
-      --radius: 8px;
+      --line: #efe2d2;
+      --orange: #f5832b;  --orange-soft: #fff0e1;
+      --blue:   #2e9ee6;  --blue-soft:   #e6f4fd;
+      --green:  #1fae7e;  --green-soft:  #e2f6ef;
+      --purple: #9061e0;  --purple-soft: #f1eafe;
+      --radius: 22px;
+      --radius-sm: 16px;
+      --shadow: 0 14px 34px rgba(120, 96, 60, .14);
+      --shadow-sm: 0 8px 20px rgba(120, 96, 60, .10);
     }
-
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
     body {
-      margin: 0;
-      color: var(--ink);
-      background: var(--paper);
-      font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
-      line-height: 1.75;
+      margin: 0; color: var(--ink); background: var(--paper);
+      font-family: "Hiragino Maru Gothic ProN", "ヒラギノ丸ゴ ProN W4", "Hiragino Maru Gothic Pro", "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+      line-height: 1.85; -webkit-font-smoothing: antialiased;
     }
-
-    a {
-      color: inherit;
-    }
-
-    header {
-      background: #152238;
-      color: #fff;
-    }
-
-    .shell {
-      width: min(1040px, calc(100% - 32px));
-      margin: 0 auto;
-      padding: 38px 0;
-    }
-
-    header .shell {
-      padding: 42px 0;
-    }
-
-    .badge {
-      display: inline-flex;
-      padding: 4px 10px;
-      border: 1px solid rgba(255, 255, 255, .44);
-      border-radius: var(--radius);
-      background: rgba(255, 255, 255, .12);
-      font-size: .86rem;
-      font-weight: 900;
-    }
-
-    h1 {
-      margin: 14px 0 10px;
-      font-size: 2rem;
-      line-height: 1.3;
-    }
-
-    header p {
-      max-width: 760px;
-      margin: 0;
-      color: rgba(255, 255, 255, .84);
-    }
-
-    nav {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 20px;
-    }
+    a { color: inherit; }
+    .wrap { width: min(1000px, calc(100% - 32px)); margin: 0 auto; }
 
     .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 40px;
-      padding: 8px 12px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: #fff;
-      color: var(--ink);
-      font-weight: 900;
-      text-decoration: none;
+      display: inline-flex; align-items: center; gap: 8px;
+      min-height: 48px; padding: 9px 18px;
+      border: none; border-radius: 999px;
+      background: #fff; color: var(--ink);
+      font-weight: 800; text-decoration: none; cursor: pointer;
+      box-shadow: var(--shadow-sm); transition: transform .12s ease;
     }
+    .btn:hover { transform: translateY(-2px); }
+    .btn svg { width: 20px; height: 20px; }
 
-    header .btn {
-      background: rgba(255, 255, 255, .14);
+    header {
+      background: linear-gradient(135deg, #20407a 0%, #2d6cb0 100%);
       color: #fff;
-      border-color: rgba(255, 255, 255, .35);
     }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
+    header .wrap { padding: 34px 0 38px; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 7px 16px; border-radius: 999px;
+      background: rgba(255,255,255,.16); color: #fff;
+      font-weight: 800; font-size: .9rem;
+      border: 1px solid rgba(255,255,255,.32);
     }
+    h1 { margin: 14px 0 10px; font-size: clamp(1.6rem, 3.6vw, 2.2rem); line-height: 1.34; }
+    header p.lead { margin: 0; max-width: 50em; color: rgba(255,255,255,.9); }
+    nav.top { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+    header .btn { background: rgba(255,255,255,.16); color: #fff; border: 1px solid rgba(255,255,255,.3); box-shadow: none; }
 
-    .card,
-    .wide {
-      border: 1px solid var(--line);
+    main { padding: 0 0 70px; }
+    .section { margin-top: 28px; }
+
+    .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .card, .wide {
       border-radius: var(--radius);
       background: var(--panel);
-      box-shadow: var(--shadow);
-      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      padding: 24px;
     }
+    .wide { margin-top: 16px; }
+    .card h2, .wide h2 {
+      margin: 0 0 12px; font-size: 1.32rem;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .card h2 .ic, .wide h2 .ic {
+      display: grid; place-items: center;
+      width: 44px; height: 44px; flex: none;
+      border-radius: 14px; background: var(--blue-soft); color: var(--blue);
+    }
+    .card h2 .ic svg, .wide h2 .ic svg { width: 26px; height: 26px; }
+    h3 { margin: 16px 0 6px; font-size: 1.04rem; }
+    p { color: var(--sub); margin: 0 0 4px; }
+    ul, ol { margin: 6px 0 0; padding-left: 22px; color: var(--sub); }
+    li { margin: 6px 0; }
 
-    .wide {
-      margin-top: 16px;
+    .process { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 14px; }
+    .pc {
+      border-radius: var(--radius-sm);
+      background: var(--c-soft);
+      border-top: 5px solid var(--c);
+      padding: 16px 14px;
     }
+    .pc strong { color: var(--c); font-size: 1.08rem; }
+    .pc p { margin: 6px 0 0; font-size: .92rem; }
 
-    h2 {
-      margin: 0 0 10px;
-      font-size: 1.35rem;
-    }
-
-    h3 {
-      margin: 16px 0 6px;
-      font-size: 1rem;
-    }
-
-    p {
-      color: var(--sub);
-    }
-
-    ul,
-    ol {
-      margin: 0;
-      padding-left: 22px;
-      color: var(--sub);
-    }
-
-    li {
-      margin: 6px 0;
-    }
-
-    .process {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 12px;
-    }
-
-    .process div {
-      border-left: 4px solid var(--accent);
-      border-radius: var(--radius);
-      background: #f8fbff;
-      padding: 12px;
-    }
-
-    .source-list a {
-      color: #1d4ed8;
-    }
+    .src a { color: #1d6fb8; font-weight: 700; }
 
     footer {
-      padding: 28px 16px 36px;
-      border-top: 1px solid var(--line);
-      color: var(--sub);
-      text-align: center;
-      font-size: .86rem;
+      margin-top: 60px; padding: 32px 16px 42px;
+      background: #fffdf9; border-top: 2px solid var(--line);
+      text-align: center; color: var(--sub);
     }
 
     @media (max-width: 780px) {
-      .grid,
-      .process {
-        grid-template-columns: 1fr;
-      }
+      .grid2, .process { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
   <header>
-    <div class="shell">
-      <span class="badge">先生向け</span>
-      <h1>AIを「答えを出す道具」ではなく、社会科の考えを促す道具にする</h1>
-      <p>子ども用トップは小4以上が押して使えることを優先しています。このページでは、授業者向けに学習過程、話し合い、資料写真の扱い、評価の見取りを整理します。</p>
-      <nav>
-        <a class="btn" href="../">子ども用トップ</a>
-        <a class="btn" href="../cases/">活用事例</a>
+    <div class="wrap">
+      <span class="badge">先生むけガイド</span>
+      <h1>AIを「答えを出す道具」ではなく、社会科の考えをうながす道具にする</h1>
+      <p class="lead">子ども用トップは、小4以上が「読まずに押して使える」ことを最優先に作っています。このページでは授業者向けに、学習過程・話し合い・資料写真の扱い・評価の見取りを整理します。</p>
+      <nav class="top">
+        <a class="btn" href="../">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+          子ども用トップ
+        </a>
+        <a class="btn" href="../cases/">活用れい</a>
         <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSfyw3Alsnns-Zy_L-aO4uw1-FHgvkFMe-s3refbxZAsZ2U-1Q/viewform" target="_blank" rel="noopener">フィードバック</a>
       </nav>
     </div>
   </header>
 
-  <main class="shell">
-    <section class="grid" aria-label="運用方針">
+  <main class="wrap">
+    <section class="section grid2" aria-label="運用方針">
       <article class="card">
-        <h2>対象は小4以上</h2>
+        <h2><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 4-9 4-9-4z"/><path d="M5 9v5c0 1.7 3.1 3 7 3s7-1.3 7-3V9"/></svg></span>対象は小4以上</h2>
         <p>小3以下にAI操作を求めると、学習内容より操作や読解で止まりやすくなります。小4以上でも、最初は教師が使い方を一緒に確認する前提です。</p>
         <ul>
           <li>小4: 教師が場面を選び、子どもは短い入力から始める。</li>
@@ -204,8 +136,8 @@
         </ul>
       </article>
       <article class="card">
-        <h2>子どもに見せるのは最小限</h2>
-        <p>子どもは「プロンプト」を選びたいのではなく、今困っていることを解決したいだけです。トップでは説明を削り、学習過程のボタンに集約しています。</p>
+        <h2><span class="ic" style="background:var(--orange-soft);color:var(--orange)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></span>子どもに見せるのは最小限</h2>
+        <p>子どもは「プロンプト」を選びたいのではなく、今こまっていることを解決したいだけです。トップでは説明を削り、学習過程のボタンに集約しています。</p>
         <ul>
           <li>つかむ: 問いをつくる</li>
           <li>調べる: 資料からわかることを分ける</li>
@@ -216,30 +148,18 @@
     </section>
 
     <section class="wide" aria-label="学習過程">
-      <h2>学習過程の中でAIを入れる場所</h2>
-      <p>教育出版系の「つかむ・調べる・まとめる・いかす」に合わせ、AIの役割を限定します。AIの出力そのものを成果物にせず、問い・根拠・話し合いの足場にします。</p>
+      <h2><span class="ic" style="background:var(--green-soft);color:var(--green)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span>学習過程の中でAIを入れる場所</h2>
+      <p>「つかむ・調べる・まとめる・いかす」に合わせ、AIの役割を限定します。AIの出力そのものを成果物にせず、問い・根拠・話し合いの足場にします。</p>
       <div class="process">
-        <div style="--accent:var(--orange)">
-          <strong>つかむ</strong>
-          <p>気づきを問いにする。話し合う視点を出す。</p>
-        </div>
-        <div style="--accent:var(--blue)">
-          <strong>調べる</strong>
-          <p>資料から言えることと、まだ言えないことを分ける。</p>
-        </div>
-        <div style="--accent:var(--green)">
-          <strong>まとめる</strong>
-          <p>ノートの文を短く整え、根拠と考えを分ける。</p>
-        </div>
-        <div style="--accent:var(--purple)">
-          <strong>いかす</strong>
-          <p>立場・根拠・よりよい社会の観点で話し合う。</p>
-        </div>
+        <div class="pc" style="--c:var(--orange);--c-soft:var(--orange-soft)"><strong>つかむ</strong><p>気づきを問いにする。話し合う視点を出す。</p></div>
+        <div class="pc" style="--c:var(--blue);--c-soft:var(--blue-soft)"><strong>調べる</strong><p>資料から言えることと、まだ言えないことを分ける。</p></div>
+        <div class="pc" style="--c:var(--green);--c-soft:var(--green-soft)"><strong>まとめる</strong><p>ノートの文を短く整え、根拠と考えを分ける。</p></div>
+        <div class="pc" style="--c:var(--purple);--c-soft:var(--purple-soft)"><strong>いかす</strong><p>立場・根拠・よりよい社会の観点で話し合う。</p></div>
       </div>
     </section>
 
     <section class="wide" aria-label="話し合い">
-      <h2>話し合い支援のポイント</h2>
+      <h2><span class="ic" style="background:var(--purple-soft);color:var(--purple)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h11a2 2 0 012 2v4a2 2 0 01-2 2H8l-4 3v-3a2 2 0 01-1-2V7a2 2 0 010-2z"/><path d="M9 16v1a2 2 0 002 2h6l3 2v-2a2 2 0 001-2v-3a2 2 0 00-2-2h-1"/></svg></span>話し合い支援のポイント</h2>
       <p>「何について話し合うか」が曖昧なままでは、調べたことの発表会で終わりがちです。AIには、答えではなく話し合いテーマと観点を出させます。</p>
       <ul>
         <li>立場を変える: 住民、働く人、行政、消費者、生産者など。</li>
@@ -250,7 +170,7 @@
     </section>
 
     <section class="wide" aria-label="写真資料">
-      <h2>教科書写真・資料写真を使うとき</h2>
+      <h2><span class="ic" style="background:var(--orange-soft);color:var(--orange)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="14" rx="2.5"/><circle cx="12" cy="13" r="3.5"/><path d="M8 6l1.5-2h5L16 6"/></svg></span>教科書写真・資料写真を使うとき</h2>
       <p>授業中に教科書や資料を見ながらAIに相談する場面は現実的です。ただし、子どもには「先生のOKがあるときだけ」と明示し、学校・自治体・利用サービスのルールに合わせます。</p>
       <ul>
         <li>AIへの指示は「この資料から読み取れることだけ」に限定する。</li>
@@ -259,23 +179,10 @@
         <li>外部サービスの利用規約や学校アカウントの設定を確認する。</li>
       </ul>
     </section>
-
-    <section class="wide source-list" aria-label="参考">
-      <h2>参考にした公開資料</h2>
-      <p>本文の転載ではなく、公開されている指導アイデアの単元構成・学習活動の型を参考にして、独自のAI活用例へ置き換えています。</p>
-      <ul>
-        <li><a href="https://www.kyoiku-shuppan.co.jp/r6shou/shakai/index.html" target="_blank" rel="noopener">教育出版 令和6年度版 小学校社会</a></li>
-        <li><a href="https://kyoiku.sho.jp/79449/" target="_blank" rel="noopener">小4社会「水はどこから」指導アイデア</a></li>
-        <li><a href="https://kyoiku.sho.jp/308123/" target="_blank" rel="noopener">小5社会「米づくりのさかんな地域」指導アイデア</a></li>
-        <li><a href="https://kyoiku.sho.jp/59545/" target="_blank" rel="noopener">小5社会「自動車工業のさかんな地域」指導アイデア</a></li>
-        <li><a href="https://kyoiku.sho.jp/79816/" target="_blank" rel="noopener">小6社会「日本国憲法とわたしたちの生活」指導アイデア</a></li>
-        <li><a href="https://kyoiku.sho.jp/59608/" target="_blank" rel="noopener">小6社会「明治維新と新しい国づくり」指導アイデア</a></li>
-      </ul>
-    </section>
   </main>
 
   <footer>
-    <p>社会科AIおたすけ | 先生向けガイド</p>
+    <p>社会科AIおたすけ｜先生むけガイド</p>
   </footer>
 </body>
 </html>

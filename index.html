@@ -3,744 +3,789 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>社会科AIおたすけ | 小4以上</title>
-  <meta name="description" content="小学校4年生以上の社会科で使う、つかむ・調べる・まとめる・いかすに沿ったAIプロンプト支援サイト。">
+  <title>社会科AIおたすけ | 小4〜小6</title>
+  <meta name="description" content="小学4〜6年生の社会科で使える、つかむ・調べる・まとめる・いかすに沿ったAIおたすけサイト。えらんで・書いて・コピーするだけ。">
   <style>
     :root {
-      --ink: #182033;
-      --sub: #526071;
-      --paper: #fffdf7;
+      --ink: #2b3047;
+      --sub: #606b80;
+      --paper: #fff7ec;
+      --paper2: #fffdf9;
       --panel: #ffffff;
-      --line: #d8e1ee;
-      --blue: #245bd6;
-      --green: #0d7c66;
-      --orange: #be5a1d;
-      --purple: #6b4bc4;
-      --red: #b63d4d;
-      --shadow: 0 18px 48px rgba(24, 32, 51, .12);
-      --radius: 8px;
+      --line: #efe2d2;
+
+      --orange: #f5832b;  --orange-soft: #fff0e1;
+      --blue:   #2e9ee6;  --blue-soft:   #e6f4fd;
+      --green:  #1fae7e;  --green-soft:  #e2f6ef;
+      --purple: #9061e0;  --purple-soft: #f1eafe;
+      --yellow: #ffcf3f;
+
+      --radius: 22px;
+      --radius-sm: 16px;
+      --shadow: 0 14px 34px rgba(120, 96, 60, .14);
+      --shadow-sm: 0 8px 20px rgba(120, 96, 60, .10);
     }
 
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
       color: var(--ink);
       background: var(--paper);
-      font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
-      line-height: 1.7;
+      font-family: "Hiragino Maru Gothic ProN", "ヒラギノ丸ゴ ProN W4", "Hiragino Maru Gothic Pro", "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+      line-height: 1.8;
+      -webkit-font-smoothing: antialiased;
     }
 
-    body.is-modal-open {
-      overflow: hidden;
-    }
+    body.is-modal-open { overflow: hidden; }
 
-    button,
-    input,
-    textarea {
-      font: inherit;
-    }
+    button, input, textarea { font: inherit; }
+    a { color: inherit; }
+    img { max-width: 100%; }
 
-    a {
-      color: inherit;
-    }
-
-    .hero {
-      min-height: 430px;
-      color: #fff;
-      background:
-        linear-gradient(90deg, rgba(12, 23, 45, .86), rgba(12, 23, 45, .6) 48%, rgba(12, 23, 45, .14)),
-        url("assets/classroom-ai-social-studies.png") center right / cover no-repeat;
-      display: grid;
-      align-items: end;
-    }
-
-    .hero-inner,
-    .shell,
-    .topbar-inner {
-      width: min(1120px, calc(100% - 32px));
+    .wrap {
+      width: min(1080px, calc(100% - 32px));
       margin: 0 auto;
     }
 
-    .hero-inner {
-      padding: 54px 0 44px;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      min-height: 32px;
-      padding: 4px 10px;
-      border: 1px solid rgba(255, 255, 255, .44);
-      border-radius: var(--radius);
-      background: rgba(255, 255, 255, .14);
-      font-weight: 800;
-      font-size: .86rem;
-    }
-
-    h1 {
-      max-width: 650px;
-      margin: 16px 0 12px;
-      font-size: 2.45rem;
-      line-height: 1.22;
-    }
-
-    .hero p {
-      max-width: 610px;
-      margin: 0;
-      color: rgba(255, 255, 255, .9);
-      font-size: 1rem;
-    }
-
-    .hero-actions,
-    .tool-actions,
-    .link-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 22px;
-    }
-
+    /* ---------- ボタン ---------- */
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-height: 42px;
-      padding: 9px 14px;
-      border: 1px solid transparent;
-      border-radius: var(--radius);
+      gap: 8px;
+      min-height: 56px;
+      padding: 12px 22px;
+      border: none;
+      border-radius: 999px;
       cursor: pointer;
-      font-weight: 900;
+      font-weight: 800;
+      font-size: 1.02rem;
       text-decoration: none;
-      transition: transform .15s ease, box-shadow .15s ease;
+      transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
     }
+    .btn:hover { transform: translateY(-2px); }
+    .btn:active { transform: translateY(0); }
 
-    .btn:hover {
-      transform: translateY(-1px);
+    .btn-sun {
+      background: var(--yellow);
+      color: #5a4300;
+      box-shadow: 0 10px 0 #e6b419, 0 16px 26px rgba(230, 180, 25, .35);
     }
+    .btn-sun:hover { box-shadow: 0 8px 0 #e6b419, 0 16px 26px rgba(230, 180, 25, .4); }
+    .btn-sun:active { box-shadow: 0 3px 0 #e6b419; }
 
-    .btn-primary {
-      background: #fff;
-      color: #14336d;
-      box-shadow: 0 12px 28px rgba(0, 0, 0, .18);
-    }
-
-    .btn-dark {
-      background: var(--ink);
-      color: #fff;
-    }
-
-    .btn-ghost {
-      background: rgba(255, 255, 255, .13);
-      color: #fff;
-      border-color: rgba(255, 255, 255, .4);
-    }
-
-    .btn-line {
+    .btn-white {
       background: #fff;
       color: var(--ink);
-      border-color: var(--line);
+      box-shadow: var(--shadow-sm);
     }
-
-    .btn-green {
-      background: #eaf8f5;
-      color: #075f55;
-      border-color: #b8ddd7;
+    .btn-soft {
+      background: rgba(255, 255, 255, .85);
+      color: var(--ink);
+      border: 2px solid var(--line);
     }
+    .btn-green { background: var(--green); color: #fff; box-shadow: 0 10px 22px rgba(31, 174, 126, .3); }
+    .btn-blue  { background: var(--blue);  color: #fff; box-shadow: 0 10px 22px rgba(46, 158, 230, .3); }
+    .btn-ink   { background: var(--ink);   color: #fff; }
 
+    .btn svg { width: 22px; height: 22px; flex: none; }
+
+    /* ---------- ヘッダー ---------- */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(120% 90% at 82% 6%, #fff3cf 0%, rgba(255, 243, 207, 0) 46%),
+        linear-gradient(180deg, #cfeeff 0%, #e8f6ff 38%, var(--paper) 100%);
+    }
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+      align-items: center;
+      gap: 18px;
+      padding: 30px 0 44px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 16px;
+      border-radius: 999px;
+      background: #fff;
+      color: var(--orange);
+      font-weight: 800;
+      font-size: .9rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .badge .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--orange); }
+
+    .hero h1 {
+      margin: 16px 0 12px;
+      font-size: clamp(1.85rem, 4.2vw, 2.65rem);
+      line-height: 1.32;
+      letter-spacing: 0;
+    }
+    .hero h1 .line-keep {
+      display: inline-block;
+      white-space: nowrap;
+    }
+    .hero h1 br.mobile-break { display: none; }
+    .hero h1 .mark {
+      background: linear-gradient(transparent 62%, #ffe27a 62%);
+      padding: 0 .1em;
+    }
+    .hero p.lead {
+      margin: 0 0 24px;
+      max-width: 30em;
+      font-size: 1.06rem;
+      color: #4d5871;
+    }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+
+    .hero-art {
+      position: relative;
+      display: grid;
+      place-items: center;
+      min-height: 280px;
+    }
+    .hero-art img {
+      width: 100%;
+      max-width: 420px;
+      filter: drop-shadow(0 18px 30px rgba(80, 70, 40, .18));
+    }
+    /* 生成画像が無いときに見せる丸ゴシックのSVGマスコット */
+    .mascot { width: min(360px, 78%); height: auto; }
+
+    /* ふわふわ背景の飾り */
+    .deco { position: absolute; z-index: 1; opacity: .9; pointer-events: none; }
+    .deco.c1 { top: 8%;  left: 4%;  width: 64px;  color: #ffd76b; }
+    .deco.c2 { top: 60%; left: 2%;  width: 46px;  color: #8fd6ff; }
+    .deco.c3 { top: 14%; right: 3%; width: 54px;  color: #ffb38a; }
+    .deco.c4 { bottom: 8%; right: 8%; width: 40px; color: #b6e6c9; }
+
+    /* ---------- ナビ ---------- */
     .topbar {
       position: sticky;
       top: 0;
       z-index: 40;
-      background: rgba(255, 253, 247, .94);
-      border-bottom: 1px solid var(--line);
-      backdrop-filter: blur(14px);
+      background: rgba(255, 247, 236, .9);
+      backdrop-filter: blur(12px);
+      border-bottom: 2px solid var(--line);
     }
-
     .topbar-inner {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      justify-content: space-between;
       align-items: center;
-      padding: 10px 0;
+      justify-content: space-between;
+      padding: 9px 0;
     }
-
-    .topbar nav {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .topbar a,
-    .topbar button {
-      min-height: 34px;
-      padding: 5px 10px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
+    .topbar nav { display: flex; gap: 8px; flex-wrap: wrap; }
+    .topbar a, .topbar button {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      padding: 6px 16px;
+      border: none;
+      border-radius: 999px;
       background: #fff;
       color: var(--sub);
-      font-size: .84rem;
-      font-weight: 900;
+      font-weight: 800;
+      font-size: .94rem;
       text-decoration: none;
       cursor: pointer;
+      box-shadow: var(--shadow-sm);
     }
+    .topbar a:hover, .topbar button:hover { color: var(--ink); }
 
-    .shell {
-      padding: 28px 0 70px;
+    /* ---------- セクション共通 ---------- */
+    main { padding-bottom: 72px; }
+    .section { margin-top: 52px; }
+    .section-head { text-align: center; margin-bottom: 22px; }
+    .section-head .kicker {
+      display: inline-block;
+      color: var(--orange);
+      font-weight: 800;
+      font-size: .95rem;
+      margin-bottom: 2px;
     }
-
-    .intro {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 340px;
-      gap: 18px;
-      align-items: stretch;
-      margin-bottom: 28px;
-    }
-
-    .intro-panel,
-    .quick-help,
-    .tool-panel,
-    .teacher-strip {
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--panel);
-      box-shadow: 0 12px 34px rgba(24, 32, 51, .08);
-    }
-
-    .intro-panel {
-      padding: 22px;
-    }
-
-    .intro-panel h2,
-    .tool-panel h2,
-    .examples h2 {
-      margin: 0 0 8px;
-      font-size: 1.45rem;
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(1.5rem, 3.4vw, 2.05rem);
       line-height: 1.35;
     }
+    .section-head p { margin: 8px 0 0; color: var(--sub); }
 
-    .intro-panel p,
-    .quick-help p,
-    .teacher-strip p {
-      margin: 0;
-      color: var(--sub);
-    }
-
-    .quick-help {
-      padding: 18px;
+    /* ---------- 3ステップの流れ ---------- */
+    .flow {
       display: grid;
-      align-content: center;
-      gap: 12px;
-      background: #f2fbf7;
+      grid-template-columns: 1fr auto 1fr auto 1fr;
+      align-items: stretch;
+      gap: 6px;
     }
-
-    .quick-help strong {
-      color: #075f55;
+    .flow-card {
+      background: var(--panel);
+      border-radius: var(--radius);
+      padding: 22px 18px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
     }
+    .flow-num {
+      display: inline-grid;
+      place-items: center;
+      width: 44px; height: 44px;
+      margin-bottom: 8px;
+      border-radius: 50%;
+      background: var(--orange-soft);
+      color: var(--orange);
+      font-weight: 800;
+      font-size: 1.2rem;
+    }
+    .flow-card h3 { margin: 4px 0 4px; font-size: 1.18rem; }
+    .flow-card p { margin: 0; color: var(--sub); font-size: .96rem; }
+    .flow-card .ic { width: 40px; height: 40px; color: var(--orange); margin-bottom: 2px; }
+    .flow-arrow { display: grid; place-items: center; color: #e0b98a; }
+    .flow-arrow svg { width: 26px; height: 26px; }
 
-    .process-grid {
+    /* ---------- 4つのえらぶカード ---------- */
+    .pick-grid {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 14px;
-      margin: 18px 0 30px;
     }
-
-    .process-card {
-      display: grid;
-      gap: 8px;
-      min-height: 166px;
-      padding: 18px;
-      border: 2px solid transparent;
-      border-radius: var(--radius);
-      background: #fff;
-      box-shadow: 0 10px 28px rgba(24, 32, 51, .08);
-      cursor: pointer;
-      text-align: left;
-    }
-
-    .process-card.is-active {
-      border-color: var(--accent);
-      box-shadow: 0 16px 42px rgba(24, 32, 51, .14);
-    }
-
-    .process-card .step {
-      color: var(--accent);
-      font-size: .82rem;
-      font-weight: 900;
-    }
-
-    .process-card h3 {
-      margin: 0;
-      font-size: 1.18rem;
-    }
-
-    .process-card p {
-      margin: 0;
-      color: var(--sub);
-      font-size: .92rem;
-    }
-
-    .tool-panel {
-      padding: 22px;
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 360px;
-      gap: 22px;
-      align-items: start;
-    }
-
-    .tool-label {
-      display: inline-flex;
-      color: var(--tool-color);
-      font-weight: 900;
-      margin-bottom: 6px;
-    }
-
-    .field-grid {
-      display: grid;
-      gap: 14px;
-      margin-top: 16px;
-    }
-
-    label {
+    .pick-card {
       display: grid;
       gap: 6px;
-      color: var(--ink);
-      font-weight: 900;
-    }
-
-    input,
-    textarea {
-      width: 100%;
-      border: 1px solid var(--line);
+      padding: 22px 18px 20px;
+      border: 3px solid transparent;
       border-radius: var(--radius);
+      background: var(--c-soft);
+      cursor: pointer;
+      text-align: left;
+      transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+    }
+    .pick-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+    .pick-card.is-active {
+      border-color: var(--c);
+      box-shadow: var(--shadow);
       background: #fff;
-      color: var(--ink);
-      padding: 11px 12px;
     }
-
-    textarea {
-      min-height: 110px;
-      resize: vertical;
+    .pick-icon {
+      display: grid;
+      place-items: center;
+      width: 60px; height: 60px;
+      border-radius: 18px;
+      background: #fff;
+      color: var(--c);
+      margin-bottom: 4px;
     }
+    .pick-card.is-active .pick-icon { background: var(--c-soft); }
+    .pick-icon svg { width: 34px; height: 34px; }
+    .pick-name { font-size: 1.3rem; font-weight: 800; }
+    .pick-kid { color: var(--c); font-weight: 800; font-size: .98rem; }
+    .pick-when { color: var(--sub); font-size: .9rem; line-height: 1.6; }
 
-    .prompt-preview {
-      background: #f6f8fb;
-      border: 1px dashed #bfcbe0;
+    /* ---------- ツールパネル ---------- */
+    .tool {
+      margin-top: 18px;
       border-radius: var(--radius);
-      padding: 14px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      overflow: hidden;
     }
-
-    .prompt-preview h3 {
-      margin: 0 0 8px;
-      font-size: 1rem;
+    .tool-top {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 20px 24px;
+      background: var(--tc-soft);
+      border-bottom: 2px dashed var(--tc);
     }
+    .tool-top .pick-icon { margin: 0; width: 54px; height: 54px; background: #fff; color: var(--tc); }
+    .tool-top .pick-icon svg { width: 30px; height: 30px; }
+    .tool-top .label { color: var(--tc); font-weight: 800; font-size: .92rem; }
+    .tool-top h3 { margin: 0; font-size: 1.34rem; line-height: 1.3; }
+    .tool-top p { margin: 2px 0 0; color: var(--sub); font-size: .95rem; }
 
-    .prompt-preview pre {
+    .tool-body { padding: 22px 24px 26px; }
+
+    .substep { display: flex; align-items: center; gap: 10px; margin: 0 0 10px; }
+    .substep .n {
+      display: grid; place-items: center;
+      width: 30px; height: 30px; flex: none;
+      border-radius: 50%;
+      background: var(--tc); color: #fff;
+      font-weight: 800; font-size: .95rem;
+    }
+    .substep span { font-weight: 800; font-size: 1.08rem; }
+
+    label.field { display: grid; gap: 6px; margin-bottom: 18px; }
+    label.field .hint { color: var(--sub); font-weight: 500; font-size: .9rem; }
+    input[type="text"], textarea {
+      width: 100%;
+      border: 2px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: #fffdfa;
+      color: var(--ink);
+      padding: 13px 15px;
+      transition: border-color .12s ease;
+    }
+    input[type="text"]:focus, textarea:focus { outline: none; border-color: var(--tc); }
+    textarea { min-height: 96px; resize: vertical; }
+
+    .copy-row { margin: 4px 0 18px; }
+    .btn-copy {
+      width: 100%;
+      background: var(--tc);
+      color: #fff;
+      font-size: 1.12rem;
+      min-height: 62px;
+      box-shadow: 0 10px 0 var(--tc-deep), 0 16px 26px rgba(0,0,0,.12);
+    }
+    .btn-copy:hover { box-shadow: 0 8px 0 var(--tc-deep), 0 16px 26px rgba(0,0,0,.16); }
+    .btn-copy:active { transform: translateY(6px); box-shadow: 0 3px 0 var(--tc-deep); }
+
+    .open-ai {
+      background: var(--tc-soft);
+      border-radius: var(--radius-sm);
+      padding: 16px 18px;
+    }
+    .open-ai .substep { margin-bottom: 12px; }
+    .open-ai .ai-btns { display: flex; flex-wrap: wrap; gap: 10px; }
+
+    .peek {
+      margin-top: 16px;
+      border: 2px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: #fffdfa;
+      overflow: hidden;
+    }
+    .peek > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 13px 16px;
+      font-weight: 800;
+      color: var(--sub);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .peek > summary::-webkit-details-marker { display: none; }
+    .peek > summary .chev { transition: transform .15s ease; }
+    .peek[open] > summary .chev { transform: rotate(90deg); }
+    .peek pre {
       margin: 0;
-      color: #263247;
+      padding: 0 16px 16px;
       font-family: inherit;
-      font-size: .92rem;
+      font-size: .94rem;
+      line-height: 1.7;
+      color: #41506a;
       white-space: pre-wrap;
     }
 
-    .talk-box {
-      margin-top: 14px;
-      padding: 14px;
-      border-left: 4px solid var(--tool-color);
-      border-radius: var(--radius);
-      background: #fffdfa;
+    .talk {
+      margin-top: 16px;
+      border-radius: var(--radius-sm);
+      background: #fffaf0;
+      border: 2px solid #ffe6b3;
+      padding: 16px 18px;
     }
+    .talk h4 { margin: 0 0 6px; font-size: 1.02rem; display: flex; align-items: center; gap: 8px; }
+    .talk h4 svg { width: 22px; height: 22px; color: #e6a417; }
+    .talk ul { margin: 0; padding-left: 20px; color: var(--sub); }
+    .talk li { margin: 4px 0; }
 
-    .talk-box h3 {
-      margin: 0 0 6px;
-      font-size: 1rem;
-    }
-
-    .talk-box ul {
-      margin: 0;
-      padding-left: 20px;
-      color: var(--sub);
-    }
-
-    .teacher-strip {
-      margin-top: 26px;
-      padding: 18px;
+    /* ---------- リンクカード ---------- */
+    .cards2 {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 14px;
-      align-items: center;
-      background: #f8fbff;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
     }
-
-    .examples {
-      margin-top: 30px;
-    }
-
-    .example-links {
+    .link-card {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
-      margin-top: 14px;
-    }
-
-    .example-card {
-      padding: 16px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: #fff;
-      text-decoration: none;
-      box-shadow: 0 10px 28px rgba(24, 32, 51, .07);
-    }
-
-    .example-card strong {
-      display: block;
-      margin-bottom: 6px;
-    }
-
-    .example-card span {
-      color: var(--sub);
-      font-size: .9rem;
-    }
-
-    .manual-modal[hidden] {
-      display: none;
-    }
-
-    .manual-modal {
-      position: fixed;
-      inset: 0;
-      z-index: 1000;
-      display: grid;
-      align-items: center;
+      gap: 8px;
       padding: 24px;
-      background: rgba(12, 20, 35, .72);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow-sm);
+      text-decoration: none;
+      color: inherit;
+      transition: transform .12s ease, box-shadow .12s ease;
+    }
+    .link-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+    .link-card .lc-icon {
+      display: grid; place-items: center;
+      width: 52px; height: 52px;
+      border-radius: 16px;
+      background: var(--blue-soft);
+      color: var(--blue);
+    }
+    .link-card.green .lc-icon { background: var(--green-soft); color: var(--green); }
+    .link-card h3 { margin: 0; font-size: 1.22rem; }
+    .link-card p { margin: 0; color: var(--sub); font-size: .95rem; }
+    .link-card .go { color: var(--blue); font-weight: 800; }
+    .link-card.green .go { color: var(--green); }
+
+    /* ---------- 言葉辞典の帯 ---------- */
+    .kotoba {
+      display: grid;
+      grid-template-columns: 64px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 16px;
+      padding: 20px 24px;
+      border-radius: var(--radius);
+      background: var(--green-soft);
+    }
+    .kotoba .ic { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 18px; background: #fff; color: var(--green); }
+    .kotoba h3 { margin: 0; font-size: 1.16rem; }
+    .kotoba p { margin: 2px 0 0; color: #3e6a5f; font-size: .95rem; }
+
+    /* ---------- フッター ---------- */
+    footer {
+      margin-top: 64px;
+      padding: 34px 16px 44px;
+      background: #fffdf9;
+      border-top: 2px solid var(--line);
+      text-align: center;
+      color: var(--sub);
+    }
+    footer .fnote {
+      max-width: 36em;
+      margin: 0 auto 10px;
+      padding: 14px 18px;
+      border-radius: var(--radius-sm);
+      background: var(--orange-soft);
+      color: #8a5320;
+      font-weight: 700;
     }
 
-    .manual-dialog {
-      width: min(940px, 100%);
-      max-height: calc(100vh - 48px);
+    /* ---------- 使い方モーダル ---------- */
+    .modal[hidden] { display: none; }
+    .modal {
+      position: fixed; inset: 0; z-index: 1000;
+      display: grid; align-items: center;
+      padding: 20px;
+      background: rgba(40, 35, 25, .55);
+    }
+    .dialog {
+      width: min(720px, 100%);
+      max-height: calc(100vh - 40px);
+      margin: auto;
       display: grid;
       grid-template-rows: auto minmax(0, 1fr);
-      margin: auto;
+      border-radius: var(--radius);
+      background: #fff;
       overflow: hidden;
-      border-radius: var(--radius);
-      background: #fff;
       box-shadow: var(--shadow);
     }
-
-    .manual-header {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 14px;
+    .dialog-head {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px;
       padding: 18px 22px;
-      border-bottom: 1px solid var(--line);
-      background: #f8fbff;
+      background: var(--orange-soft);
     }
-
-    .manual-header h2 {
-      margin: 0;
-      font-size: 1.28rem;
+    .dialog-head h2 { margin: 0; font-size: 1.3rem; }
+    .dialog-close {
+      width: 48px; height: 48px; flex: none;
+      border: none; border-radius: 50%;
+      background: #fff; cursor: pointer;
+      font-size: 1.4rem; font-weight: 800; color: var(--sub);
+      box-shadow: var(--shadow-sm);
     }
-
-    .manual-header p {
-      margin: 4px 0 0;
-      color: var(--sub);
+    .dialog-body { padding: 20px 22px 24px; overflow-y: auto; }
+    .mstep { display: flex; gap: 14px; padding: 14px 0; border-bottom: 2px dashed var(--line); }
+    .mstep:last-child { border-bottom: none; }
+    .mstep .n {
+      display: grid; place-items: center;
+      width: 40px; height: 40px; flex: none;
+      border-radius: 50%; background: var(--orange); color: #fff;
+      font-weight: 800;
     }
+    .mstep h3 { margin: 0 0 4px; font-size: 1.1rem; }
+    .mstep p { margin: 0; color: var(--sub); }
 
-    .manual-close {
-      width: 42px;
-      height: 42px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: #fff;
-      cursor: pointer;
-      font-size: 1.25rem;
-      font-weight: 900;
-    }
-
-    .manual-body {
-      padding: 20px 22px;
-      overflow-y: auto;
-    }
-
-    .manual-steps {
-      display: grid;
-      gap: 16px;
-    }
-
-    .manual-step {
-      display: grid;
-      grid-template-columns: minmax(0, .65fr) minmax(0, 1fr);
-      gap: 16px;
-      padding: 16px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: #fffdfa;
-    }
-
-    .manual-step h3 {
-      margin: 0 0 8px;
-    }
-
-    .manual-step p,
-    .manual-step li {
-      color: var(--sub);
-    }
-
-    .manual-shot {
-      width: 100%;
-      display: block;
-      border: 1px solid #ccd6e4;
-      border-radius: var(--radius);
-      background: #f4f7fb;
-    }
-
-    footer {
-      padding: 30px 16px 38px;
-      border-top: 1px solid var(--line);
-      color: var(--sub);
-      text-align: center;
-      font-size: .86rem;
-    }
-
+    /* ---------- トースト ---------- */
     #toast {
-      position: fixed;
-      left: 50%;
-      bottom: 24px;
-      z-index: 2000;
-      transform: translate(-50%, 70px);
+      position: fixed; left: 50%; bottom: 26px; z-index: 2000;
+      transform: translate(-50%, 80px);
       opacity: 0;
-      background: var(--ink);
-      color: #fff;
-      padding: 10px 14px;
-      border-radius: var(--radius);
+      display: flex; align-items: center; gap: 10px;
+      background: var(--green); color: #fff;
+      padding: 14px 22px;
+      border-radius: 999px;
+      font-weight: 800;
       box-shadow: var(--shadow);
-      font-weight: 900;
-      transition: transform .2s ease, opacity .2s ease;
+      transition: transform .25s ease, opacity .25s ease;
     }
+    #toast.is-visible { transform: translate(-50%, 0); opacity: 1; }
+    #toast svg { width: 24px; height: 24px; }
 
-    #toast.is-visible {
-      transform: translate(-50%, 0);
-      opacity: 1;
+    /* ---------- レスポンシブ ---------- */
+    @media (max-width: 920px) {
+      .hero-inner { grid-template-columns: 1fr; text-align: center; padding-top: 20px; }
+      .hero p.lead { margin-left: auto; margin-right: auto; }
+      .hero-actions { justify-content: center; }
+      .hero-art { order: -1; min-height: 200px; }
+      .mascot { width: 200px; }
+      .pick-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
-
-    @media (max-width: 900px) {
-      .intro,
-      .tool-panel,
-      .teacher-strip,
-      .manual-step {
-        grid-template-columns: 1fr;
-      }
-
-      .process-grid,
-      .example-links {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
+    @media (max-width: 680px) {
+      .flow { grid-template-columns: 1fr; }
+      .flow-arrow { transform: rotate(90deg); padding: 2px 0; }
+      .cards2 { grid-template-columns: 1fr; }
+      .kotoba { grid-template-columns: 1fr; text-align: center; justify-items: center; }
+      .open-ai .ai-btns .btn { width: 100%; }
+      .hero-actions .btn { width: 100%; }
     }
-
-    @media (max-width: 560px) {
-      .hero {
-        min-height: 430px;
-        background:
-          linear-gradient(0deg, rgba(12, 23, 45, .86), rgba(12, 23, 45, .55) 64%, rgba(12, 23, 45, .18)),
-          url("assets/classroom-ai-social-studies.png") center / cover no-repeat;
-      }
-
-      .hero-inner,
-      .shell,
-      .topbar-inner {
-        width: min(100% - 24px, 1120px);
-      }
-
-      h1 {
-        font-size: 1.8rem;
-      }
-
-      .process-grid,
-      .example-links {
-        grid-template-columns: 1fr;
-      }
-
-      .hero-actions .btn,
-      .tool-actions .btn,
-      .link-row .btn {
-        width: 100%;
-      }
-
-      .topbar nav {
-        overflow-x: auto;
-        flex-wrap: nowrap;
-        width: 100%;
-        padding-bottom: 2px;
-      }
-
-      .manual-modal {
-        padding: 12px;
-      }
-
-      .manual-dialog {
-        max-height: calc(100vh - 24px);
-      }
+    @media (max-width: 460px) {
+      .pick-grid { grid-template-columns: 1fr; }
+      .hero h1 .line-keep { white-space: normal; }
+      .hero h1 br.mobile-break { display: block; }
+      .deco.c2, .deco.c4 { display: none; }
     }
   </style>
 </head>
 <body>
+  <!-- ===== ヒーロー ===== -->
   <header class="hero">
-    <div class="hero-inner">
-      <span class="badge">小4以上 | 社会科AIおたすけ</span>
-      <h1>読まなくても、まず押せる。社会の学習をAIに手伝ってもらおう。</h1>
-      <p>「つかむ・調べる・まとめる・いかす」の中から、今やりたいことを選んでください。AIは答えを写すためではなく、考えるために使います。</p>
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="#tools">今すぐ使う</a>
-        <button class="btn btn-ghost" type="button" data-open-manual>使い方を見る</button>
-        <a class="btn btn-ghost" href="https://a-tozak.github.io/shakai-kotoba-jiten/" target="_blank" rel="noopener">言葉辞典</a>
+    <svg class="deco c1" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.6 6.3L21 9l-5 4.2L17.6 20 12 16.4 6.4 20 8 13.2 3 9l6.4-.7z"/></svg>
+    <svg class="deco c2" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+    <svg class="deco c3" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.6 6.3L21 9l-5 4.2L17.6 20 12 16.4 6.4 20 8 13.2 3 9l6.4-.7z"/></svg>
+    <svg class="deco c4" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+
+    <div class="wrap hero-inner">
+      <div>
+        <span class="badge"><span class="dot"></span>小学4年生〜6年生のみなさんへ</span>
+        <h1>わからないことは、<br><span class="line-keep"><span class="mark">AIといっしょ</span>に<br class="mobile-break">考えよう。</span></h1>
+        <p class="lead">「えらぶ・書く・コピーする」の3つだけ。AIはこたえを写すための道具じゃないよ。きみの「なぜ？」を、いっしょに考えてくれる相談あいてなんだ。</p>
+        <div class="hero-actions">
+          <a class="btn btn-sun" href="#pick">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            さっそく はじめる
+          </a>
+          <button class="btn btn-white" type="button" data-open-manual>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+            使い方を見る
+          </button>
+        </div>
+      </div>
+      <div class="hero-art">
+        <!-- 生成イラストがあれば assets/hero-kids.png を表示。無ければ下のSVGマスコット。 -->
+        <img src="assets/hero-kids.png" alt="タブレットでAIに相談しながら社会科を学ぶ子どもたち" onload="var m=document.getElementById('mascot');if(m)m.remove()" onerror="this.remove()">
+        <svg id="mascot" class="mascot" viewBox="0 0 240 240" fill="none" aria-hidden="true">
+          <ellipse cx="120" cy="214" rx="74" ry="13" fill="#000" opacity="0.06"/>
+          <rect x="64" y="74" width="112" height="100" rx="34" fill="#2e9ee6"/>
+          <rect x="78" y="92" width="84" height="58" rx="22" fill="#fff"/>
+          <circle cx="104" cy="120" r="9" fill="#2b3047"/>
+          <circle cx="136" cy="120" r="9" fill="#2b3047"/>
+          <circle cx="107" cy="117" r="3" fill="#fff"/>
+          <circle cx="139" cy="117" r="3" fill="#fff"/>
+          <path d="M108 136q12 9 24 0" stroke="#2b3047" stroke-width="4" stroke-linecap="round"/>
+          <circle cx="90" cy="135" r="6" fill="#ffd0b0"/>
+          <circle cx="150" cy="135" r="6" fill="#ffd0b0"/>
+          <rect x="112" y="52" width="16" height="20" rx="6" fill="#9061e0"/>
+          <circle cx="120" cy="46" r="11" fill="#ffcf3f"/>
+          <rect x="52" y="104" width="14" height="34" rx="7" fill="#2e9ee6"/>
+          <rect x="174" y="104" width="14" height="34" rx="7" fill="#2e9ee6"/>
+          <g>
+            <path d="M150 78c0-14 12-24 27-24s27 10 27 23c0 13-12 22-27 22-3 0-6 0-9-1l-12 6 3-11c-6-4-9-9-9-15z" fill="#fff" stroke="#1fae7e" stroke-width="4"/>
+            <circle cx="165" cy="77" r="3" fill="#1fae7e"/>
+            <circle cx="177" cy="77" r="3" fill="#1fae7e"/>
+            <circle cx="189" cy="77" r="3" fill="#1fae7e"/>
+          </g>
+        </svg>
       </div>
     </div>
   </header>
 
+  <!-- ===== ナビ ===== -->
   <div class="topbar">
-    <div class="topbar-inner">
+    <div class="wrap topbar-inner">
       <nav aria-label="ページ内リンク">
-        <a href="#tools">使う</a>
-        <a href="cases/">事例</a>
-        <a href="teacher/">先生向け</a>
-        <a href="https://a-tozak.github.io/shakai-kotoba-jiten/" target="_blank" rel="noopener">言葉辞典</a>
+        <a href="#pick">えらぶ</a>
+        <a href="cases/">活用れい</a>
+        <a href="teacher/">先生むけ</a>
+        <a href="https://a-tozak.github.io/shakai-kotoba-jiten/" target="_blank" rel="noopener">言葉じてん</a>
       </nav>
       <button type="button" data-open-manual>使い方</button>
     </div>
   </div>
 
-  <main class="shell">
-    <section class="intro" aria-label="使い始め">
-      <div class="intro-panel">
-        <h2>いま、なにをしたい？</h2>
-        <p>下の4つから選ぶだけです。何を書けばよいかわからないときは、「つかむ」から始めます。</p>
+  <main class="wrap">
+    <!-- ===== 3ステップの流れ ===== -->
+    <section class="section" aria-label="使い方の流れ">
+      <div class="section-head">
+        <span class="kicker">かんたん 3ステップ</span>
+        <h2>やることは、これだけ。</h2>
       </div>
-      <div class="quick-help">
-        <strong>わからない言葉が出てきたら</strong>
-        <p>AIに聞く前に、社会科の言葉辞典で調べてもOKです。</p>
-        <a class="btn btn-green" href="https://a-tozak.github.io/shakai-kotoba-jiten/" target="_blank" rel="noopener">言葉辞典を開く</a>
+      <div class="flow">
+        <div class="flow-card">
+          <span class="flow-num">1</span>
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 7-7"/><path d="M21 12a9 9 0 11-5.2-8.2"/></svg>
+          <h3>えらぶ</h3>
+          <p>いまやりたいことを、4つからえらぶ。</p>
+        </div>
+        <div class="flow-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        <div class="flow-card">
+          <span class="flow-num">2</span>
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l4-1L19 8a2.8 2.8 0 00-4-4L4 15z"/><path d="M14 6l4 4"/></svg>
+          <h3>書く</h3>
+          <p>テーマと、気づいたことを書く。空っぽでもOK。</p>
+        </div>
+        <div class="flow-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        <div class="flow-card">
+          <span class="flow-num">3</span>
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6a2 2 0 00-2-2H6a2 2 0 00-2 2v8a2 2 0 002 2h2"/></svg>
+          <h3>コピーしてはる</h3>
+          <p>ボタンを押して、AIにはりつける。</p>
+        </div>
       </div>
     </section>
 
-    <section id="tools" aria-label="学習過程別おたすけ">
-      <div class="process-grid" id="processGrid"></div>
+    <!-- ===== えらぶ ===== -->
+    <section class="section" id="pick" aria-label="今やることをえらぶ">
+      <div class="section-head">
+        <span class="kicker">ステップ1</span>
+        <h2>いま、なにをしたい？</h2>
+        <p>こまったら、いちばん左の「つかむ」からはじめよう。</p>
+      </div>
+      <div class="pick-grid" id="pickGrid"></div>
+    </section>
 
-      <section class="tool-panel" id="toolPanel" aria-live="polite">
-        <div>
-          <span class="tool-label" id="toolStep"></span>
-          <h2 id="toolTitle"></h2>
-          <p id="toolBenefit"></p>
-          <div class="field-grid">
-            <label>
-              <span id="themeLabel"></span>
-              <input id="themeInput" type="text" autocomplete="off">
-            </label>
-            <label>
-              <span id="memoLabel"></span>
-              <textarea id="memoInput"></textarea>
-            </label>
-          </div>
-          <div class="tool-actions">
-            <button class="btn btn-dark" type="button" id="copyPromptButton">AIに送る文をコピー</button>
-            <a class="btn btn-line" href="https://gemini.google.com/" target="_blank" rel="noopener">Geminiを開く</a>
-            <a class="btn btn-line" href="https://notebooklm.google.com/" target="_blank" rel="noopener">NotebookLMを開く</a>
+    <!-- ===== ツール ===== -->
+    <section id="toolWrap" aria-live="polite">
+      <div class="tool" id="tool">
+        <div class="tool-top">
+          <span class="pick-icon" id="toolIcon"></span>
+          <div>
+            <span class="label" id="toolLabel"></span>
+            <h3 id="toolTitle"></h3>
+            <p id="toolBenefit"></p>
           </div>
         </div>
-        <aside>
-          <div class="prompt-preview">
-            <h3>コピーされる文</h3>
-            <pre id="promptPreview"></pre>
+        <div class="tool-body">
+          <div class="substep"><span class="n">2</span><span>テーマと、気づいたことを書こう</span></div>
+          <label class="field">
+            <span id="themeLabel"></span>
+            <span class="hint" id="themeHint"></span>
+            <input id="themeInput" type="text" autocomplete="off">
+          </label>
+          <label class="field">
+            <span id="memoLabel"></span>
+            <span class="hint" id="memoHint"></span>
+            <textarea id="memoInput"></textarea>
+          </label>
+
+          <div class="substep"><span class="n">3</span><span>コピーして、AIにはろう</span></div>
+          <div class="copy-row">
+            <button class="btn btn-copy" type="button" id="copyBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6a2 2 0 00-2-2H6a2 2 0 00-2 2v8a2 2 0 002 2h2"/></svg>
+              AIに送る文を コピーする
+            </button>
           </div>
-          <div class="talk-box">
-            <h3>話し合うなら</h3>
+
+          <div class="open-ai">
+            <p style="margin:0 0 4px;font-weight:800;">コピーできたら、AIをひらいて はりつけよう</p>
+            <div class="ai-btns">
+              <a class="btn btn-blue" href="https://gemini.google.com/" target="_blank" rel="noopener">Geminiをひらく</a>
+              <a class="btn btn-soft" href="https://notebooklm.google.com/" target="_blank" rel="noopener">NotebookLMをひらく</a>
+            </div>
+          </div>
+
+          <details class="peek">
+            <summary>
+              <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+              AIにこう聞くよ（見てみる）
+            </summary>
+            <pre id="promptPreview"></pre>
+          </details>
+
+          <div class="talk">
+            <h4>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h12a2 2 0 012 2v6a2 2 0 01-2 2H9l-4 3v-3a2 2 0 01-2-2V7a2 2 0 012-2z"/></svg>
+              ともだちと話すなら
+            </h4>
             <ul id="talkList"></ul>
           </div>
-        </aside>
-      </section>
-    </section>
-
-    <section class="teacher-strip">
-      <div>
-        <h2>先生へ</h2>
-        <p>このトップは子ども用です。単元内での使い方、写真資料の扱い、指導案を参考にした活用事例は別ページにまとめました。</p>
-      </div>
-      <div class="link-row">
-        <a class="btn btn-line" href="teacher/">先生向けページ</a>
-        <a class="btn btn-line" href="cases/">活用事例を見る</a>
+        </div>
       </div>
     </section>
 
-    <section class="examples" aria-label="事例への入口">
-      <h2>事例を少しだけ見る</h2>
-      <div class="example-links">
-        <a class="example-card" href="cases/#tsukamu">
-          <strong>つかむ</strong>
-          <span>小4「水はどこから」問いをつくる</span>
+    <!-- ===== 言葉じてん ===== -->
+    <section class="section">
+      <div class="kotoba">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 012-2h6v17H6a2 2 0 00-2 2z"/><path d="M20 5a2 2 0 00-2-2h-6v17h6a2 2 0 012 2z"/></svg></span>
+        <div>
+          <h3>わからない言葉が出てきたら</h3>
+          <p>AIに聞く前に、社会科の言葉じてんで調べてもいいよ。</p>
+        </div>
+        <a class="btn btn-green" href="https://a-tozak.github.io/shakai-kotoba-jiten/" target="_blank" rel="noopener">言葉じてんをひらく</a>
+      </div>
+    </section>
+
+    <!-- ===== れい・先生むけ ===== -->
+    <section class="section" aria-label="もっと見る">
+      <div class="cards2">
+        <a class="link-card" href="cases/">
+          <span class="lc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4z"/><path d="M4 9h16M9 5v14"/></svg></span>
+          <h3>使った れいを見る</h3>
+          <p>水・米づくり・工業・政治・歴史。ほかの学年の使いかたをのぞいてみよう。</p>
+          <span class="go">活用れいへ →</span>
         </a>
-        <a class="example-card" href="cases/#shiraberu">
-          <strong>調べる</strong>
-          <span>小5「米づくり」資料から読み取る</span>
-        </a>
-        <a class="example-card" href="cases/#ikasu">
-          <strong>いかす</strong>
-          <span>小6「政治」「歴史」話し合う</span>
+        <a class="link-card green" href="teacher/">
+          <span class="lc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 4-9 4-9-4z"/><path d="M5 9v5c0 1.7 3.1 3 7 3s7-1.3 7-3V9"/></svg></span>
+          <h3>先生むけのページ</h3>
+          <p>単元での使い方、写真資料のあつかい、評価の見取りをまとめました。</p>
+          <span class="go" style="color:var(--green)">先生むけへ →</span>
         </a>
       </div>
     </section>
   </main>
 
   <footer>
-    <p>社会科AIおたすけ | 小4以上</p>
-    <p>AIの答えは、教科書・資料・先生の話と照らし合わせて使いましょう。</p>
+    <p class="fnote">AIのこたえは、そのまま写さないでね。教科書・資料・先生の話とくらべて、自分の言葉でノートに書こう。</p>
+    <p>社会科AIおたすけ｜小学4年生〜6年生むけ</p>
   </footer>
 
-  <div class="manual-modal" id="manualModal" hidden aria-hidden="true">
-    <div class="manual-dialog" role="dialog" aria-modal="true" aria-labelledby="manualTitle">
-      <div class="manual-header">
-        <div>
-          <h2 id="manualTitle">使い方</h2>
-          <p>読むところは少なくしました。選んで、入れて、コピーします。</p>
-        </div>
-        <button class="manual-close" type="button" data-close-manual aria-label="閉じる">×</button>
+  <!-- ===== 使い方モーダル ===== -->
+  <div class="modal" id="manualModal" hidden>
+    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="manualTitle">
+      <div class="dialog-head">
+        <h2 id="manualTitle">使い方</h2>
+        <button class="dialog-close" type="button" data-close-manual aria-label="とじる">×</button>
       </div>
-      <div class="manual-body">
-        <div class="manual-steps">
-          <article class="manual-step">
-            <div>
-              <h3>1. 今やることを選ぶ</h3>
-              <p>「つかむ・調べる・まとめる・いかす」から、今の授業に近いものを押します。</p>
-            </div>
-            <img class="manual-shot" src="assets/manual-new-home.png" alt="学習過程から選ぶ画面">
-          </article>
-          <article class="manual-step">
-            <div>
-              <h3>2. 二つだけ入力する</h3>
-              <p>テーマと、気づいたことや困っていることを一つ入れます。空欄でもコピーできます。</p>
-            </div>
-            <img class="manual-shot" src="assets/manual-new-tool.png" alt="テーマと気づきを入力してコピーする画面">
-          </article>
-          <article class="manual-step">
-            <div>
-              <h3>3. AIに貼って、自分の言葉で直す</h3>
-              <p>AIの返事をそのまま写さず、教科書や資料で確かめてからノートに書きます。</p>
-            </div>
-            <div class="talk-box">
-              <h3>写真を使うとき</h3>
-              <ul>
-                <li>先生のOKがあるときだけ使います。</li>
-                <li>AIには「資料からわかることだけ」と聞きます。</li>
-                <li>教科書や学校のルールに合わせます。</li>
-              </ul>
-            </div>
-          </article>
+      <div class="dialog-body">
+        <div class="mstep">
+          <span class="n">1</span>
+          <div>
+            <h3>いまやることを えらぶ</h3>
+            <p>「つかむ・調べる・まとめる・いかす」から、いまの授業に近いものを押すよ。</p>
+          </div>
+        </div>
+        <div class="mstep">
+          <span class="n">2</span>
+          <div>
+            <h3>2つだけ 書く</h3>
+            <p>テーマと、気づいたこと・こまっていることを書こう。空っぽのままコピーしてもいいよ。</p>
+          </div>
+        </div>
+        <div class="mstep">
+          <span class="n">3</span>
+          <div>
+            <h3>コピーして、AIにはる</h3>
+            <p>「コピーする」を押して、GeminiやNotebookLMにはりつけよう。</p>
+          </div>
+        </div>
+        <div class="mstep">
+          <span class="n">4</span>
+          <div>
+            <h3>自分の言葉に直す</h3>
+            <p>AIのこたえはそのまま写さず、教科書や資料でたしかめてからノートに書こう。写真を使うのは、先生のOKがあるときだけだよ。</p>
+          </div>
         </div>
       </div>
     </div>
@@ -749,19 +794,26 @@
   <div id="toast" role="status" aria-live="polite"></div>
 
   <script>
-    const KOTOBA_JITEN_URL = "https://a-tozak.github.io/shakai-kotoba-jiten/";
+    const ICONS = {
+      tsukamu: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M16 16l5 5"/><path d="M8.6 9a2 2 0 113.4 1.7c-.7.4-1 .8-1 1.6"/><path d="M11 14.2h.01"/></svg>',
+      shiraberu: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5c2.5-1.4 5.5-1.4 8 0v14c-2.5-1.4-5.5-1.4-8 0z"/><path d="M20 5c-2.5-1.4-5.5-1.4-8 0v14c2.5-1.4 5.5-1.4 8 0z"/><path d="M7 9h2M7 12h2"/></svg>',
+      matomeru: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="13" height="18" rx="2.5"/><path d="M9 8h6M9 12h6M9 16h3"/><path d="M5 7H3M5 12H3M5 17H3"/></svg>',
+      ikasu: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h11a2 2 0 012 2v4a2 2 0 01-2 2H8l-4 3v-3a2 2 0 01-1-2V7a2 2 0 010-2z"/><path d="M9 16v1a2 2 0 002 2h6l3 2v-2a2 2 0 001-2v-3a2 2 0 00-2-2h-1"/></svg>'
+    };
 
     const tools = {
       tsukamu: {
-        step: "つかむ",
-        color: "var(--orange)",
-        title: "ふしぎを見つけて、問いにする",
-        benefit: "何を調べるか決まらないときに使います。",
+        c: "orange",
+        label: "つかむ",
+        title: "ふしぎを見つけて、問いをつくる",
+        benefit: "「何を調べよう？」がまだ決まらないときに使うよ。",
         themeLabel: "学習していること",
-        memoLabel: "気になったことを一つ",
-        themePlaceholder: "例: 水はどこから来るのか",
-        memoPlaceholder: "例: じゃ口をひねると水が出るのがふしぎ",
-        talks: ["なぜそうなっているのか", "だれが関わっているのか", "昔と今で変わったことはあるか"],
+        themeHint: "いま勉強しているテーマを書こう",
+        themePlaceholder: "れい：水はどこから来るのか",
+        memoLabel: "気になったことを ひとつ",
+        memoHint: "「ふしぎだな」と思ったことでOK",
+        memoPlaceholder: "れい：じゃ口をひねると水が出るのがふしぎ",
+        talks: ["なぜ そうなっているのかな", "だれが かかわっているのかな", "むかしと今で 変わったことはあるかな"],
         prompt(theme, memo) {
           return `あなたは小学校4年生以上の社会科の学習を助ける先生です。
 
@@ -775,15 +827,17 @@
         }
       },
       shiraberu: {
-        step: "調べる",
-        color: "var(--blue)",
-        title: "資料・写真からわかることを出す",
-        benefit: "教科書、写真、地図、グラフを見て考えたいときに使います。",
-        themeLabel: "資料の名前や単元",
-        memoLabel: "見て気づいたこと",
-        themePlaceholder: "例: 米づくりのグラフ",
-        memoPlaceholder: "例: 地域によって米の量がちがう",
-        talks: ["資料から本当に言えることは何か", "まだ資料だけでは言えないことは何か", "ほかにどんな資料を見ればよいか"],
+        c: "blue",
+        label: "調べる",
+        title: "資料・写真から ヒントを読み取る",
+        benefit: "写真・地図・グラフを見て考えたいときに使うよ。",
+        themeLabel: "資料の名前や 単元",
+        themeHint: "見ている資料や、勉強している単元を書こう",
+        themePlaceholder: "れい：米づくりのグラフ",
+        memoLabel: "見て 気づいたこと",
+        memoHint: "資料を見て「こうかな」と思ったこと",
+        memoPlaceholder: "れい：地いきによって米の量がちがう",
+        talks: ["資料から ほんとうに言えることは何かな", "まだ資料だけでは 言えないことは何かな", "ほかに どんな資料を見ればいいかな"],
         prompt(theme, memo) {
           return `あなたは小学校4年生以上の社会科の資料読み取りを助ける先生です。
 
@@ -800,15 +854,17 @@
         }
       },
       matomeru: {
-        step: "まとめる",
-        color: "var(--green)",
-        title: "ノートの文を3文まとめにする",
-        benefit: "調べたことを、先生に出せる文にしたいときに使います。",
-        themeLabel: "まとめたいテーマ",
-        memoLabel: "ノートに書いたこと",
-        themePlaceholder: "例: 工業生産を支える人々",
-        memoPlaceholder: "例: 工場ではたくさんの人が分担している",
-        talks: ["問いへの答えになっているか", "資料からわかったことが入っているか", "自分の考えが一文あるか"],
+        c: "green",
+        label: "まとめる",
+        title: "ノートを すっきり3文にまとめる",
+        benefit: "調べたことを、先生に出せる文にしたいときに使うよ。",
+        themeLabel: "まとめたい テーマ",
+        themeHint: "何についてまとめるのか書こう",
+        themePlaceholder: "れい：工業生産を支える人々",
+        memoLabel: "ノートに 書いたこと",
+        memoHint: "ノートのメモを そのまま書いてOK",
+        memoPlaceholder: "れい：工場ではたくさんの人が分担している",
+        talks: ["問いへの 答えになっているかな", "資料から わかったことが入っているかな", "自分の考えが 一文あるかな"],
         prompt(theme, memo) {
           return `あなたは小学校4年生以上の社会科のまとめを助ける先生です。
 
@@ -824,15 +880,17 @@
         }
       },
       ikasu: {
-        step: "いかす",
-        color: "var(--purple)",
-        title: "話し合いのテーマをつくる",
-        benefit: "友だちと何について話し合えばよいか迷ったときに使います。",
-        themeLabel: "話し合いたい単元",
-        memoLabel: "自分の考えや迷っていること",
-        themePlaceholder: "例: 日本国憲法と政治",
-        memoPlaceholder: "例: みんなの意見を政治に生かすにはどうしたらいいか",
-        talks: ["立場を変えると考えは変わるか", "よりよい社会にするには何が必要か", "根拠になる資料はどれか"],
+        c: "purple",
+        label: "いかす",
+        title: "みんなで話し合う テーマをつくる",
+        benefit: "友だちと何を話し合えばいいか 迷ったときに使うよ。",
+        themeLabel: "話し合いたい 単元",
+        themeHint: "話し合いのもとになる単元を書こう",
+        themePlaceholder: "れい：日本国憲法と政治",
+        memoLabel: "自分の考えや 迷っていること",
+        memoHint: "「どう思う？」を 正直に書こう",
+        memoPlaceholder: "れい：みんなの意見を政治に生かすにはどうしたらいいか",
+        talks: ["立場を変えると 考えは変わるかな", "よりよい社会にするには 何が必要かな", "根きょになる資料は どれかな"],
         prompt(theme, memo) {
           return `あなたは小学校4年生以上の社会科の話し合いを助ける先生です。
 
@@ -846,125 +904,110 @@
       }
     };
 
-    let currentTool = "tsukamu";
+    const order = ["tsukamu", "shiraberu", "matomeru", "ikasu"];
+    let current = "tsukamu";
 
-    function renderProcessCards() {
-      const grid = document.getElementById("processGrid");
-      grid.innerHTML = Object.entries(tools).map(([id, tool]) => `
-        <button class="process-card ${id === currentTool ? "is-active" : ""}" type="button" data-tool="${id}" style="--accent:${tool.color}">
-          <span class="step">${tool.step}</span>
-          <h3>${tool.title}</h3>
-          <p>${tool.benefit}</p>
-        </button>
-      `).join("");
+    const $ = (id) => document.getElementById(id);
+
+    function renderPick() {
+      $("pickGrid").innerHTML = order.map((id) => {
+        const t = tools[id];
+        return `
+        <button class="pick-card ${id === current ? "is-active" : ""}" type="button" data-tool="${id}"
+          style="--c:var(--${t.c});--c-soft:var(--${t.c}-soft)">
+          <span class="pick-icon">${ICONS[id]}</span>
+          <span class="pick-name">${t.label}</span>
+          <span class="pick-kid">${t.title}</span>
+          <span class="pick-when">${t.benefit}</span>
+        </button>`;
+      }).join("");
     }
+
+    const DEEP = { orange: "#c9651a", blue: "#1f7bb8", green: "#16805d", purple: "#6f44b8" };
 
     function renderTool() {
-      const tool = tools[currentTool];
-      document.getElementById("toolPanel").style.setProperty("--tool-color", tool.color);
-      document.getElementById("toolStep").textContent = tool.step;
-      document.getElementById("toolTitle").textContent = tool.title;
-      document.getElementById("toolBenefit").textContent = tool.benefit;
-      document.getElementById("themeLabel").textContent = tool.themeLabel;
-      document.getElementById("memoLabel").textContent = tool.memoLabel;
-      document.getElementById("themeInput").placeholder = tool.themePlaceholder;
-      document.getElementById("memoInput").placeholder = tool.memoPlaceholder;
-      document.getElementById("talkList").innerHTML = tool.talks.map((item) => `<li>${item}</li>`).join("");
-      updatePromptPreview();
+      const t = tools[current];
+      const tool = $("tool");
+      tool.style.setProperty("--tc", `var(--${t.c})`);
+      tool.style.setProperty("--tc-soft", `var(--${t.c}-soft)`);
+      tool.style.setProperty("--tc-deep", DEEP[t.c]);
+      $("toolIcon").innerHTML = ICONS[current];
+      $("toolLabel").textContent = t.label;
+      $("toolTitle").textContent = t.title;
+      $("toolBenefit").textContent = t.benefit;
+      $("themeLabel").textContent = t.themeLabel;
+      $("themeHint").textContent = t.themeHint;
+      $("memoLabel").textContent = t.memoLabel;
+      $("memoHint").textContent = t.memoHint;
+      $("themeInput").placeholder = t.themePlaceholder;
+      $("memoInput").placeholder = t.memoPlaceholder;
+      $("talkList").innerHTML = t.talks.map((x) => `<li>${x}</li>`).join("");
+      updatePreview();
     }
 
-    function updatePromptPreview() {
-      const tool = tools[currentTool];
-      const theme = document.getElementById("themeInput").value.trim();
-      const memo = document.getElementById("memoInput").value.trim();
-      document.getElementById("promptPreview").textContent = tool.prompt(theme, memo);
+    function updatePreview() {
+      const t = tools[current];
+      $("promptPreview").textContent = t.prompt($("themeInput").value.trim(), $("memoInput").value.trim());
     }
 
     async function copyPrompt() {
-      const text = document.getElementById("promptPreview").textContent;
+      const text = $("promptPreview").textContent;
       try {
         await navigator.clipboard.writeText(text);
-      } catch (error) {
-        const area = document.createElement("textarea");
-        area.value = text;
-        document.body.appendChild(area);
-        area.select();
-        document.execCommand("copy");
-        area.remove();
+      } catch (e) {
+        const a = document.createElement("textarea");
+        a.value = text; document.body.appendChild(a); a.select();
+        document.execCommand("copy"); a.remove();
       }
-      showToast("コピーしました。AIに貼り付けて使いましょう。");
+      showToast("コピーしたよ！AIにはりつけてね");
     }
 
     function openManual() {
-      const modal = document.getElementById("manualModal");
-      modal.hidden = false;
-      modal.setAttribute("aria-hidden", "false");
+      const m = $("manualModal");
+      m.hidden = false;
       document.body.classList.add("is-modal-open");
-      modal.querySelector("[data-close-manual]").focus();
+      m.querySelector("[data-close-manual]").focus();
     }
-
     function closeManual() {
-      const modal = document.getElementById("manualModal");
-      modal.hidden = true;
-      modal.setAttribute("aria-hidden", "true");
+      $("manualModal").hidden = true;
       document.body.classList.remove("is-modal-open");
     }
 
-    function showToast(message) {
-      const toast = document.getElementById("toast");
-      toast.textContent = message;
-      toast.classList.add("is-visible");
-      window.clearTimeout(showToast.timer);
-      showToast.timer = window.setTimeout(() => toast.classList.remove("is-visible"), 2600);
+    function showToast(msg) {
+      const t = $("toast");
+      t.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>${msg}`;
+      t.classList.add("is-visible");
+      clearTimeout(showToast.t);
+      showToast.t = setTimeout(() => t.classList.remove("is-visible"), 2800);
     }
 
-    document.addEventListener("click", (event) => {
-      const toolButton = event.target.closest("[data-tool]");
-      if (toolButton) {
-        currentTool = toolButton.dataset.tool;
-        document.getElementById("themeInput").value = "";
-        document.getElementById("memoInput").value = "";
-        renderProcessCards();
+    document.addEventListener("click", (e) => {
+      const pick = e.target.closest("[data-tool]");
+      if (pick) {
+        current = pick.dataset.tool;
+        $("themeInput").value = "";
+        $("memoInput").value = "";
+        renderPick();
         renderTool();
-        document.getElementById("toolPanel").scrollIntoView({ behavior: "smooth", block: "start" });
+        $("toolWrap").scrollIntoView({ behavior: "smooth", block: "start" });
         return;
       }
-
-      if (event.target.closest("#copyPromptButton")) {
-        copyPrompt();
-        return;
-      }
-
-      if (event.target.closest("[data-open-manual]")) {
-        openManual();
-        return;
-      }
-
-      if (event.target.closest("[data-close-manual]")) {
-        closeManual();
-        return;
-      }
-
-      const modal = document.getElementById("manualModal");
-      if (!modal.hidden && event.target === modal) {
-        closeManual();
-      }
+      if (e.target.closest("#copyBtn")) { copyPrompt(); return; }
+      if (e.target.closest("[data-open-manual]")) { openManual(); return; }
+      if (e.target.closest("[data-close-manual]")) { closeManual(); return; }
+      const m = $("manualModal");
+      if (!m.hidden && e.target === m) closeManual();
     });
 
-    document.addEventListener("input", (event) => {
-      if (event.target.matches("#themeInput, #memoInput")) {
-        updatePromptPreview();
-      }
+    document.addEventListener("input", (e) => {
+      if (e.target.matches("#themeInput, #memoInput")) updatePreview();
     });
 
-    document.addEventListener("keydown", (event) => {
-      const modal = document.getElementById("manualModal");
-      if (event.key === "Escape" && !modal.hidden) {
-        closeManual();
-      }
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !$("manualModal").hidden) closeManual();
     });
 
-    renderProcessCards();
+    renderPick();
     renderTool();
   </script>
 </body>

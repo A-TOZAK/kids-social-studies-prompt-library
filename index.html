@@ -41,6 +41,10 @@
       line-height: 1.75;
     }
 
+    body.is-modal-open {
+      overflow: hidden;
+    }
+
     button,
     input,
     select {
@@ -489,6 +493,130 @@
       white-space: nowrap;
     }
 
+    .manual-modal[hidden] {
+      display: none;
+    }
+
+    .manual-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 1500;
+      display: grid;
+      align-items: center;
+      padding: 24px;
+      background: rgba(12, 20, 35, .72);
+      overflow-y: auto;
+    }
+
+    .manual-dialog {
+      width: min(1040px, 100%);
+      max-height: min(860px, calc(100vh - 48px));
+      margin: auto;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      background: var(--panel);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .manual-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: start;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--line);
+      background: #f8fbff;
+    }
+
+    .manual-header h2 {
+      margin: 0;
+      font-size: 1.35rem;
+      line-height: 1.35;
+    }
+
+    .manual-header p {
+      margin: 6px 0 0;
+      color: var(--sub);
+      font-size: .94rem;
+    }
+
+    .manual-close {
+      min-width: 42px;
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 1.25rem;
+      font-weight: 900;
+    }
+
+    .manual-body {
+      padding: 22px 24px 26px;
+      overflow-y: auto;
+    }
+
+    .manual-flow {
+      display: grid;
+      gap: 18px;
+    }
+
+    .manual-step {
+      display: grid;
+      grid-template-columns: minmax(230px, .72fr) minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fffdfa;
+    }
+
+    .manual-step h3 {
+      margin: 0 0 8px;
+      font-size: 1.02rem;
+    }
+
+    .manual-step p {
+      margin: 0 0 10px;
+      color: var(--sub);
+      font-size: .92rem;
+    }
+
+    .manual-step ol,
+    .manual-step ul {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--sub);
+      font-size: .9rem;
+    }
+
+    .manual-step li {
+      margin: 5px 0;
+    }
+
+    .manual-shot {
+      width: 100%;
+      display: block;
+      border: 1px solid #ccd6e4;
+      border-radius: var(--radius);
+      background: #f4f7fb;
+      box-shadow: 0 10px 28px rgba(23, 32, 51, .1);
+    }
+
+    .manual-note {
+      margin-top: 18px;
+      padding: 14px 16px;
+      border: 1px solid #f2d993;
+      border-radius: var(--radius);
+      background: #fff8df;
+      color: #5d4208;
+      font-size: .92rem;
+    }
+
     footer {
       padding: 30px 16px 38px;
       border-top: 1px solid var(--line);
@@ -533,7 +661,8 @@
       .control-inner,
       .section-head,
       .card-body,
-      .feedback-panel {
+      .feedback-panel,
+      .manual-step {
         grid-template-columns: 1fr;
       }
 
@@ -576,6 +705,19 @@
         width: auto;
       }
 
+      .manual-modal {
+        padding: 12px;
+      }
+
+      .manual-dialog {
+        max-height: calc(100vh - 24px);
+      }
+
+      .manual-header,
+      .manual-body {
+        padding: 16px;
+      }
+
       .card-title,
       .card-body {
         padding: 16px;
@@ -593,6 +735,7 @@
       <p>読み書きが得意な子だけの道具にしないために、短く書けるプロンプト、選べる足場かけ、先生の見取りポイントをセットにしました。</p>
       <div class="hero-actions">
         <a class="btn btn-primary" href="#library">プロンプトを使う</a>
+        <button class="btn btn-secondary" type="button" data-open-manual>使い方を見る</button>
         <a class="btn btn-secondary" href="#teacher-guide">先生用ガイドを見る</a>
       </div>
     </div>
@@ -698,6 +841,74 @@
   </footer>
 
   <div id="toast" role="status" aria-live="polite"></div>
+
+  <div class="manual-modal" id="manualModal" hidden aria-hidden="true">
+    <div class="manual-dialog" role="dialog" aria-modal="true" aria-labelledby="manualTitle" aria-describedby="manualLead">
+      <div class="manual-header">
+        <div>
+          <h2 id="manualTitle">プロンプトの使い方マニュアル</h2>
+          <p id="manualLead">授業中に子どもが迷わないよう、カード選びからAIへの貼り付けまでをスクショ付きで確認できます。</p>
+        </div>
+        <button class="manual-close" type="button" data-close-manual aria-label="マニュアルを閉じる">×</button>
+      </div>
+      <div class="manual-body">
+        <div class="manual-flow">
+          <article class="manual-step">
+            <div>
+              <h3>1. 学習場面に合うカードを選ぶ</h3>
+              <p>上のナビゲーションから「問い」「困った」「予想」などを選びます。迷った子は、まず「困った」カードから始めます。</p>
+              <ol>
+                <li>今の学習場面に近い言葉を押します。</li>
+                <li>カードのタイトルと説明を読みます。</li>
+                <li>書けそうなら、そのカードを使います。</li>
+              </ol>
+            </div>
+            <img class="manual-shot" src="assets/manual-step-choose.png" alt="プロンプトカードを選ぶ画面のスクリーンショット">
+          </article>
+
+          <article class="manual-step">
+            <div>
+              <h3>2. やさしい版・しっかり版を選ぶ</h3>
+              <p>最初は「やさしい版」で大丈夫です。発表やまとめの前に、考えを広げたいときだけ「しっかり版」に切り替えます。</p>
+              <ul>
+                <li>やさしい版: テーマや気づき一つで始められます。</li>
+                <li>しっかり版: 理由、資料、立場のちがいまで考えます。</li>
+              </ul>
+            </div>
+            <img class="manual-shot" src="assets/manual-step-switch.png" alt="やさしい版としっかり版を切り替える画面のスクリーンショット">
+          </article>
+
+          <article class="manual-step">
+            <div>
+              <h3>3. コピーして、太字のところを直す</h3>
+              <p>「コピーする」を押すと、プロンプトがコピーされます。AIへ貼る前に、太字だった部分を自分の言葉へ変えます。</p>
+              <ol>
+                <li>「コピーする」を押します。</li>
+                <li>Gemini または NotebookLM を開きます。</li>
+                <li>貼り付けたあと、テーマや気づきを自分の内容に直します。</li>
+              </ol>
+            </div>
+            <img class="manual-shot" src="assets/manual-step-copy.png" alt="コピーするボタンを押したあとの画面のスクリーンショット">
+          </article>
+
+          <article class="manual-step">
+            <div>
+              <h3>4. AIの返事をそのまま写さない</h3>
+              <p>AIの返事は、考えるためのヒントです。最後は教科書・資料・ノートと照らし合わせ、自分の言葉で直します。</p>
+              <ul>
+                <li>資料から本当に言えることに線を引きます。</li>
+                <li>わからない言葉は、AIに「小学生向けに言いかえて」と聞きます。</li>
+                <li>先生に見せる前に、自分の考えが一文入っているか確認します。</li>
+              </ul>
+            </div>
+            <div class="manual-note">
+              授業での合言葉: AIは「答えを書く人」ではなく、「考えるために質問してくれる人」として使います。
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script>
     const FEEDBACK_FORM_URL = "";
@@ -1170,7 +1381,43 @@
       showToast.timer = window.setTimeout(() => toast.classList.remove("is-visible"), 2600);
     }
 
+    function openManual() {
+      const modal = document.getElementById("manualModal");
+      modal.hidden = false;
+      modal.setAttribute("aria-hidden", "false");
+      document.body.classList.add("is-modal-open");
+      const closeButton = modal.querySelector("[data-close-manual]");
+      closeButton.focus();
+    }
+
+    function closeManual() {
+      const modal = document.getElementById("manualModal");
+      modal.hidden = true;
+      modal.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("is-modal-open");
+      const opener = document.querySelector("[data-open-manual]");
+      if (opener) opener.focus();
+    }
+
     document.addEventListener("click", (event) => {
+      const openManualButton = event.target.closest("[data-open-manual]");
+      if (openManualButton) {
+        openManual();
+        return;
+      }
+
+      const closeManualButton = event.target.closest("[data-close-manual]");
+      if (closeManualButton) {
+        closeManual();
+        return;
+      }
+
+      const modal = document.getElementById("manualModal");
+      if (!modal.hidden && event.target === modal) {
+        closeManual();
+        return;
+      }
+
       const modeButton = event.target.closest("[data-mode]");
       if (modeButton) {
         currentMode = modeButton.dataset.mode;
@@ -1192,6 +1439,13 @@
       if (feedbackButton) {
         openFeedback(feedbackButton.dataset.feedback);
         return;
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      const modal = document.getElementById("manualModal");
+      if (event.key === "Escape" && !modal.hidden) {
+        closeManual();
       }
     });
 

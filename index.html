@@ -404,6 +404,12 @@
       border-color: var(--line);
     }
 
+    .dictionary-btn {
+      background: #eef8f6;
+      color: #075f55;
+      border-color: #b8ddd7;
+    }
+
     .teacher-area {
       display: grid;
       gap: 12px;
@@ -736,6 +742,7 @@
       <div class="hero-actions">
         <a class="btn btn-primary" href="#library">プロンプトを使う</a>
         <button class="btn btn-secondary" type="button" data-open-manual>使い方を見る</button>
+        <a class="btn btn-secondary" href="https://a-tozak.github.io/shakai-kotoba-jiten/" target="_blank" rel="noopener">言葉辞典を開く</a>
         <a class="btn btn-secondary" href="#teacher-guide">先生用ガイドを見る</a>
       </div>
     </div>
@@ -897,7 +904,7 @@
               <p>AIの返事は、考えるためのヒントです。最後は教科書・資料・ノートと照らし合わせ、自分の言葉で直します。</p>
               <ul>
                 <li>資料から本当に言えることに線を引きます。</li>
-                <li>わからない言葉は、AIに「小学生向けに言いかえて」と聞きます。</li>
+                <li>わからない言葉は、AIに「小学生向けに言いかえて」と聞くか、社会科の言葉辞典で調べます。</li>
                 <li>先生に見せる前に、自分の考えが一文入っているか確認します。</li>
               </ul>
             </div>
@@ -911,6 +918,7 @@
   </div>
 
   <script>
+    const KOTOBA_JITEN_URL = "https://a-tozak.github.io/shakai-kotoba-jiten/";
     const FEEDBACK_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSfyw3Alsnns-Zy_L-aO4uw1-FHgvkFMe-s3refbxZAsZ2U-1Q/viewform";
 
     const prompts = [
@@ -1322,6 +1330,7 @@
                   <button class="btn copy-btn" type="button" data-copy="${prompt.id}">コピーする</button>
                   <a class="btn open-btn" href="https://gemini.google.com/" target="_blank" rel="noopener">Gemini</a>
                   <a class="btn open-btn" href="https://notebooklm.google.com/" target="_blank" rel="noopener">NotebookLM</a>
+                  <a class="btn dictionary-btn" href="${KOTOBA_JITEN_URL}" target="_blank" rel="noopener">言葉辞典</a>
                 </div>
               </div>
               <aside class="teacher-area" aria-label="教師用メモ">

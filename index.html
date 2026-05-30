@@ -586,6 +586,44 @@
       font-size: .84rem;
     }
 
+    .upload-guide {
+      margin-top: 28px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #f8fbff;
+      padding: 22px;
+      box-shadow: 0 10px 24px rgba(23, 32, 51, .06);
+    }
+
+    .upload-guide h2 {
+      margin-top: 0;
+    }
+
+    .upload-steps {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .upload-step {
+      border: 1px solid #d7e2ef;
+      border-radius: var(--radius);
+      background: #fff;
+      padding: 14px;
+    }
+
+    .upload-step strong {
+      display: block;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+
+    .upload-step span {
+      color: var(--sub);
+      font-size: .92rem;
+    }
+
     .feedback-section {
       margin-top: 28px;
       display: grid;
@@ -750,6 +788,10 @@
         grid-template-columns: 1fr;
       }
 
+      .upload-steps {
+        grid-template-columns: 1fr 1fr;
+      }
+
       .teacher-note {
         grid-column: 2;
         border-left: 0;
@@ -791,6 +833,10 @@
       }
 
       .message-bar {
+        grid-template-columns: 1fr;
+      }
+
+      .upload-steps {
         grid-template-columns: 1fr;
       }
     }
@@ -870,6 +916,30 @@
       <p class="source-note">参考: 小学校学習指導要領解説 社会編、教育出版 令和6年度版『小学社会』年間指導計画・評価計画（案）。</p>
     </section>
 
+    <section class="upload-guide" aria-label="Geminiで資料を読む流れ">
+      <span class="section-label">ネット資料を読むとき</span>
+      <h2>難しいページは、資料として入れてから聞く</h2>
+      <p class="lead">自治体のPDFや統計ページは、URLだけでなく、スクショ・PDF・コピーした文章も一緒に入れると読み取りやすくなります。</p>
+      <div class="upload-steps">
+        <div class="upload-step">
+          <strong>1. 出どころを見る</strong>
+          <span>市役所・県・国・新聞社など、だれが出した情報かを確認します。</span>
+        </div>
+        <div class="upload-step">
+          <strong>2. 資料を入れる</strong>
+          <span>Geminiの「ファイルを追加」からPDFや画像を入れます。</span>
+        </div>
+        <div class="upload-step">
+          <strong>3. プロンプトを貼る</strong>
+          <span>このサイトで作った文を貼って、やさしく読み取ってもらいます。</span>
+        </div>
+        <div class="upload-step">
+          <strong>4. 教科書と比べる</strong>
+          <span>AIの答えをそのまま信じず、教科書・資料・先生の話と照らし合わせます。</span>
+        </div>
+      </div>
+    </section>
+
     <section class="message-bar" aria-label="使うときの約束">
       <div class="message-icon">✓</div>
       <div>
@@ -909,6 +979,13 @@
               <p>テーマや気づきを入れると、右側のプロンプトがその場で変わります。</p>
             </div>
             <img class="manual-shot" src="assets/manual-step-copy.png" alt="プロンプトをコピーする画面">
+          </article>
+          <article class="manual-step">
+            <div>
+              <h3>3. 資料を入れてから聞く</h3>
+              <p>自治体のPDFやページのスクショは、Geminiの「ファイルを追加」から入れて、プロンプトを貼ります。</p>
+            </div>
+            <img class="manual-shot" src="assets/manual-step-upload.png" alt="資料を入れてからプロンプトを使う画面">
           </article>
         </div>
       </div>
@@ -1017,6 +1094,105 @@
 2. 読み取れる事実
 3. 学習問題と関係しそうなこと
 4. 資料では確認できないこと`;
+        }
+      },
+      {
+        id: "web-source-check",
+        category: "research",
+        title: "インターネットの情報をたしかめよう",
+        description: "サイトの出どころ・日付・根拠を見て、学習に使える情報か確認します。",
+        tags: ["ネット資料", "出どころ", "正しさ"],
+        fields: [
+          { id: "unit", label: "単元や場面", placeholder: "例: 4年 防災、5年 食料生産" },
+          { id: "pageInfo", label: "見ているページの情報", placeholder: "例: 市役所の防災ページ。URLやページ名、更新日がわかれば書く", type: "textarea" },
+          { id: "question", label: "このページで知りたいこと", placeholder: "例: 地域の避難場所はどう決められているのか", type: "textarea" }
+        ],
+        teacher: ["ねらい: 情報の信頼性を確かめる", "使う場面: インターネット調べの前後", "支援: 出どころ・日付・根拠・目的を確認する"],
+        mini: "このページを学習に使ってよいか、出どころや根拠を確かめてください。",
+        gemini(values) {
+          return `あなたは小学校4年生以上の社会科で、インターネットの情報を確かめる手伝いをする先生です。
+
+単元や場面: ${value(values.unit, "社会科の単元")}
+見ているページの情報: ${value(values.pageInfo, "ページ名やURLはまだ書いていません")}
+このページで知りたいこと: ${value(values.question, "まだ決まっていません")}
+
+このページを社会科の学習に使ってよいか、確かめる手伝いをしてください。
+ページの本文やスクリーンショット、PDFが入っていない場合は、わかる範囲だけで答えてください。
+
+次の形で短く出してください。
+1. まず確認すること
+2. 出どころ・日付・根拠を見るポイント
+3. まだ足りない情報
+4. 他のページや教科書で確かめるとよいこと
+5. ノートに書くときの注意
+
+子どもがそのまま写すのではなく、自分で確かめられるようにしてください。`;
+        },
+        notebook(values) {
+          return `NotebookLMに入れた資料だけをもとに答えてください。
+
+単元や場面: ${value(values.unit, "社会科の単元")}
+見ているページの情報: ${value(values.pageInfo, "ページ名やURLはまだ書いていません")}
+このページで知りたいこと: ${value(values.question, "まだ決まっていません")}
+
+資料の中から、この情報を学習に使うときに確認すべき点を整理してください。
+次の形で答えてください。
+
+1. 情報を出している人・団体
+2. 日付や更新時期
+3. 根拠になりそうな数字・資料・説明
+4. 学習問題と関係すること
+5. 資料だけでは確認できないこと`;
+        }
+      },
+      {
+        id: "web-page-easy-reading",
+        category: "research",
+        title: "難しいページをやさしく読み取ろう",
+        description: "自治体資料や統計ページの難しい言葉を、社会科の学習に使える形にします。",
+        tags: ["自治体資料", "難しい言葉", "要点"],
+        fields: [
+          { id: "unit", label: "単元や場面", placeholder: "例: 6年 わたしたちの暮らしを支える政治" },
+          { id: "source", label: "入れた資料・ページ", placeholder: "例: 市の子育て支援のPDF、県の統計ページ、ハザードマップ", type: "textarea" },
+          { id: "stuck", label: "読み取りにくいところ", placeholder: "例: 専門用語が多い。何が大事かわからない", type: "textarea" }
+        ],
+        teacher: ["ねらい: 公的資料を社会科の言葉で読み取る", "使う場面: 自治体資料・統計資料を使う調べ学習", "支援: 要約よりも根拠の読み取りを重視する"],
+        mini: "難しい資料を、小学生にもわかる言葉で読み取る手伝いをしてください。",
+        gemini(values) {
+          return `あなたは小学校4年生以上の社会科で、難しい資料を読み取る手伝いをする先生です。
+
+単元や場面: ${value(values.unit, "社会科の単元")}
+入れた資料・ページ: ${value(values.source, "自治体資料や統計ページ")}
+読み取りにくいところ: ${value(values.stuck, "何が大事かわかりません")}
+
+資料やページの内容を、小学生が社会科で使えるように読み取る手伝いをしてください。
+資料がアップロードされている場合は、その資料をもとにしてください。
+資料がない場合は、読み取るための見方だけを教えてください。
+
+次の形で短く出してください。
+1. 何についての資料か
+2. 大事な言葉を3つと、やさしい言い方
+3. 資料からわかること
+4. 学習問題とつながること
+5. ノートに書くならどのように書き始めるか
+
+資料に書いていないことは、決めつけて言わないでください。`;
+        },
+        notebook(values) {
+          return `NotebookLMに入れた資料だけをもとに答えてください。
+
+単元や場面: ${value(values.unit, "社会科の単元")}
+入れた資料・ページ: ${value(values.source, "自治体資料や統計ページ")}
+読み取りにくいところ: ${value(values.stuck, "何が大事かわかりません")}
+
+資料の内容を、小学生が社会科で使えるように整理してください。
+次の形で答えてください。
+
+1. 資料の目的
+2. 大事な言葉とやさしい説明
+3. 資料から読み取れる事実
+4. 学習問題に使える根拠
+5. 資料だけでは確認できないこと`;
         }
       },
       {
@@ -1236,6 +1412,12 @@
         unit: "ともに生きる暮らしと政治",
         question: "例: 人々の願いをかなえるために政治はどう働くのか",
         uses: ["調べるヒント: 願い、制度、予算、実施までの流れを見る", "考えを深める: だれの立場から見るかを変える", "まとめる: よりよい社会への関わり方を入れる"]
+      },
+      {
+        grade: "6年",
+        unit: "自治体の資料を読む",
+        question: "例: 市の取り組みは、どのような願いや課題から始まったのか",
+        uses: ["調べるヒント: 市役所や県のページは、出どころ・日付・目的を先に見る", "考えを深める: 住民、行政、子どもなど立場を分ける", "まとめる: 資料の言葉を自分の言葉に直して根拠を書く"]
       },
       {
         grade: "6年",

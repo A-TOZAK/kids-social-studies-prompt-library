@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>子どものためのプロンプトライブラリ | 社会科</title>
-  <meta name="description" content="小学校4年生以上の社会科で、調べる・比べる・まとめる・考える・発表するを助ける子ども向けAIプロンプト集。">
+  <meta name="description" content="小学校4年生以上の社会科で、調べるヒント・自分の考えづくり・まとめを助ける子ども向けAIプロンプト集。">
+  <link rel="icon" href="data:,">
   <style>
     :root {
       --navy: #0c2b5a;
@@ -512,6 +513,79 @@
       margin: 6px 0;
     }
 
+    .lesson-examples {
+      margin-top: 32px;
+    }
+
+    .example-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .example-card {
+      display: grid;
+      gap: 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      padding: 18px;
+      box-shadow: 0 10px 24px rgba(23, 32, 51, .07);
+    }
+
+    .example-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      color: var(--sub);
+      font-size: .84rem;
+      font-weight: 900;
+    }
+
+    .grade-badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: #eef5ff;
+      color: var(--blue);
+    }
+
+    .example-card h3 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 1.05rem;
+      line-height: 1.45;
+    }
+
+    .example-question {
+      margin: 0;
+      padding: 10px 12px;
+      border-left: 4px solid var(--active-color, var(--green));
+      background: #f7fafc;
+      color: #243148;
+      font-weight: 900;
+    }
+
+    .example-card ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--sub);
+      font-size: .92rem;
+    }
+
+    .example-card li {
+      margin: 5px 0;
+    }
+
+    .source-note {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: .84rem;
+    }
+
     .feedback-section {
       margin-top: 28px;
       display: grid;
@@ -672,6 +746,10 @@
         grid-template-columns: 8px minmax(0, 1fr);
       }
 
+      .example-grid {
+        grid-template-columns: 1fr;
+      }
+
       .teacher-note {
         grid-column: 2;
         border-left: 0;
@@ -723,7 +801,7 @@
     <div class="hero-inner">
       <div class="eyebrow">社会科 | 小学校4年生以上向け</div>
       <h1>子どものためのプロンプトライブラリ</h1>
-      <p class="hero-copy">調べる・比べる・まとめる・考えるを助ける、社会科のAIプロンプト集</p>
+      <p class="hero-copy">学習問題をもとに、調べるヒント・自分の考え・まとめを助ける、社会科のAIプロンプト集</p>
       <label class="hero-search" aria-label="キーワード検索">
         <input id="searchInput" type="search" placeholder="キーワードでさがす">
       </label>
@@ -773,11 +851,23 @@
       <div class="library-head">
         <div>
           <span class="section-label">よく使うプロンプト</span>
-          <h2>授業で使いやすい場面から選ぶ</h2>
+          <h2>授業のどこで使うかで選ぶ</h2>
           <p>カードを選ぶと、上の入力欄とプロンプトが切り替わります。</p>
         </div>
       </div>
       <div class="prompt-list" id="promptList"></div>
+    </section>
+
+    <section class="lesson-examples" aria-label="授業での活用例">
+      <div class="library-head">
+        <div>
+          <span class="section-label">授業での活用例</span>
+          <h2>年間指導計画に合わせた使いどころ</h2>
+          <p>学習問題をつくる、資料で調べる、自分の考えをまとめる場面に合わせています。</p>
+        </div>
+      </div>
+      <div class="example-grid" id="lessonExamples"></div>
+      <p class="source-note">参考: 小学校学習指導要領解説 社会編、教育出版 令和6年度版『小学社会』年間指導計画・評価計画（案）。</p>
     </section>
 
     <section class="message-bar" aria-label="使うときの約束">
@@ -829,219 +919,335 @@
 
   <script>
     const categories = [
-      { id: "research", label: "調べる", color: "var(--green)" },
-      { id: "compare", label: "比べる", color: "var(--blue)" },
-      { id: "summarize", label: "まとめる", color: "var(--gold)" },
-      { id: "think", label: "考える", color: "var(--teal)" },
-      { id: "present", label: "発表する", color: "var(--purple)" }
+      { id: "research", label: "調べるヒント", color: "var(--green)" },
+      { id: "make", label: "考えをつくる", color: "var(--blue)" },
+      { id: "polish", label: "考えを深める", color: "var(--teal)" },
+      { id: "summarize", label: "まとめる", color: "var(--gold)" }
     ];
 
     const templates = [
       {
-        id: "change-reader",
+        id: "research-plan",
         category: "research",
-        title: "資料を読んで、くらしの変化を3つ見つけよう",
-        description: "昔と今のくらしの違いや、資料からわかることを整理します。",
-        tags: ["短く聞く", "やさしい言い方", "例を見せる"],
+        title: "学習問題から、調べることを決めよう",
+        description: "学習問題と予想をもとに、次に見る資料や聞くことを整理します。",
+        tags: ["学習問題", "見通し", "資料選び"],
         fields: [
-          { id: "topic", label: "学習していること", placeholder: "例: 昔のくらしと今のくらし" },
-          { id: "notice", label: "資料を見て気づいたこと", placeholder: "例: 昔は洗濯に時間がかかりそう" },
-          { id: "question", label: "知りたいこと", placeholder: "例: どうして道具が変わったのかな" }
+          { id: "unit", label: "単元や場面", placeholder: "例: 4年 水はどこから" },
+          { id: "lessonQuestion", label: "学習問題", placeholder: "例: 水はどのように家まで送られてくるのだろう", type: "textarea" },
+          { id: "known", label: "もう知っていること・予想", placeholder: "例: 浄水場できれいにしてから送られると思う", type: "textarea" }
         ],
-        teacher: ["ねらい: 資料の読み取り", "使う場面: 昔のくらし・今のくらし", "声かけ: こたえをそのまま写さない"],
-        mini: "この資料を読んで、昔と今で変わったことを3つ見つけてください。",
+        teacher: ["ねらい: 学習問題を追究する見通しをもつ", "使う場面: 単元導入・調べ活動の前", "支援: 調べる順番と資料を先に決める"],
+        mini: "学習問題を解くために、次に何を調べればよいかを整理してください。",
         gemini(values) {
-          return `あなたは小学校4年生以上の社会科を助ける先生です。
+          return `あなたは小学校4年生以上の社会科の学習を助ける先生です。
 
-学習していること: ${value(values.topic, "昔のくらしと今のくらし")}
-資料を見て気づいたこと: ${value(values.notice, "まだうまく書けません")}
-知りたいこと: ${value(values.question, "まだ決まっていません")}
+単元や場面: ${value(values.unit, "社会科の単元")}
+学習問題: ${value(values.lessonQuestion, "まだ決まっていません")}
+もう知っていること・予想: ${value(values.known, "まだうまく書けません")}
 
-資料からわかることをもとに、くらしの変化を3つ見つける手伝いをしてください。
-小学生にわかる短い文で、次の形で答えてください。
+この学習問題を解くために、次に調べることを考える手伝いをしてください。
+答えを先に教えず、次の形で短く出してください。
 
-1. 資料からわかること
-2. そこから考えられること
-3. まだ資料だけでは言えないこと
+1. まず見るとよい資料を3つ
+2. 資料を見るときのポイント
+3. 友だちや先生に聞くとよいこと
+4. ノートに書ける「調べるめあて」の文
 
-最後に、ノートに書ける一文の例を出してください。
-ただし、答えを丸写しできる長い文章にはしないでください。`;
+小学生にわかる言葉で、社会科の学習に合うように答えてください。`;
         },
         notebook(values) {
           return `NotebookLMに入れた資料だけをもとに答えてください。
 
-調べたいこと: ${value(values.topic, "昔のくらしと今のくらし")}
-資料を見て気づいたこと: ${value(values.notice, "まだうまく書けません")}
-知りたいこと: ${value(values.question, "まだ決まっていません")}
+単元や場面: ${value(values.unit, "社会科の単元")}
+学習問題: ${value(values.lessonQuestion, "まだ決まっていません")}
+もう知っていること・予想: ${value(values.known, "まだうまく書けません")}
 
-資料から読み取れる「くらしの変化」を3つに整理してください。
-それぞれについて、根拠になった資料名や部分がわかるように短く書いてください。
-資料だけでは言えないことは「資料だけではまだ言えない」と書いてください。`;
+この学習問題を解くために、資料の中で確認するとよい場所を整理してください。
+次の形で、資料にあることだけを書いてください。
+
+1. まず読む資料や見出し
+2. 読むときに注目する言葉・数字・写真
+3. 学習問題に関係しそうな根拠
+4. 資料だけではまだわからないこと`;
         }
       },
       {
-        id: "compare-prefectures",
-        category: "compare",
-        title: "2つの地域を比べて、似ているところと違うところを見つけよう",
-        description: "地形・気候・産業などの観点で比べます。",
-        tags: ["観点をしぼる", "表で整理", "1つずつ比較"],
+        id: "source-reading-hints",
+        category: "research",
+        title: "資料を読むヒントをもらおう",
+        description: "写真・地図・グラフ・本文のどこを見ればよいか、視点をしぼります。",
+        tags: ["資料読み取り", "見るところ", "根拠"],
         fields: [
-          { id: "first", label: "比べるもの1", placeholder: "例: A県" },
-          { id: "second", label: "比べるもの2", placeholder: "例: B県" },
-          { id: "viewpoint", label: "比べる観点", placeholder: "例: 地形、気候、特産品" }
+          { id: "unit", label: "単元や場面", placeholder: "例: 5年 米づくりのさかんな地域" },
+          { id: "source", label: "見ている資料", placeholder: "例: 教科書の写真、地図、グラフ、表", type: "textarea" },
+          { id: "stuck", label: "困っていること", placeholder: "例: グラフから何を読み取ればいいかわからない", type: "textarea" }
         ],
-        teacher: ["ねらい: 比較の視点をもつ", "使う場面: 都道府県の学習", "支援: 観点を先に確認する"],
-        mini: "A県とB県を比べて、似ているところと違うところを表にしてください。",
+        teacher: ["ねらい: 資料から必要な情報を集める", "使う場面: 個別調べ・教科書写真の読み取り", "支援: 事実と考えを分けて読む"],
+        mini: "この資料のどこを見ればよいか、見るポイントを3つ教えてください。",
         gemini(values) {
-          return `あなたは小学校4年生以上の社会科を助ける先生です。
+          return `あなたは小学校4年生以上の社会科の資料読み取りを助ける先生です。
 
-比べるもの1: ${value(values.first, "A県")}
-比べるもの2: ${value(values.second, "B県")}
-比べる観点: ${value(values.viewpoint, "地形、気候、特産品")}
+単元や場面: ${value(values.unit, "社会科の単元")}
+見ている資料: ${value(values.source, "教科書や資料集の資料")}
+困っていること: ${value(values.stuck, "何を見ればよいかわかりません")}
 
-次の表の形で、似ているところと違うところを整理してください。
-・観点
-・似ているところ
-・違うところ
-・なぜ違うのか考えられる理由
+資料を読むヒントをください。
+ただし、資料そのものを見ていない場合は、決めつけて答えないでください。
+次の形で短く出してください。
 
-小学生にわかる言葉で、短く答えてください。
-最後に、友だちと話し合うテーマを1つ作ってください。`;
+1. まず見るところ
+2. くらべるところ
+3. 気づいたらメモするとよい言葉
+4. 資料から言えることと、まだ言えないことの分け方
+
+最後に、ノートに書くとよい一文の型を出してください。`;
         },
         notebook(values) {
           return `NotebookLMに入れた資料だけをもとに答えてください。
 
-比べるもの1: ${value(values.first, "A県")}
-比べるもの2: ${value(values.second, "B県")}
-比べる観点: ${value(values.viewpoint, "地形、気候、特産品")}
+単元や場面: ${value(values.unit, "社会科の単元")}
+見ている資料: ${value(values.source, "教科書や資料集の資料")}
+困っていること: ${value(values.stuck, "何を見ればよいかわかりません")}
 
-資料の中から、似ているところと違うところを表に整理してください。
-根拠になる資料名やページ、見出しがわかる場合は一緒に書いてください。
-資料にないことは推測せず、「資料では確認できない」と書いてください。`;
+資料の中から、読むヒントになる部分を探してください。
+次の形で答えてください。
+
+1. 注目するとよい資料名・見出し
+2. 読み取れる事実
+3. 学習問題と関係しそうなこと
+4. 資料では確認できないこと`;
         }
       },
       {
-        id: "short-summary",
+        id: "first-opinion",
+        category: "make",
+        title: "自分の考えをまず1文でつくろう",
+        description: "社会科が苦手でも、わかったことから考えを作れるようにします。",
+        tags: ["1文から", "苦手な子向け", "根拠を入れる"],
+        fields: [
+          { id: "unit", label: "単元や場面", placeholder: "例: 4年 ごみはどこへ" },
+          { id: "lessonQuestion", label: "学習問題", placeholder: "例: ごみはどのように集められ、処理されるのだろう", type: "textarea" },
+          { id: "facts", label: "調べてわかったこと", placeholder: "例: 分別するとリサイクルしやすくなる", type: "textarea" }
+        ],
+        teacher: ["ねらい: 事実をもとに自分の考えをもつ", "使う場面: 調べ活動の途中・まとめ前", "支援: 文型を使って短く書く"],
+        mini: "調べてわかったことを使って、自分の考えを1文で作る手伝いをしてください。",
+        gemini(values) {
+          return `あなたは小学校4年生以上の社会科で、自分の考えを作る手伝いをする先生です。
+
+単元や場面: ${value(values.unit, "社会科の単元")}
+学習問題: ${value(values.lessonQuestion, "まだ決まっていません")}
+調べてわかったこと: ${value(values.facts, "まだうまく書けません")}
+
+この子が自分の考えを1文で書けるように助けてください。
+答えを完成させすぎず、次の形で出してください。
+
+1. 使えそうな大事な言葉を3つ
+2. 考えを書くための文の型を2つ
+3. その文に入れるとよい根拠
+4. もう少し調べるとよいことを1つ
+
+「AIが書いた文をそのまま写す」のではなく、自分の言葉に直せるようにしてください。`;
+        },
+        notebook(values) {
+          return `NotebookLMに入れた資料だけをもとに答えてください。
+
+単元や場面: ${value(values.unit, "社会科の単元")}
+学習問題: ${value(values.lessonQuestion, "まだ決まっていません")}
+調べてわかったこと: ${value(values.facts, "まだうまく書けません")}
+
+自分の考えを作るための材料を、資料から探してください。
+次の形で答えてください。
+
+1. 考えに使えそうな根拠
+2. 根拠と関係する資料名・見出し
+3. 自分の考えとして書けそうな方向
+4. 資料だけでは言えないこと`;
+        }
+      },
+      {
+        id: "improve-opinion",
+        category: "polish",
+        title: "書いた考えを、もっと社会科らしくしよう",
+        description: "根拠・別の立場・くらしとのつながりを入れて考えを深めます。",
+        tags: ["ブラッシュアップ", "別の立場", "根拠"],
+        fields: [
+          { id: "currentIdea", label: "今の自分の考え", placeholder: "例: 水を大切にしたほうがいいと思います", type: "textarea" },
+          { id: "evidence", label: "使いたい根拠", placeholder: "例: 水を送るために多くの施設や人が関わっている", type: "textarea" },
+          { id: "nextQuestion", label: "もっと考えたいこと", placeholder: "例: 自分たちにできることは何か", type: "textarea" }
+        ],
+        teacher: ["ねらい: 思考・判断・表現を高める", "使う場面: まとめ前・意見文の推敲", "支援: 根拠、立場、社会との関わりを確認する"],
+        mini: "今の考えを、根拠や別の立場を入れてもっとよくしてください。",
+        gemini(values) {
+          return `あなたは小学校4年生以上の社会科で、考えを深める手伝いをする先生です。
+
+今の自分の考え: ${value(values.currentIdea, "まだうまく書けません")}
+使いたい根拠: ${value(values.evidence, "まだ決まっていません")}
+もっと考えたいこと: ${value(values.nextQuestion, "まだ決まっていません")}
+
+この考えを社会科らしくするために、次の形でアドバイスしてください。
+
+1. よいところ
+2. 根拠を足すならどこか
+3. 別の立場から考えるなら何を見るか
+4. くらしや社会とのつながりを入れるなら何を書くか
+5. 自分の言葉で書き直すための短い文の型
+
+完成文を長く作りすぎず、子どもが自分で直せるようにしてください。`;
+        },
+        notebook(values) {
+          return `NotebookLMに入れた資料だけをもとに答えてください。
+
+今の自分の考え: ${value(values.currentIdea, "まだうまく書けません")}
+使いたい根拠: ${value(values.evidence, "まだ決まっていません")}
+もっと考えたいこと: ${value(values.nextQuestion, "まだ決まっていません")}
+
+この考えを深めるために使えそうな資料を探してください。
+次の形で答えてください。
+
+1. 考えを支える根拠
+2. 別の立場や見方がわかる資料
+3. くらしや社会とのつながりがわかる資料
+4. 資料では確認できないこと`;
+        }
+      },
+      {
+        id: "discussion-theme",
+        category: "polish",
+        title: "話し合いのテーマをつくろう",
+        description: "意見が分かれるところを見つけ、話し合う視点を作ります。",
+        tags: ["話し合い", "視点", "選択・判断"],
+        fields: [
+          { id: "lessonQuestion", label: "学習問題", placeholder: "例: 地域の安全を守るために何が大切なのだろう", type: "textarea" },
+          { id: "positions", label: "出ている考え", placeholder: "例: 備えが大切、役所の取り組みが大切、地域の協力が大切", type: "textarea" },
+          { id: "evidence", label: "使えそうな資料や根拠", placeholder: "例: ハザードマップ、避難訓練の資料、地域の人の話", type: "textarea" }
+        ],
+        teacher: ["ねらい: 説明・議論につながる問いをつくる", "使う場面: ペア・グループ交流前", "支援: 正解探しではなく根拠比べにする"],
+        mini: "この学習問題で、友だちと話し合うテーマを作ってください。",
+        gemini(values) {
+          return `あなたは小学校4年生以上の社会科で、話し合いを助ける先生です。
+
+学習問題: ${value(values.lessonQuestion, "まだ決まっていません")}
+出ている考え: ${value(values.positions, "まだ出ていません")}
+使えそうな資料や根拠: ${value(values.evidence, "まだ決まっていません")}
+
+友だちと話し合うテーマを作ってください。
+次の形で短く出してください。
+
+1. 話し合いテーマを3つ
+2. それぞれで比べる視点
+3. 根拠として使える資料
+4. 話し合いで気をつけること
+
+勝ち負けを決める話し合いではなく、根拠をもとに考えを深める話し合いにしてください。`;
+        },
+        notebook(values) {
+          return `NotebookLMに入れた資料だけをもとに答えてください。
+
+学習問題: ${value(values.lessonQuestion, "まだ決まっていません")}
+出ている考え: ${value(values.positions, "まだ出ていません")}
+使えそうな資料や根拠: ${value(values.evidence, "まだ決まっていません")}
+
+資料をもとに、話し合いに使える論点を整理してください。
+次の形で答えてください。
+
+1. 資料から意見が分かれそうな点
+2. それぞれの意見を支える根拠
+3. 友だちに聞くとよい質問
+4. 資料では確認できないこと`;
+        }
+      },
+      {
+        id: "social-summary",
         category: "summarize",
-        title: "調べたことを、発表用に短くまとめよう",
-        description: "調べた内容を、聞き手に伝わる順番にします。",
-        tags: ["3文にする", "発表向け", "大事な言葉"],
+        title: "学習問題に答えるまとめをつくろう",
+        description: "わかったこと、根拠、自分の考えを分けてまとめます。",
+        tags: ["まとめ", "根拠", "自分の言葉"],
         fields: [
-          { id: "topic", label: "まとめたいテーマ", placeholder: "例: 水はどこから来るのか" },
-          { id: "facts", label: "調べてわかったこと", placeholder: "例: 浄水場できれいにしてから水道管で送られる" },
-          { id: "thought", label: "自分の考え", placeholder: "例: 水を大切に使いたい" }
+          { id: "lessonQuestion", label: "学習問題", placeholder: "例: 食料生産を発展させるために何が大切なのだろう", type: "textarea" },
+          { id: "facts", label: "調べてわかったこと", placeholder: "例: 生産者は品質や安全、働き方の工夫をしている", type: "textarea" },
+          { id: "idea", label: "自分の考え", placeholder: "例: 消費者も選び方を考えることが大切だと思う", type: "textarea" }
         ],
-        teacher: ["ねらい: 要点の整理", "使う場面: 発表前", "声かけ: 自分の考えを一文入れる"],
-        mini: "調べたことを、発表で言いやすい3文にまとめてください。",
+        teacher: ["ねらい: 学習問題に対する自分の考えを表現する", "使う場面: 単元末・ノートまとめ", "支援: 事実、根拠、考えを分ける"],
+        mini: "学習問題に答えるまとめを、根拠と自分の考えに分けて作ってください。",
         gemini(values) {
-          return `あなたは小学校4年生以上の社会科の発表を助ける先生です。
+          return `あなたは小学校4年生以上の社会科のまとめを助ける先生です。
 
-テーマ: ${value(values.topic, "調べたテーマ")}
+学習問題: ${value(values.lessonQuestion, "まだ決まっていません")}
 調べてわかったこと: ${value(values.facts, "まだうまく書けません")}
-自分の考え: ${value(values.thought, "まだ決まっていません")}
+自分の考え: ${value(values.idea, "まだ決まっていません")}
 
-発表で言いやすいように、3文のまとめを作る手伝いをしてください。
-1文目: 何について調べたか
-2文目: 調べてわかった大事なこと
-3文目: 自分の考えやくらしとのつながり
+学習問題に答えるまとめを作る手伝いをしてください。
+次の形で短く出してください。
 
-むずかしい言葉は小学生向けに言いかえてください。
-最後に、もっとよくするための質問を1つだけしてください。`;
+1. わかったこと
+2. 根拠になる資料や事実
+3. 自分の考え
+4. くらしや社会とのつながり
+5. 自分の言葉で書くためのまとめの型
+
+丸写しにならないように、完成文は短めにしてください。`;
         },
         notebook(values) {
           return `NotebookLMに入れた資料だけをもとに答えてください。
 
-テーマ: ${value(values.topic, "調べたテーマ")}
+学習問題: ${value(values.lessonQuestion, "まだ決まっていません")}
 調べてわかったこと: ${value(values.facts, "まだうまく書けません")}
-自分の考え: ${value(values.thought, "まだ決まっていません")}
+自分の考え: ${value(values.idea, "まだ決まっていません")}
 
-資料に書かれていることをもとに、発表用の3文まとめを作るための材料を整理してください。
-資料から言えることと、自分の考えとして書くことを分けてください。
-資料名や根拠がわかる場合は短く添えてください。`;
+学習問題に答えるまとめの材料を、資料から整理してください。
+次の形で答えてください。
+
+1. 資料から言えること
+2. 根拠になる資料名・見出し
+3. 自分の考えとして分けて書くとよいこと
+4. 資料だけでは言えないこと`;
         }
+      }
+    ];
+
+    const lessonExamples = [
+      {
+        grade: "4年",
+        unit: "健康なくらしとまちづくり",
+        question: "例: ごみはどのように集められ、処理されるのか",
+        uses: ["調べるヒント: 収集、処理、再利用の順に資料を見る", "考えをつくる: 分別や減量がなぜ必要かを根拠で考える", "まとめる: 自分たちにできることを一文で入れる"]
       },
       {
-        id: "why-question",
-        category: "think",
-        title: "なぜそうなるのか、理由を考えよう",
-        description: "原因と結果、人の立場を分けて考えます。",
-        tags: ["理由を分ける", "立場を変える", "考えを深める"],
-        fields: [
-          { id: "question", label: "考えたい問い", placeholder: "例: なぜごみを分別するのか" },
-          { id: "guess", label: "自分の予想", placeholder: "例: リサイクルするため" },
-          { id: "person", label: "関係する人", placeholder: "例: 市役所の人、地域の人" }
-        ],
-        teacher: ["ねらい: 原因と結果", "使う場面: 予想を深める", "支援: 立場を変えて考える"],
-        mini: "なぜそうなるのか、理由を3つに分けて考えてください。",
-        gemini(values) {
-          return `あなたは小学校4年生以上の社会科の考えを深める先生です。
-
-考えたい問い: ${value(values.question, "なぜそうなるのか")}
-自分の予想: ${value(values.guess, "まだうまく書けません")}
-関係する人: ${value(values.person, "まだ決まっていません")}
-
-この問いについて、理由を3つに分けて考える手伝いをしてください。
-・人の立場から考えた理由
-・場所や地域から考えた理由
-・昔と今の変化から考えた理由
-
-決めつけになっているところがあれば、やさしく教えてください。
-最後に、次に調べるとよい資料を2つ出してください。`;
-        },
-        notebook(values) {
-          return `NotebookLMに入れた資料だけをもとに答えてください。
-
-考えたい問い: ${value(values.question, "なぜそうなるのか")}
-自分の予想: ${value(values.guess, "まだうまく書けません")}
-関係する人: ${value(values.person, "まだ決まっていません")}
-
-資料の中から、この問いの理由を考える材料を探してください。
-人の立場、場所や地域、変化の3つに分けて整理してください。
-資料だけでは言えない理由は、推測として混ぜずに「資料では確認できない」と書いてください。`;
-        }
+        grade: "4年",
+        unit: "水はどこから",
+        question: "例: 水はどのように安全に家まで届くのか",
+        uses: ["調べるヒント: 水源、浄水場、水道管、使う人に分ける", "考えをつくる: 施設と人々の協力に着目する", "まとめる: 水を大切に使う理由まで書く"]
       },
       {
-        id: "presentation-plan",
-        category: "present",
-        title: "発表の順番を考えよう",
-        description: "聞き手に伝わる発表の流れを作ります。",
-        tags: ["順番を決める", "短く話す", "聞き手を意識"],
-        fields: [
-          { id: "topic", label: "発表するテーマ", placeholder: "例: 自然災害からくらしを守る" },
-          { id: "main", label: "一番伝えたいこと", placeholder: "例: 日ごろの備えが大切" },
-          { id: "audience", label: "聞く人", placeholder: "例: クラスの友だち" }
-        ],
-        teacher: ["ねらい: 表現の構成", "使う場面: 発表準備", "支援: 根拠を入れる"],
-        mini: "発表の順番を、はじめ・中・おわりで考えてください。",
-        gemini(values) {
-          return `あなたは小学校4年生以上の社会科の発表を助ける先生です。
-
-発表するテーマ: ${value(values.topic, "発表するテーマ")}
-一番伝えたいこと: ${value(values.main, "まだうまく書けません")}
-聞く人: ${value(values.audience, "クラスの友だち")}
-
-発表の順番を「はじめ・中・おわり」で考えてください。
-それぞれ、何を話すとよいか短く書いてください。
-資料や調べたことを入れる場所も教えてください。
-最後に、発表前に確認することを3つ出してください。`;
-        },
-        notebook(values) {
-          return `NotebookLMに入れた資料だけをもとに答えてください。
-
-発表するテーマ: ${value(values.topic, "発表するテーマ")}
-一番伝えたいこと: ${value(values.main, "まだうまく書けません")}
-聞く人: ${value(values.audience, "クラスの友だち")}
-
-資料をもとに、発表の順番を「はじめ・中・おわり」で整理してください。
-どの資料をどこで使うとよいかも示してください。
-資料にないことは入れず、必要なら「自分の考えとして付け足す」と分けてください。`;
-        }
+        grade: "5年",
+        unit: "日本の国土とくらし",
+        question: "例: 自然条件と人々のくらしにはどんな関係があるのか",
+        uses: ["調べるヒント: 気候、地形、産業、くらしを比べる", "考えをつくる: 地域の特色と人々の工夫をつなげる", "まとめる: 似ている点と違う点を分けて書く"]
+      },
+      {
+        grade: "5年",
+        unit: "未来を支える食料生産",
+        question: "例: 食料生産を発展させるために何が大切なのか",
+        uses: ["調べるヒント: 生産者、消費者、自然条件、課題に分ける", "考えを深める: 安全・安定・環境の視点で話し合う", "まとめる: これからの食料生産への自分の考えを書く"]
+      },
+      {
+        grade: "6年",
+        unit: "ともに生きる暮らしと政治",
+        question: "例: 人々の願いをかなえるために政治はどう働くのか",
+        uses: ["調べるヒント: 願い、制度、予算、実施までの流れを見る", "考えを深める: だれの立場から見るかを変える", "まとめる: よりよい社会への関わり方を入れる"]
+      },
+      {
+        grade: "6年",
+        unit: "日本の歴史",
+        question: "例: 時代の変化は人々のくらしをどう変えたのか",
+        uses: ["調べるヒント: 人物、できごと、制度、くらしの変化に分ける", "考えをつくる: 変化の理由と影響をつなげる", "まとめる: 歴史を学ぶ意味を自分の言葉で書く"]
       }
     ];
 
     let currentTool = "gemini";
     let currentCategory = "research";
-    let selectedTemplateId = "change-reader";
+    let selectedTemplateId = "research-plan";
     const values = {};
 
     function value(input, fallback) {
@@ -1080,7 +1286,7 @@
       document.getElementById("fieldGrid").innerHTML = template.fields.map((field) => `
         <label>
           <span>${field.label}</span>
-          ${field.id === "facts" || field.id === "notice" || field.id === "thought" || field.id === "main"
+          ${field.type === "textarea"
             ? `<textarea data-field="${field.id}" placeholder="${field.placeholder}">${values[field.id] || ""}</textarea>`
             : `<input data-field="${field.id}" type="text" value="${values[field.id] || ""}" placeholder="${field.placeholder}">`}
         </label>
@@ -1129,6 +1335,21 @@
           </article>
         `;
       }).join("") || `<div class="prompt-card"><div class="strip"></div><div class="prompt-main"><h3>見つかりませんでした</h3><p>別の言葉で検索してください。</p></div></div>`;
+    }
+
+    function renderLessonExamples() {
+      const area = document.getElementById("lessonExamples");
+      area.innerHTML = lessonExamples.map((example) => `
+        <article class="example-card">
+          <div class="example-meta">
+            <span class="grade-badge">${example.grade}</span>
+            <span>${example.unit}</span>
+          </div>
+          <h3>授業での使いどころ</h3>
+          <p class="example-question">${example.question}</p>
+          <ul>${example.uses.map((item) => `<li>${item}</li>`).join("")}</ul>
+        </article>
+      `).join("");
     }
 
     async function copyText(text) {
@@ -1248,6 +1469,7 @@
     renderCategories();
     renderBuilder();
     renderCards();
+    renderLessonExamples();
   </script>
 </body>
 </html>

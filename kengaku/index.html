@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>社会科見学 Geminiプロンプト集 | 4年生</title>
+  <title>社会科見学 問いカード・プロンプト集 | 4年生</title>
   <style>
     :root {
       --navy:   #0b2754;
@@ -41,13 +41,32 @@
        HERO
     ============================ */
     .hero {
-      background: linear-gradient(150deg, #0b2754 0%, #194ea0 100%);
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(90deg, rgba(7,26,61,.94) 0%, rgba(10,44,88,.86) 42%, rgba(9,32,65,.34) 100%),
+        url("../assets/social-field-trip-exploration.png") center right / cover no-repeat;
       color: #fff;
-      padding: 32px 0 28px;
+      padding: 34px 0 32px;
+      min-height: 360px;
+      display: grid;
+      align-items: end;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 76px;
+      background: linear-gradient(0deg, rgba(250,247,239,1), rgba(250,247,239,0));
+      pointer-events: none;
     }
     .wrap {
       width: min(1040px, 100% - 32px);
       margin: 0 auto;
+    }
+    .hero .wrap {
+      position: relative;
+      z-index: 1;
     }
     .hero-eyebrow {
       font-size: .78rem;
@@ -57,14 +76,15 @@
       margin-bottom: 8px;
     }
     .hero h1 {
-      font-size: 2.3rem;
+      font-size: 2.6rem;
       line-height: 1.25;
       margin-bottom: 10px;
+      max-width: 560px;
     }
     .hero-lead {
       font-size: .95rem;
-      opacity: .82;
-      max-width: 640px;
+      opacity: .9;
+      max-width: 540px;
       margin-bottom: 18px;
     }
     .hero-badges {
@@ -84,6 +104,113 @@
     .badge-date  { background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25); }
     .badge-dict  { background: #fff; color: var(--navy); }
     .badge-dict:hover { background: #f0f5ff; }
+
+    /* ============================
+       LEARNING PATH
+    ============================ */
+    .learning-layout {
+      display: grid;
+      grid-template-columns: 176px minmax(0, 1fr);
+      gap: 22px;
+      align-items: start;
+    }
+    .learning-nav {
+      position: sticky;
+      top: 66px;
+      z-index: 120;
+      display: grid;
+      gap: 8px;
+    }
+    .learning-nav-title {
+      font-size: .78rem;
+      font-weight: 900;
+      color: var(--muted);
+      letter-spacing: .08em;
+      padding: 0 4px 2px;
+    }
+    .stage-link {
+      display: grid;
+      grid-template-columns: 38px 1fr;
+      gap: 9px;
+      align-items: center;
+      min-height: 66px;
+      padding: 9px 10px;
+      border: 2px solid var(--line);
+      border-radius: var(--r-sm);
+      background: var(--white);
+      box-shadow: 0 2px 10px rgba(10,30,70,.05);
+      color: var(--ink);
+    }
+    .stage-link:hover { border-color: #83aee8; }
+    .stage-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 1.2rem;
+      font-weight: 900;
+      color: #fff;
+    }
+    .stage-link strong {
+      display: block;
+      color: var(--navy);
+      font-size: .9rem;
+      line-height: 1.25;
+    }
+    .stage-link small {
+      display: block;
+      color: var(--muted);
+      font-size: .72rem;
+      line-height: 1.25;
+      margin-top: 2px;
+    }
+    .stage-question .stage-icon { background: #148253; }
+    .stage-research .stage-icon { background: #1768c7; }
+    .stage-summary .stage-icon { background: #8b4a18; }
+    .learning-content { min-width: 0; }
+    .kid-guide {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .kid-step {
+      background: var(--white);
+      border: 2px solid var(--line);
+      border-radius: var(--r);
+      padding: 16px;
+      box-shadow: var(--shadow);
+      scroll-margin-top: 92px;
+    }
+    .kid-step-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-size: 1.35rem;
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+    .kid-step h2 {
+      color: var(--navy);
+      font-size: 1.08rem;
+      line-height: 1.35;
+      margin-bottom: 6px;
+    }
+    .kid-step p {
+      color: var(--sub);
+      font-size: .88rem;
+      line-height: 1.55;
+    }
+    .kid-step:nth-child(1) { border-color: #b7dbc9; }
+    .kid-step:nth-child(2) { border-color: #b7cff0; }
+    .kid-step:nth-child(3) { border-color: #efc6a0; }
+    .kid-step:nth-child(1) .kid-step-icon { background: #148253; }
+    .kid-step:nth-child(2) .kid-step-icon { background: #1768c7; }
+    .kid-step:nth-child(3) .kid-step-icon { background: #8b4a18; }
 
     /* ============================
        TAB NAV
@@ -331,6 +458,7 @@
     .btn-ai-search:hover { background: #1558b0; }
     .search-chips { display: flex; flex-wrap: wrap; gap: 6px; }
     .schip {
+      appearance: none;
       display: inline-flex; align-items: center; gap: 4px;
       padding: 4px 12px; border-radius: 14px;
       background: #fff; border: 1px solid #a0c0e8;
@@ -345,6 +473,7 @@
        WORD TICKER
     ============================ */
     .ticker-wrap {
+      display: none;
       margin: 16px 0 20px;
       border-radius: var(--r-sm);
       overflow: hidden;
@@ -708,7 +837,10 @@
       border-radius: 999px;
       background: rgba(255,255,255,.14);
       pointer-events: none;
+      opacity: 1;
+      transition: opacity 260ms ease;
     }
+    .ss-progress.is-hidden { opacity: 0; }
     .ss-progress-fill {
       height: 100%;
       width: 0%;
@@ -764,7 +896,36 @@
        RESPONSIVE
     ============================ */
     @media (max-width: 600px) {
-      .hero h1 { font-size: 1.5rem; }
+      .hero {
+        min-height: 420px;
+        background:
+          linear-gradient(180deg, rgba(7,26,61,.92) 0%, rgba(7,26,61,.78) 52%, rgba(7,26,61,.42) 100%),
+          url("../assets/social-field-trip-exploration.png") center top / cover no-repeat;
+        align-items: end;
+      }
+      .hero h1 { font-size: 1.68rem; }
+      .hero-lead { font-size: .88rem; }
+      .learning-layout { display: block; }
+      .learning-nav {
+        top: 52px;
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        padding: 8px 0;
+        margin: -8px 0 12px;
+        background: var(--paper);
+        scrollbar-width: none;
+      }
+      .learning-nav::-webkit-scrollbar { display: none; }
+      .learning-nav-title { display: none; }
+      .stage-link {
+        min-width: 142px;
+        grid-template-columns: 32px 1fr;
+        min-height: 58px;
+        padding: 8px;
+      }
+      .stage-icon { width: 32px; height: 32px; font-size: 1rem; }
+      .kid-guide { grid-template-columns: 1fr; }
       .prompt-grid, .kw-grid, .source-grid { grid-template-columns: 1fr; }
       .slide-flow { grid-template-columns: 1fr 1fr; }
       .ss-content { width: min(100% - 24px, 680px); padding: 36px 10px 68px; }
@@ -782,10 +943,10 @@
   <div class="wrap">
     <a href="../index.html" style="display:inline-flex;align-items:center;gap:5px;font-size:.78rem;font-weight:800;opacity:.6;margin-bottom:12px;color:#fff;text-decoration:none;" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='.6'">← 子どものためのプロンプトライブラリ</a>
     <div class="hero-eyebrow">社会科 4年生 ｜ 社会科見学</div>
-    <h1>見学で学ぼう！<br>Gemini プロンプト集</h1>
+    <h1>見学で学ぼう！<br>問いをつくるカード</h1>
     <p class="hero-lead">
-      飯塚市クリーンセンター・多々良浄水場・福岡市防災センターの見学に向けて、
-      AIを使って問いを立てたり、まとめたりしよう。
+      まず「何を見る？」を決めて、資料で調べて、わかったことを自分の言葉でまとめます。
+      AIは答えを写すためではなく、見学の目のつけどころを助ける道具です。
     </p>
     <div class="hero-badges">
       <span class="badge badge-date">📅 見学日：2026年6月16日（火）</span>
@@ -816,6 +977,41 @@
 
 <main>
 <div class="wrap">
+<div class="learning-layout">
+  <aside class="learning-nav" aria-label="今の学習の場所">
+    <div class="learning-nav-title">今やること</div>
+    <a class="stage-link stage-question" href="#stage-question">
+      <span class="stage-icon">?</span>
+      <span><strong>問いをつかむ</strong><small>何を見る？</small></span>
+    </a>
+    <a class="stage-link stage-research" href="#stage-research">
+      <span class="stage-icon">🔍</span>
+      <span><strong>調べる</strong><small>資料・地図</small></span>
+    </a>
+    <a class="stage-link stage-summary" href="#stage-summary">
+      <span class="stage-icon">✓</span>
+      <span><strong>まとめる</strong><small>自分の言葉</small></span>
+    </a>
+  </aside>
+
+  <div class="learning-content">
+    <section class="kid-guide" aria-label="このサイトの使い方">
+      <article class="kid-step" id="stage-question">
+        <div class="kid-step-icon">?</div>
+        <h2>1. 何を見ればいい？</h2>
+        <p>見学先の場所、車や水の流れ、働く人の工夫から、まず問いを一つ選びます。</p>
+      </article>
+      <article class="kid-step" id="stage-research">
+        <div class="kid-step-icon">🔍</div>
+        <h2>2. どこで調べる？</h2>
+        <p>AI検索で調べる言葉を決め、元になっている資料や地図も実際に読みます。</p>
+      </article>
+      <article class="kid-step" id="stage-summary">
+        <div class="kid-step-icon">✓</div>
+        <h2>3. わかったことは？</h2>
+        <p>見たこと・聞いたこと・考えたことを分けて、自分の言葉でまとめます。</p>
+      </article>
+    </section>
 
   <!-- ==========================================
        TAB 1 : 飯塚市クリーンセンター
@@ -940,18 +1136,18 @@
 
     <!-- AI検索 -->
     <div class="ai-search-section">
-      <h3>🔍 Chromeの AI検索モードで調べよう</h3>
+      <h3>🔍 調べたい言葉を選んで、AIモードで聞いてみよう</h3>
       <div class="ai-search-row">
         <input class="ai-search-input" type="text" id="q-clean"
                placeholder="調べたいことを入力…" value="飯塚市 ごみ処理 仕組み">
         <button class="btn-ai-search" type="button" onclick="aiSearch('q-clean')">AIで検索</button>
       </div>
       <div class="search-chips">
-        <a class="schip" href="https://www.google.com/search?udm=46&q=飯塚市+ごみ+収集+分別" target="_blank" rel="noopener">飯塚市 ごみ 分別</a>
-        <a class="schip" href="https://www.google.com/search?udm=46&q=クリーンセンター+焼却+仕組み" target="_blank" rel="noopener">焼却の仕組み</a>
-        <a class="schip" href="https://www.google.com/search?udm=46&q=資源ごみ+リサイクル+流れ" target="_blank" rel="noopener">リサイクルの流れ</a>
-        <a class="schip" href="https://www.google.com/search?udm=46&q=埋め立て処分場+問題+満杯" target="_blank" rel="noopener">埋め立て処分場の問題</a>
-        <a class="schip" href="https://www.google.com/search?udm=46&q=ごみ処理場+働く人+仕事" target="_blank" rel="noopener">ごみ処理場で働く人</a>
+        <button class="schip" type="button" data-query="飯塚市 ごみ 収集 分別">飯塚市 ごみ 分別</button>
+        <button class="schip" type="button" data-query="クリーンセンター 焼却 仕組み">焼却の仕組み</button>
+        <button class="schip" type="button" data-query="資源ごみ リサイクル 流れ">リサイクルの流れ</button>
+        <button class="schip" type="button" data-query="埋め立て処分場 問題 満杯">埋め立て処分場の問題</button>
+        <button class="schip" type="button" data-query="ごみ処理場 働く人 仕事">ごみ処理場で働く人</button>
       </div>
       <p class="search-note">出てきたページは「どこが出している情報か（市役所・県・国など）」を確かめてから使いましょう。</p>
     </div>
@@ -999,13 +1195,20 @@
 
     <!-- 一次資料 -->
     <div class="sources-section">
-      <h3>🔗 一次資料 — 直接アクセスしよう</h3>
+      <h3>🔗 元になっている資料を実際に読んでみよう</h3>
       <div class="source-grid">
-        <a class="source-link" href="https://www.city.iizuka.lg.jp/kankyou/gomi/index.html" target="_blank" rel="noopener">
+        <a class="source-link" href="https://www.city.iizuka.lg.jp/site/garbage/2648.html" target="_blank" rel="noopener">
           <div class="src-icon">🏛️</div>
           <div class="src-text">
             <strong>飯塚市 ごみの出し方・分け方</strong>
             <span>飯塚市公式ホームページ</span>
+          </div>
+        </a>
+        <a class="source-link" href="https://www.city.iizuka.lg.jp/garbage-item/search/search.php" target="_blank" rel="noopener">
+          <div class="src-icon">🔎</div>
+          <div class="src-text">
+            <strong>ごみの分け方検索</strong>
+            <span>知りたいごみを名前で調べる</span>
           </div>
         </a>
         <a class="source-link" href="https://maps.google.com/maps?q=飯塚市クリーンセンター" target="_blank" rel="noopener">
@@ -1244,18 +1447,18 @@
 
     <!-- AI検索 -->
     <div class="ai-search-section">
-      <h3>🔍 Chromeの AI検索モードで調べよう</h3>
+      <h3>🔍 調べたい言葉を選んで、AIモードで聞いてみよう</h3>
       <div class="ai-search-row">
         <input class="ai-search-input" type="text" id="q-water"
                placeholder="調べたいことを入力…" value="多々良浄水場 水をきれいにする仕組み">
         <button class="btn-ai-search" type="button" onclick="aiSearch('q-water')">AIで検索</button>
       </div>
       <div class="search-chips">
-        <a class="schip" href="https://www.google.com/search?udm=46&q=浄水場+水+きれいにする+仕組み" target="_blank" rel="noopener">浄水場の仕組み</a>
-        <a class="schip" href="https://www.google.com/search?udm=46&q=水道水+水質検査+何を調べる" target="_blank" rel="noopener">水質検査の内容</a>
-        <a class="schip" href="https://www.google.com/search?udm=46&q=水道+24時間+働く人+仕事" target="_blank" rel="noopener">24時間働く人</a>
-        <a class="schip" href="https://www.google.com/search?udm=46&q=多々良川+水源+どこ" target="_blank" rel="noopener">多々良川の水源</a>
-        <a class="schip" href="https://www.google.com/search?udm=46&q=福岡市水道局+水をつくる" target="_blank" rel="noopener">福岡市の水道</a>
+        <button class="schip" type="button" data-query="浄水場 水 きれいにする 仕組み">浄水場の仕組み</button>
+        <button class="schip" type="button" data-query="水道水 水質検査 何を調べる">水質検査の内容</button>
+        <button class="schip" type="button" data-query="水道 24時間 働く人 仕事">24時間働く人</button>
+        <button class="schip" type="button" data-query="多々良川 水源 どこ">多々良川の水源</button>
+        <button class="schip" type="button" data-query="福岡市水道局 水をつくる">福岡市の水道</button>
       </div>
       <p class="search-note">出てきたページは「どこが出している情報か（市役所・県・国など）」を確かめてから使いましょう。</p>
     </div>
@@ -1313,7 +1516,7 @@
 
     <!-- 一次資料 -->
     <div class="sources-section">
-      <h3>🔗 一次資料 — 直接アクセスしよう</h3>
+      <h3>🔗 元になっている資料を実際に読んでみよう</h3>
       <div class="source-grid">
         <a class="source-link" href="https://www.city.fukuoka.lg.jp/suidokyoku/" target="_blank" rel="noopener">
           <div class="src-icon">🚰</div>
@@ -1336,11 +1539,11 @@
             <span>国土地理院 地理院地図</span>
           </div>
         </a>
-        <a class="source-link" href="https://www.qsr.mlit.go.jp/tatara/" target="_blank" rel="noopener">
+        <a class="source-link" href="https://www.f-suiki.or.jp/facility/joint-relation/" target="_blank" rel="noopener">
           <div class="src-icon">🌊</div>
           <div class="src-text">
-            <strong>多々良川について調べる</strong>
-            <span>国土交通省 多々良川河川事務所</span>
+            <strong>多々良浄水場の概要</strong>
+            <span>福岡地区水道企業団</span>
           </div>
         </a>
         <a class="source-link" href="https://www.city.fukuoka.lg.jp/" target="_blank" rel="noopener">
@@ -1557,18 +1760,18 @@
 
     <!-- AI検索 -->
     <div class="ai-search-section">
-      <h3>🔍 Chromeの AI検索モードで調べよう</h3>
+      <h3>🔍 調べたい言葉を選んで、AIモードで聞いてみよう</h3>
       <div class="ai-search-row">
         <input class="ai-search-input" type="text" id="q-disaster"
                placeholder="調べたいことを入力…" value="飯塚市 水害 ハザードマップ">
         <button class="btn-ai-search" type="button" onclick="aiSearch('q-disaster')">AIで検索</button>
       </div>
       <div class="search-chips">
-        <a class="schip" href="https://www.google.com/search?udm=46&q=自助+共助+公助+違い" target="_blank" rel="noopener">自助・共助・公助</a>
-        <a class="schip" href="https://www.google.com/search?udm=46&q=ハザードマップ+見方+使い方" target="_blank" rel="noopener">ハザードマップの見方</a>
-        <a class="schip" href="https://www.google.com/search?udm=46&q=飯塚市+水害+歴史+洪水" target="_blank" rel="noopener">飯塚市の水害</a>
-        <a class="schip" href="https://www.google.com/search?udm=46&q=福岡市防災センター+体験+内容" target="_blank" rel="noopener">防災センターの内容</a>
-        <a class="schip" href="https://www.google.com/search?udm=46&q=災害+備え+小学生+できること" target="_blank" rel="noopener">小学生にできる備え</a>
+        <button class="schip" type="button" data-query="自助 共助 公助 違い">自助・共助・公助</button>
+        <button class="schip" type="button" data-query="ハザードマップ 見方 使い方">ハザードマップの見方</button>
+        <button class="schip" type="button" data-query="飯塚市 水害 歴史 洪水">飯塚市の水害</button>
+        <button class="schip" type="button" data-query="福岡市防災センター 体験 内容">防災センターの内容</button>
+        <button class="schip" type="button" data-query="災害 備え 小学生 できること">小学生にできる備え</button>
       </div>
       <p class="search-note">出てきたページは「どこが出している情報か（市役所・県・国など）」を確かめてから使いましょう。</p>
     </div>
@@ -1626,7 +1829,7 @@
 
     <!-- 一次資料 -->
     <div class="sources-section">
-      <h3>🔗 一次資料 — 直接アクセスしよう</h3>
+      <h3>🔗 元になっている資料を実際に読んでみよう</h3>
       <div class="source-grid">
         <a class="source-link" href="https://bosai.city.fukuoka.lg.jp/" target="_blank" rel="noopener">
           <div class="src-icon">🏛️</div>
@@ -1635,7 +1838,7 @@
             <span>体験・展示内容の紹介</span>
           </div>
         </a>
-        <a class="source-link" href="https://www.city.iizuka.lg.jp/kurashi/bousai/index.html" target="_blank" rel="noopener">
+        <a class="source-link" href="https://www.city.iizuka.lg.jp/site/bousai/" target="_blank" rel="noopener">
           <div class="src-icon">🌧️</div>
           <div class="src-text">
             <strong>飯塚市 防災情報</strong>
@@ -1967,11 +2170,13 @@
     </div>
   </details>
 
+  </div><!-- /learning-content -->
+</div><!-- /learning-layout -->
 </div><!-- /wrap -->
 </main>
 
 <footer>
-  <p>神教材製作所 | 社会科見学 Geminiプロンプト集（4年生）</p>
+  <p>神教材製作所 | 社会科見学 問いカード・プロンプト集（4年生）</p>
   <p>プロンプトはGeminiへのヒント。答えは自分の言葉でまとめよう。</p>
   <p style="margin-top:8px"><a href="https://a-tozak.github.io/shakai-kotoba-jiten/" target="_blank" rel="noopener">📖 社会ことば辞典</a></p>
 </footer>
@@ -1990,7 +2195,7 @@
   <div class="ss-footer">
     <button class="ss-nav" id="ssPrevBtn">← 前へ</button>
     <div class="ss-timer-bar"><div class="ss-timer-fill" id="ssTimerFill"></div></div>
-    <button class="ss-mode-btn is-on" id="ssSpeedBtn" title="速度切り替え">🕒 10秒</button>
+    <button class="ss-mode-btn is-on" id="ssSpeedBtn" title="速度切り替え">🕒 8秒</button>
     <button class="ss-mode-btn" id="ssShuffleBtn" title="シャッフル">🔀 順番通り</button>
     <span class="ss-duration-note">← → 送る　P 停止　F 速度　S シャッフル</span>
     <button class="ss-nav" id="ssNextBtn">次へ →</button>
@@ -2023,8 +2228,18 @@
   function aiSearch(inputId) {
     const q = document.getElementById(inputId).value.trim();
     if (!q) return;
-    window.open('https://www.google.com/search?udm=46&q=' + encodeURIComponent(q), '_blank', 'noopener');
+    window.open('https://www.google.com/search?udm=50&q=' + encodeURIComponent(q), '_blank', 'noopener');
   }
+
+  document.addEventListener('click', e => {
+    const chip = e.target.closest('[data-query]');
+    if (!chip) return;
+    const section = chip.closest('.ai-search-section');
+    const input = section?.querySelector('.ai-search-input');
+    if (!input) return;
+    input.value = chip.dataset.query;
+    input.focus();
+  });
 
   // Enterキーで検索
   ['q-clean','q-water','q-disaster'].forEach(id => {
@@ -2155,7 +2370,7 @@
   ];
 
   let ssCurrent = 0, ssPaused = false, ssIntervalId = null, ssStartTime = 0;
-  let ssSpeed = 10;        // seconds per slide
+  let ssSpeed = 8;         // seconds per slide
   let ssShuffle = false;
   let ssOrder = [];        // play order (sequential or shuffled)
   let ssOrderPos = 0;
@@ -2204,13 +2419,17 @@
 
   function ssTransitionTo(pos) {
     const stage = document.getElementById('ssStage');
+    const progress = document.querySelector('.ss-progress');
     if (ssIntervalId) { clearInterval(ssIntervalId); ssIntervalId = null; }
     document.getElementById('ssProgressFill').style.width = '100%';
-    stage.classList.add('is-fading');
+    if (progress) progress.classList.add('is-hidden');
     if (ssFadeTimeoutId) clearTimeout(ssFadeTimeoutId);
     ssFadeTimeoutId = setTimeout(function() {
-      ssShowAt(pos);
-    }, 900);
+      stage.classList.add('is-fading');
+      ssFadeTimeoutId = setTimeout(function() {
+        ssShowAt(pos);
+      }, 900);
+    }, 280);
   }
 
   /* keep old ssShow(n) for direct index calls during testing */
@@ -2276,8 +2495,13 @@
     ssClearTimer();
     ssStartTime = Date.now();
     var fill = document.getElementById('ssProgressFill');
+    var progress = document.querySelector('.ss-progress');
+    if (progress) progress.classList.add('is-hidden');
     fill.style.width = '0%';
     if (ssPaused) return;
+    window.requestAnimationFrame(function() {
+      if (progress) progress.classList.remove('is-hidden');
+    });
     var total = ssSpeed * 1000;
     ssIntervalId = setInterval(function() {
       if (ssPaused) return;
@@ -2298,9 +2522,9 @@
   }
 
   function ssToggleSpeed() {
-    ssSpeed = 10;
+    ssSpeed = 8;
     var btn = document.getElementById('ssSpeedBtn');
-    btn.textContent = '🕒 10秒';
+    btn.textContent = '🕒 8秒';
     btn.classList.add('is-on');
     ssStartTimer();
   }

@@ -577,7 +577,10 @@
       position: absolute; inset: 0;
       overflow: hidden;
       display: flex; align-items: center; justify-content: center;
+      opacity: 1;
+      transition: opacity 900ms ease;
     }
+    .ss-stage.is-fading { opacity: 0; }
     .ss-stage::before {
       content: "";
       position: absolute; inset: 0;
@@ -693,6 +696,25 @@
     /* footer */
     .ss-footer {
       display: none;
+    }
+    .ss-progress {
+      position: absolute;
+      left: 50%; bottom: 58px;
+      z-index: 2;
+      width: min(520px, calc(100% - 56px));
+      height: 3px;
+      transform: translateX(-50%);
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255,255,255,.14);
+      pointer-events: none;
+    }
+    .ss-progress-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: inherit;
+      background: rgba(255,255,255,.52);
+      transition: width 120ms linear;
     }
     .ss-nav {
       border: 0; background: rgba(255,255,255,.22); color: #fff;
@@ -1968,11 +1990,12 @@
   <div class="ss-footer">
     <button class="ss-nav" id="ssPrevBtn">← 前へ</button>
     <div class="ss-timer-bar"><div class="ss-timer-fill" id="ssTimerFill"></div></div>
-    <button class="ss-mode-btn" id="ssSpeedBtn" title="速度切り替え">🕒 55秒</button>
+    <button class="ss-mode-btn is-on" id="ssSpeedBtn" title="速度切り替え">🕒 10秒</button>
     <button class="ss-mode-btn" id="ssShuffleBtn" title="シャッフル">🔀 順番通り</button>
     <span class="ss-duration-note">← → 送る　P 停止　F 速度　S シャッフル</span>
     <button class="ss-nav" id="ssNextBtn">次へ →</button>
   </div>
+  <div class="ss-progress" aria-hidden="true"><div class="ss-progress-fill" id="ssProgressFill"></div></div>
   <div class="ss-copyright">Akihiro Tozaki</div>
 </div>
 
@@ -2132,10 +2155,11 @@
   ];
 
   let ssCurrent = 0, ssPaused = false, ssIntervalId = null, ssStartTime = 0;
-  let ssSpeed = 55;        // seconds per slide
+  let ssSpeed = 10;        // seconds per slide
   let ssShuffle = false;
   let ssOrder = [];        // play order (sequential or shuffled)
   let ssOrderPos = 0;
+  let ssFadeTimeoutId = null;
 
   function ssBuildOrder(startIdx) {
     if (ssShuffle) {
@@ -2174,7 +2198,19 @@
     const stage = document.getElementById('ssStage');
     stage.className = 'ss-stage bg-' + s.bg;
     stage.innerHTML = ssRender(s);
-    ssClearTimer();
+    window.requestAnimationFrame(function(){ stage.classList.remove('is-fading'); });
+    ssStartTimer();
+  }
+
+  function ssTransitionTo(pos) {
+    const stage = document.getElementById('ssStage');
+    if (ssIntervalId) { clearInterval(ssIntervalId); ssIntervalId = null; }
+    document.getElementById('ssProgressFill').style.width = '100%';
+    stage.classList.add('is-fading');
+    if (ssFadeTimeoutId) clearTimeout(ssFadeTimeoutId);
+    ssFadeTimeoutId = setTimeout(function() {
+      ssShowAt(pos);
+    }, 900);
   }
 
   /* keep old ssShow(n) for direct index calls during testing */
@@ -2239,12 +2275,21 @@
   function ssStartTimer() {
     ssClearTimer();
     ssStartTime = Date.now();
-    var fill = document.getElementById('ssTimerFill');
+    var fill = document.getElementById('ssProgressFill');
     fill.style.width = '0%';
+    if (ssPaused) return;
+    var total = ssSpeed * 1000;
+    ssIntervalId = setInterval(function() {
+      if (ssPaused) return;
+      var pct = Math.min(((Date.now() - ssStartTime) / total) * 100, 100);
+      fill.style.width = pct + '%';
+      if (pct >= 100) ssTransitionTo(ssOrderPos + 1);
+    }, 120);
   }
 
   function ssClearTimer() {
     if (ssIntervalId) { clearInterval(ssIntervalId); ssIntervalId = null; }
+    if (ssFadeTimeoutId) { clearTimeout(ssFadeTimeoutId); ssFadeTimeoutId = null; }
   }
 
   function ssTogglePause() {
@@ -2253,10 +2298,11 @@
   }
 
   function ssToggleSpeed() {
-    ssSpeed = ssSpeed === 55 ? 5 : 55;
+    ssSpeed = 10;
     var btn = document.getElementById('ssSpeedBtn');
-    btn.textContent = ssSpeed === 5 ? '⚡ 5秒' : '🕒 55秒';
-    btn.classList.toggle('is-on', ssSpeed === 5);
+    btn.textContent = '🕒 10秒';
+    btn.classList.add('is-on');
+    ssStartTimer();
   }
 
   function ssToggleShuffle() {
@@ -2278,8 +2324,8 @@
   document.addEventListener('keydown', function(e) {
     if (!document.getElementById('slideshow').classList.contains('is-open')) return;
     if (e.key === 'Escape') closeSlideshow();
-    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); ssShowAt(ssOrderPos + 1); }
-    if (e.key === 'ArrowLeft') ssShowAt(ssOrderPos - 1);
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); ssTransitionTo(ssOrderPos + 1); }
+    if (e.key === 'ArrowLeft') ssTransitionTo(ssOrderPos - 1);
   });
 </script>
 

@@ -165,6 +165,46 @@
     .know-box li { margin: 4px 0; }
 
     /* ============================
+       FIELDWORK LENSES
+    ============================ */
+    .lens-section {
+      margin: -6px 0 28px;
+    }
+    .lens-head {
+      display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+      margin-bottom: 10px;
+    }
+    .lens-head h3 {
+      font-size: .95rem; color: var(--navy);
+    }
+    .lens-head span {
+      color: var(--muted); font-size: .78rem; font-weight: 800;
+    }
+    .lens-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 9px;
+    }
+    .lens-card {
+      border: 1px solid var(--line);
+      border-radius: var(--r-sm);
+      background: var(--white);
+      padding: 12px 14px;
+      box-shadow: 0 2px 8px rgba(10,30,70,.04);
+    }
+    .lens-card strong {
+      display: block;
+      color: var(--navy);
+      font-size: .88rem;
+      margin-bottom: 4px;
+    }
+    .lens-card p {
+      color: var(--sub);
+      font-size: .84rem;
+      line-height: 1.55;
+    }
+
+    /* ============================
        PHASE HEADER
     ============================ */
     .phase-head {
@@ -733,6 +773,27 @@
       </ul>
     </div>
 
+    <section class="lens-section" aria-label="クリーンセンターで見るポイント">
+      <div class="lens-head">
+        <h3>見学で見るポイント</h3>
+        <span>地図・流れ・人・安全</span>
+      </div>
+      <div class="lens-grid">
+        <div class="lens-card">
+          <strong>どこにある？</strong>
+          <p>住宅地・川・道路・学校からの位置を地図で見て、なぜこの場所にあるのか考える。</p>
+        </div>
+        <div class="lens-card">
+          <strong>何がどう動く？</strong>
+          <p>収集車、ごみ、灰、資源物がどこから来てどこへ行くのか、矢印でメモする。</p>
+        </div>
+        <div class="lens-card">
+          <strong>働く人は何を守る？</strong>
+          <p>安全、におい、煙、機械の点検、分別など、暮らしを支える工夫を探す。</p>
+        </div>
+      </div>
+    </section>
+
     <!-- 見学前 -->
     <div class="phase-head">
       <span class="phase-tag pt-before">見学前</span>
@@ -744,9 +805,9 @@
         <div class="pc-strip cg"></div>
         <div class="pc-body">
           <div class="pc-phase-row"><span class="phase-tag pt-before">見学前</span></div>
-          <h3>知っていることと疑問を整理しよう</h3>
-          <p class="pc-desc">知っていることを整理して、「まだわからないこと」をはっきりさせます。</p>
-          <p class="pc-can">見学で確かめたいことが3つの文にまとまります。スライドの見出し案も出てきます。</p>
+          <h3>何を調べるか・何を見るか決めよう</h3>
+          <p class="pc-desc">「何を調べたらいいかわからない」状態から、地図・ごみの流れ・働く人の視点で見学のめあてを作ります。</p>
+          <p class="pc-can">事前に調べること、現地で見ること、聞く質問がまとまります。</p>
           <details class="pc-details">
             <summary>プロンプトを見る</summary>
             <pre class="pc-prompt">あなたは小学校4年生の社会科の学習を助ける先生です。
@@ -758,12 +819,16 @@
 ・ごみ処理場でごみを燃やして処理している
 ・一部のごみは埋め立てていると聞いたことがある
 
-これから見学に行きます。答えは先に教えず、次の形で出してください。
+これから見学に行きます。
+でも、何を調べたらよいか、どこを見ればよいかがまだはっきりしていません。
 
-1. 「まだ知らないこと・疑問に思うこと」を3つ
-2. 見学で確かめたい文（3つ）
-3. スライドにメモするとよい見出し（4つ）
-4. 「学習問題」として使える文の型（1つ）
+答えを先に教えず、見学の準備ができるように次の形で出してください。
+
+1. まず地図で調べること（場所・近くの川や道路・住宅地との関係）
+2. ごみの流れで調べること（家→収集車→施設→その後）
+3. 見学先でよく見るところ（機械・車・人の動き・安全や環境の工夫）
+4. 施設の人に聞いてみたい質問（3つ）
+5. スライドに書ける「見学で確かめたいこと」の文（3つ）
 
 小学4年生にわかる言葉で答えてください。</pre>
           </details>
@@ -1012,6 +1077,27 @@
       </ul>
     </div>
 
+    <section class="lens-section" aria-label="浄水場で見るポイント">
+      <div class="lens-head">
+        <h3>見学で見るポイント</h3>
+        <span>水源・高さ・工程・管理</span>
+      </div>
+      <div class="lens-grid">
+        <div class="lens-card">
+          <strong>水はどこから来る？</strong>
+          <p>川・ダム・取水口・浄水場・配水池・家までのつながりを地図で追う。</p>
+        </div>
+        <div class="lens-card">
+          <strong>なぜこの場所？</strong>
+          <p>川や道路、土地の高さ、送る先との位置関係から、場所の意味を考える。</p>
+        </div>
+        <div class="lens-card">
+          <strong>安全をどう守る？</strong>
+          <p>水をきれいにする工程、検査、24時間の管理、働く人の役割を見る。</p>
+        </div>
+      </div>
+    </section>
+
     <!-- 見学前 -->
     <div class="phase-head">
       <span class="phase-tag pt-before">見学前</span>
@@ -1023,9 +1109,9 @@
         <div class="pc-strip wb"></div>
         <div class="pc-body">
           <div class="pc-phase-row"><span class="phase-tag pt-before">見学前</span></div>
-          <h3>知っていることと疑問を整理しよう</h3>
-          <p class="pc-desc">水が届くまでの仕組みについて、知っていることとまだわからないことを整理します。</p>
-          <p class="pc-can">見学で確かめたいことが文になります。スライドの見出し案も出てきます。</p>
+          <h3>何を調べるか・何を見るか決めよう</h3>
+          <p class="pc-desc">水がどこから来て、なぜそこに浄水場があるのかを、地図と水の流れから考えます。</p>
+          <p class="pc-can">水源・場所・工程・働く人について、見学前に調べることがまとまります。</p>
           <details class="pc-details">
             <summary>プロンプトを見る</summary>
             <pre class="pc-prompt">あなたは小学校4年生の社会科の学習を助ける先生です。
@@ -1036,12 +1122,16 @@
 ・水道の水は雨や川の水が使われている
 ・どこかできれいにしているらしい
 
-答えは先に教えず、次の形で出してください。
+これから見学に行きます。
+でも、何を調べたらよいか、どこを見ればよいかがまだはっきりしていません。
 
-1. 「まだ知らないこと・疑問に思うこと」を3つ
-2. 見学で確かめたい文（3つ）
-3. スライドにメモするとよい見出し（4つ）
-4. 「学習問題」として使える文の型（1つ）
+答えを先に教えず、見学の準備ができるように次の形で出してください。
+
+1. まず地図で調べること（水源・川・ダム・浄水場・送る先の位置）
+2. 水の流れで調べること（取水→浄水→配水→家や学校）
+3. 見学先でよく見るところ（工程・検査・機械・24時間管理・働く人）
+4. 施設の人に聞いてみたい質問（3つ）
+5. スライドに書ける「見学で確かめたいこと」の文（3つ）
 
 小学4年生にわかる言葉で答えてください。</pre>
           </details>
@@ -1300,6 +1390,27 @@
       </ul>
     </div>
 
+    <section class="lens-section" aria-label="防災センターで見るポイント">
+      <div class="lens-head">
+        <h3>見学で見るポイント</h3>
+        <span>体験・地域・備え・役割</span>
+      </div>
+      <div class="lens-grid">
+        <div class="lens-card">
+          <strong>体験は何につながる？</strong>
+          <p>地震・火災・強風などの体験を、実際の避難行動や家庭の備えと結びつける。</p>
+        </div>
+        <div class="lens-card">
+          <strong>飯塚市では何が心配？</strong>
+          <p>遠賀川・穂波川、低い土地、ハザードマップから、水害の起こりやすさを見る。</p>
+        </div>
+        <div class="lens-card">
+          <strong>だれが何をする？</strong>
+          <p>自助・共助・公助に分けて、自分、地域、市や消防の役割をメモする。</p>
+        </div>
+      </div>
+    </section>
+
     <!-- 見学前 -->
     <div class="phase-head">
       <span class="phase-tag pt-before">見学前</span>
@@ -1311,9 +1422,9 @@
         <div class="pc-strip dr"></div>
         <div class="pc-body">
           <div class="pc-phase-row"><span class="phase-tag pt-before">見学前</span></div>
-          <h3>知っていることと疑問を整理しよう</h3>
-          <p class="pc-desc">防災について知っていることを整理して、見学で確かめることを決めます。</p>
-          <p class="pc-can">見学で確かめたいことが文になります。スライドの見出し案も出てきます。</p>
+          <h3>何を調べるか・何を見るか決めよう</h3>
+          <p class="pc-desc">防災センターの体験を、飯塚市の水害や自助・共助・公助とつなげて考えます。</p>
+          <p class="pc-can">体験で見ること、地域で調べること、家で確認することがまとまります。</p>
           <details class="pc-details">
             <summary>プロンプトを見る</summary>
             <pre class="pc-prompt">あなたは小学校4年生の社会科の学習を助ける先生です。
@@ -1325,12 +1436,16 @@
 ・避難場所がある
 ・飯塚市は洪水（水害）が多い地域と聞いたことがある
 
-答えは先に教えず、次の形で出してください。
+これから見学に行きます。
+でも、何を調べたらよいか、どこを見ればよいかがまだはっきりしていません。
 
-1. 「まだ知らないこと・疑問に思うこと」を3つ
-2. 見学で確かめたい文（3つ）
-3. スライドにメモするとよい見出し（4つ）
-4. 「学習問題」として使える文の型（1つ）
+答えを先に教えず、見学の準備ができるように次の形で出してください。
+
+1. まず地図で調べること（飯塚市の川・低い土地・避難場所・ハザードマップ）
+2. 防災センターで体験しながら見ること（地震・火災・風水害・避難行動）
+3. 自助・共助・公助に分けて調べること
+4. 施設の人に聞いてみたい質問（3つ）
+5. スライドに書ける「見学で確かめたいこと」の文（3つ）
 
 小学4年生にわかる言葉で答えてください。</pre>
           </details>
@@ -2114,10 +2229,10 @@
   }
 
   function ssToggleSpeed() {
-    ssSpeed = ssSpeed === 55 ? 3 : 55;
+    ssSpeed = ssSpeed === 55 ? 5 : 55;
     var btn = document.getElementById('ssSpeedBtn');
-    btn.textContent = ssSpeed === 3 ? '⚡ 3秒' : '🕒 55秒';
-    btn.classList.toggle('is-on', ssSpeed === 3);
+    btn.textContent = ssSpeed === 5 ? '⚡ 5秒' : '🕒 55秒';
+    btn.classList.toggle('is-on', ssSpeed === 5);
     ssStartTimer(); // restart with new speed
   }
 

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>試してみた事例 | 子どものためのプロンプトライブラリ</title>
+  <meta name="description" content="子どものためのプロンプトライブラリを、不完全なキーワードで実際に試した記録。">
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      --navy: #0c2b5a;
+      --ink: #172033;
+      --sub: #536076;
+      --line: #d4dbe7;
+      --paper: #fbfaf6;
+      --panel: #ffffff;
+      --green: #217a55;
+      --blue: #1f5fa8;
+      --gold: #b78113;
+      --teal: #18736f;
+      --shadow: 0 14px 34px rgba(23, 32, 51, .1);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+      line-height: 1.7;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .hero {
+      border-bottom: 1px solid var(--line);
+      background:
+        linear-gradient(90deg, rgba(251, 250, 246, .98) 0%, rgba(251, 250, 246, .9) 58%, rgba(251, 250, 246, .56) 100%),
+        url("assets/classroom-ai-social-studies.png") center right / cover no-repeat;
+    }
+
+    .inner {
+      width: min(1080px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .hero .inner {
+      min-height: 290px;
+      display: grid;
+      align-content: center;
+      padding: 34px 0;
+    }
+
+    .eyebrow {
+      color: var(--navy);
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      max-width: 760px;
+      margin: 0 0 10px;
+      color: var(--navy);
+      font-size: 2.4rem;
+      line-height: 1.2;
+    }
+
+    .lead {
+      max-width: 760px;
+      margin: 0;
+      color: #263247;
+      font-size: 1.02rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      margin-top: 18px;
+      padding: 9px 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      color: var(--navy);
+      cursor: pointer;
+      font-weight: 900;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    main.inner {
+      padding: 28px 0 70px;
+    }
+
+    .note {
+      border: 1px solid #e2c77e;
+      border-radius: var(--radius);
+      background: #fffaf0;
+      padding: 18px 20px;
+      color: var(--sub);
+    }
+
+    .case-list {
+      display: grid;
+      gap: 18px;
+      margin-top: 24px;
+    }
+
+    .case-card {
+      display: grid;
+      gap: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+
+    .case-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      color: var(--sub);
+      font-size: .9rem;
+      font-weight: 900;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 3px 9px;
+      border-radius: 6px;
+      background: #eef5ff;
+      color: var(--blue);
+    }
+
+    .badge.green {
+      background: #eefaf5;
+      color: var(--green);
+    }
+
+    .case-card h2 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 1.35rem;
+      line-height: 1.35;
+    }
+
+    .case-grid {
+      display: grid;
+      grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+      gap: 14px;
+    }
+
+    .box {
+      border: 1px solid #d7e2ef;
+      border-radius: var(--radius);
+      background: #f8fbff;
+      padding: 14px;
+    }
+
+    .box h3 {
+      margin: 0 0 8px;
+      color: var(--navy);
+      font-size: 1rem;
+    }
+
+    .box p,
+    .box li {
+      color: var(--sub);
+    }
+
+    .box p {
+      margin: 0;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .quote {
+      border-left: 4px solid var(--green);
+      background: #f7fafc;
+      padding: 12px 14px;
+      color: #263247;
+      font-weight: 900;
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 26px 16px 36px;
+      color: #7b8797;
+      text-align: center;
+      font-size: .86rem;
+    }
+
+    @media (max-width: 760px) {
+      .inner {
+        width: min(100% - 24px, 1080px);
+      }
+
+      h1 {
+        font-size: 1.85rem;
+      }
+
+      .case-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="inner">
+      <div class="eyebrow">実際に試してみた記録</div>
+      <h1>不完全なキーワードでも、ここまで学習の形になる</h1>
+      <p class="lead">子どもや先生が最初から上手に入力できなくても、プロンプトが「次に見る資料」「見るポイント」「ノートの書き出し」へつなげてくれます。</p>
+      <a class="btn" href="index.html">プロンプトライブラリへ戻る</a>
+    </div>
+  </header>
+
+  <main class="inner">
+    <section class="note" aria-label="記録の見方">
+      <strong>記録の見方:</strong>
+      実際にChromeでサイトを開き、あえて短く不完全な入力を入れてプロンプトを作成し、その一部をGeminiで試しました。ここでは共有しやすいように、入力、AIが返した方向性、授業での使いどころを整理しています。
+    </section>
+
+    <section class="case-list" aria-label="試した事例">
+      <article class="case-card">
+        <div class="case-meta">
+          <span class="badge green">4年 ごみ</span>
+          <span class="badge">調べるヒント</span>
+          <span>入力はかなり雑</span>
+        </div>
+        <h2>「ごみ どこ」だけでも、調べるめあてまで行けた</h2>
+        <div class="case-grid">
+          <div class="box">
+            <h3>入力したこと</h3>
+            <ul>
+              <li>単元や場面: ごみ</li>
+              <li>学習問題: ごみ どこ</li>
+              <li>知っていること: 燃えるごみとかある</li>
+            </ul>
+          </div>
+          <div class="box">
+            <h3>Geminiの返答で使えたところ</h3>
+            <ul>
+              <li>教科書、副読本、ごみ出しカレンダー、クリーンセンターの資料を見るとよいと整理された。</li>
+              <li>矢印、マーク、数字を見るという資料読み取りの視点が出た。</li>
+              <li>学校や家庭のごみの行き先を友だちに聞く問いが出た。</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quote">ノートのめあて例: 家や学校から出たごみは、どこへ運ばれて、どのように処理されているのか調べよう。</div>
+      </article>
+
+      <article class="case-card">
+        <div class="case-meta">
+          <span class="badge green">防災</span>
+          <span class="badge">ネット資料</span>
+          <span>信じてよいか不安なとき</span>
+        </div>
+        <h2>「市のページ なんか避難所」でも、情報の確かめ方になった</h2>
+        <div class="case-grid">
+          <div class="box">
+            <h3>入力したこと</h3>
+            <ul>
+              <li>単元や場面: 防災</li>
+              <li>ページ情報: 市のページ なんか避難所</li>
+              <li>知りたいこと: これ信じていい？</li>
+            </ul>
+          </div>
+          <div class="box">
+            <h3>Geminiの返答で使えたところ</h3>
+            <ul>
+              <li>ページ上部と下部を見て、市の名前や市役所の表記を確認する視点が出た。</li>
+              <li>防災課、危機管理課など、出どころを見ることが示された。</li>
+              <li>更新日、ハザードマップ、実際の看板などで確かめる流れになった。</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quote">授業での使い方: 「正しいかどうかをAIに決めてもらう」のではなく、子どもが自分で出どころ・日付・根拠を見るためのチェックリストにする。</div>
+      </article>
+
+      <article class="case-card">
+        <div class="case-meta">
+          <span class="badge green">6年 政治</span>
+          <span class="badge">自治体PDF</span>
+          <span>言葉が難しいとき</span>
+        </div>
+        <h2>「市のPDF 子育て支援」「言葉がむずい」でも、読む場所が見えた</h2>
+        <div class="case-grid">
+          <div class="box">
+            <h3>入力したこと</h3>
+            <ul>
+              <li>単元や場面: 6年 政治</li>
+              <li>資料: 市のPDF 子育て支援</li>
+              <li>困りごと: 言葉がむずい 何が大事かわからん</li>
+            </ul>
+          </div>
+          <div class="box">
+            <h3>Geminiの返答で使えたところ</h3>
+            <ul>
+              <li>子育て支援、福祉、財源・予算の言い換えが出た。</li>
+              <li>市の取り組み、税金、保育所、医療費など、見るポイントが整理された。</li>
+              <li>政治が身近なくらしとどう関わるかにつながった。</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quote">ノートの書き出し例: 〇〇市の資料から、市は子どもたちのくらしや子育てを支えるために、税金を使って取り組みをしていることが分かりました。</div>
+      </article>
+
+      <article class="case-card">
+        <div class="case-meta">
+          <span class="badge green">4年 水</span>
+          <span class="badge">考えをつくる</span>
+          <span>短い言葉から考えへ</span>
+        </div>
+        <h2>「水 どうやってくる」「きれいにして管でくる」から考えを作る</h2>
+        <div class="case-grid">
+          <div class="box">
+            <h3>入力したこと</h3>
+            <ul>
+              <li>単元や場面: 水</li>
+              <li>学習問題: 水 どうやってくる</li>
+              <li>わかったこと: きれいにして管でくる</li>
+            </ul>
+          </div>
+          <div class="box">
+            <h3>サイトで作れたプロンプトのよさ</h3>
+            <ul>
+              <li>「大事な言葉」「文の型」「根拠」を分けて聞ける。</li>
+              <li>子どもの短いメモを、いきなり完成文にせず、自分の言葉へ直す支援になる。</li>
+              <li>社会科が苦手な子でも、1文から始められる。</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quote">先生向けの見方: 書けない子には完成文を渡すのではなく、「浄水場」「水道管」「働く人」など入れたい言葉を選ばせる使い方がよさそう。</div>
+      </article>
+
+      <article class="case-card">
+        <div class="case-meta">
+          <span class="badge green">5年 米づくり</span>
+          <span class="badge">NotebookLM用</span>
+          <span>資料に基づくまとめ</span>
+        </div>
+        <h2>「人がへってる 機械使う」から、資料ベースのまとめ材料へ</h2>
+        <div class="case-grid">
+          <div class="box">
+            <h3>入力したこと</h3>
+            <ul>
+              <li>学習問題: 米づくり これからどうする</li>
+              <li>わかったこと: 人がへってる 機械使う</li>
+              <li>自分の考え: 食べる人も考える</li>
+            </ul>
+          </div>
+          <div class="box">
+            <h3>サイトで作れたプロンプトのよさ</h3>
+            <ul>
+              <li>NotebookLM用は「入れた資料だけ」をもとにする指示になった。</li>
+              <li>資料から言えること、自分の考え、資料では言えないことを分けられる。</li>
+              <li>調べた内容と考えが混ざりやすい子の支援になる。</li>
+            </ul>
+          </div>
+        </div>
+        <div class="quote">授業での使い方: 教科書、農林水産省や自治体の資料をNotebookLMに入れておき、まとめ前に材料を整理する。</div>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <p>子どものためのプロンプトライブラリ | 試してみた事例</p>
+    <p>AIの答えは、教科書・資料・先生の話と照らし合わせて使いましょう。</p>
+  </footer>
+</body>
+</html>

@@ -43,10 +43,14 @@
 ```text
 .
 ├── index.html
+├── examples.html
 ├── assets/
 │   ├── classroom-ai-social-studies.png
 │   ├── manual-step-choose.png
-│   └── manual-step-copy.png
+│   ├── manual-step-copy.png
+│   └── manual-step-upload.png
+├── kengaku/
+│   └── index.html          # 社会科見学プロンプト集（4年生）
 └── gas/
     └── create-feedback-form.gs
 ```
@@ -59,6 +63,11 @@
 4. テーマや気づいたことを入力します。
 5. 自動で変わったプロンプトをコピーします。
 6. Gemini または NotebookLM に貼り付けて使います。
+
+## 試してみた事例
+
+`examples.html` に、Chromeで実際に不完全なキーワードを入れて試した記録をまとめています。
+子どもや先生に共有するときは、「最初から上手に入力できなくても、学習の形にできる」ことを示すページとして使えます。
 
 ## インターネット資料を読むとき
 

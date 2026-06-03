@@ -1,0 +1,2152 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>社会科見学 Geminiプロンプト集 | 4年生</title>
+  <style>
+    :root {
+      --navy:   #0b2754;
+      --ink:    #1a2233;
+      --sub:    #4d5e74;
+      --muted:  #8496aa;
+      --line:   #dce4ef;
+      --paper:  #fffef9;
+      --white:  #ffffff;
+      --shadow: 0 4px 16px rgba(10,30,70,.09);
+      --r:      14px;
+      --r-sm:   8px;
+
+      /* 場所カラー */
+      --cg: #1b6b40;  /* クリーンセンター green */
+      --cg-lt: #e8f6ee;
+      --wb: #1552a2;  /* 浄水場 blue */
+      --wb-lt: #e6f0ff;
+      --dr: #c04010;  /* 防災 red-orange */
+      --dr-lt: #fff0ea;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic","Meiryo",sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
+
+    /* ============================
+       HERO
+    ============================ */
+    .hero {
+      background: linear-gradient(150deg, #0b2754 0%, #194ea0 100%);
+      color: #fff;
+      padding: 32px 0 28px;
+    }
+    .wrap {
+      width: min(1040px, 100% - 32px);
+      margin: 0 auto;
+    }
+    .hero-eyebrow {
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      opacity: .65;
+      margin-bottom: 8px;
+    }
+    .hero h1 {
+      font-size: clamp(1.55rem, 4.5vw, 2.3rem);
+      line-height: 1.25;
+      margin-bottom: 10px;
+    }
+    .hero-lead {
+      font-size: .95rem;
+      opacity: .82;
+      max-width: 640px;
+      margin-bottom: 18px;
+    }
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: .82rem;
+      font-weight: 800;
+    }
+    .badge-date  { background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25); }
+    .badge-dict  { background: #fff; color: var(--navy); }
+    .badge-dict:hover { background: #f0f5ff; }
+
+    /* ============================
+       TAB NAV
+    ============================ */
+    .tab-nav {
+      position: sticky; top: 0; z-index: 200;
+      background: var(--white);
+      border-bottom: 2px solid var(--line);
+      box-shadow: 0 2px 8px rgba(10,30,70,.07);
+    }
+    .tab-nav .wrap { display: flex; overflow-x: auto; scrollbar-width: none; }
+    .tab-nav .wrap::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      flex: 0 0 auto;
+      display: flex; align-items: center; gap: 6px;
+      padding: 13px 22px;
+      border: 0; border-bottom: 3px solid transparent;
+      background: none; color: var(--sub);
+      font-size: .95rem; font-weight: 800;
+      cursor: pointer; white-space: nowrap;
+      transition: color .15s, border-color .15s;
+    }
+    .tab-dot {
+      width: 9px; height: 9px;
+      border-radius: 50%;
+    }
+    [data-tab="clean"] .tab-dot { background: var(--cg); }
+    [data-tab="water"] .tab-dot { background: var(--wb); }
+    [data-tab="disaster"] .tab-dot { background: var(--dr); }
+    .tab-btn.is-active[data-tab="clean"]    { color: var(--cg);  border-bottom-color: var(--cg); }
+    .tab-btn.is-active[data-tab="water"]    { color: var(--wb);  border-bottom-color: var(--wb); }
+    .tab-btn.is-active[data-tab="disaster"] { color: var(--dr);  border-bottom-color: var(--dr); }
+
+    /* ============================
+       PANEL
+    ============================ */
+    main { padding: 28px 0 80px; }
+    .tab-panel { display: none; }
+    .tab-panel.is-active { display: block; }
+
+    /* ============================
+       PLACE INTRO
+    ============================ */
+    .place-intro {
+      border-radius: var(--r);
+      padding: 22px 26px 20px;
+      margin-bottom: 24px;
+    }
+    .place-intro.cg { background: var(--cg-lt); border-left: 5px solid var(--cg); }
+    .place-intro.wb { background: var(--wb-lt); border-left: 5px solid var(--wb); }
+    .place-intro.dr { background: var(--dr-lt); border-left: 5px solid var(--dr); }
+    .place-tag {
+      font-size: .74rem; font-weight: 800; letter-spacing: .07em;
+      margin-bottom: 5px;
+    }
+    .cg .place-tag { color: var(--cg); }
+    .wb .place-tag { color: var(--wb); }
+    .dr .place-tag { color: var(--dr); }
+    .place-intro h2 { font-size: 1.55rem; color: var(--navy); margin-bottom: 8px; }
+    .place-intro .desc { color: var(--sub); font-size: .93rem; margin-bottom: 14px; }
+    .big-q {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 9px 16px;
+      border-radius: var(--r); background: var(--white);
+      border: 1px solid var(--line);
+      font-size: 1rem; font-weight: 800; color: var(--navy);
+    }
+
+    /* ============================
+       KNOWN KNOWLEDGE BOX
+    ============================ */
+    .know-box {
+      background: #fffbec; border: 1px solid #e8d98a;
+      border-radius: var(--r); padding: 14px 18px;
+      margin-bottom: 26px;
+    }
+    .know-box h3 { font-size: .88rem; color: #7a5a00; margin-bottom: 8px; }
+    .know-box ul { padding-left: 18px; color: var(--sub); font-size: .91rem; }
+    .know-box li { margin: 4px 0; }
+
+    /* ============================
+       PHASE HEADER
+    ============================ */
+    .phase-head {
+      display: flex; align-items: center; gap: 10px;
+      margin: 30px 0 14px;
+    }
+    .phase-tag {
+      display: inline-flex; align-items: center;
+      padding: 3px 12px; border-radius: 12px;
+      font-size: .78rem; font-weight: 800;
+    }
+    .pt-before   { background: #d8f0e4; color: #145c30; }
+    .pt-after    { background: #dce9fb; color: #12377a; }
+    .pt-notebook { background: #ece5fc; color: #4c29a0; }
+    .phase-head-title { font-size: 1rem; font-weight: 800; color: var(--navy); }
+
+    /* ============================
+       PROMPT CARDS
+    ============================ */
+    .prompt-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 12px;
+      margin-bottom: 6px;
+    }
+    .pc {
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      background: var(--white);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: flex; flex-direction: column;
+    }
+    .pc-strip { height: 4px; }
+    .pc-strip.cg { background: var(--cg); }
+    .pc-strip.wb { background: var(--wb); }
+    .pc-strip.dr { background: var(--dr); }
+    .pc-strip.nb { background: #6c3fd0; }
+    .pc-body {
+      padding: 16px 18px;
+      flex: 1; display: flex; flex-direction: column; gap: 10px;
+    }
+    .pc-phase-row { display: flex; gap: 6px; }
+    .pc h3 { font-size: 1.08rem; color: var(--navy); line-height: 1.35; }
+    .pc-desc { font-size: .88rem; color: var(--sub); }
+    .pc-can {
+      font-size: .85rem;
+      background: #f4f8fd;
+      border-radius: var(--r-sm);
+      padding: 8px 12px;
+      color: #2a4070;
+    }
+    .pc-can::before {
+      content: "✓ ";
+      font-weight: 800;
+      color: var(--cg);
+    }
+
+    /* プロンプト折りたたみ */
+    .pc-details { border: 1px solid var(--line); border-radius: var(--r-sm); overflow: hidden; }
+    .pc-details summary {
+      padding: 8px 12px; background: #f7f9fb;
+      cursor: pointer; font-size: .83rem; color: var(--sub);
+      font-weight: 800; list-style: none;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .pc-details summary::-webkit-details-marker { display: none; }
+    .pc-details summary::before { content: "▶"; font-size: .6rem; transition: transform .15s; }
+    .pc-details[open] summary::before { transform: rotate(90deg); }
+    .pc-prompt {
+      margin: 0; padding: 12px 14px;
+      background: #f9fbfd;
+      font: inherit; font-size: .82rem;
+      color: #223050; white-space: pre-wrap; overflow-wrap: anywhere;
+      line-height: 1.75;
+      border-top: 1px solid var(--line);
+    }
+
+    /* ボタン */
+    .pc-actions { display: flex; gap: 7px; flex-wrap: wrap; margin-top: auto; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 7px 16px; border-radius: 20px;
+      font-size: .85rem; font-weight: 800;
+      cursor: pointer; text-decoration: none;
+      white-space: nowrap;
+      transition: opacity .15s, transform .1s;
+    }
+    .btn:hover { opacity: .88; transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+    .btn-copy     { border: 1px solid var(--line); background: #fff; color: var(--ink); }
+    .btn-gemini   { border: 0; background: var(--navy); color: #fff; }
+    .btn-notebook { border: 0; background: #5b2fd4; color: #fff; }
+
+    /* ============================
+       AI SEARCH SECTION
+    ============================ */
+    .ai-search-section {
+      background: #eff6ff;
+      border: 1px solid #b8d4f8;
+      border-radius: var(--r);
+      padding: 18px 22px;
+      margin: 26px 0;
+    }
+    .ai-search-section h3 { font-size: .98rem; color: #153a78; margin-bottom: 10px; }
+    .ai-search-row {
+      display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;
+    }
+    .ai-search-input {
+      flex: 1; min-width: 160px;
+      padding: 9px 14px;
+      border: 1px solid #a0bce0; border-radius: 20px;
+      background: #fff; font-size: .9rem; color: var(--ink);
+      outline: none;
+    }
+    .ai-search-input:focus { border-color: #4a88d8; }
+    .btn-ai-search {
+      border: 0; background: #1a6fd4; color: #fff;
+      padding: 9px 18px; border-radius: 20px;
+      font-size: .88rem; font-weight: 800; cursor: pointer;
+      white-space: nowrap;
+      transition: background .15s;
+    }
+    .btn-ai-search:hover { background: #1558b0; }
+    .search-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .schip {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 4px 12px; border-radius: 14px;
+      background: #fff; border: 1px solid #a0c0e8;
+      color: #154080; font-size: .83rem; font-weight: 700;
+      cursor: pointer; text-decoration: none;
+      transition: background .12s;
+    }
+    .schip:hover { background: #dbeeff; }
+    .search-note { font-size: .8rem; color: #4a6080; margin-top: 10px; }
+
+    /* ============================
+       WORD TICKER
+    ============================ */
+    .ticker-wrap {
+      margin: 16px 0 20px;
+      border-radius: var(--r-sm);
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: var(--white);
+    }
+    .ticker-label-row {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 14px 5px;
+      border-bottom: 1px solid var(--line);
+      background: #f7f9fb;
+      font-size: .72rem; font-weight: 800; letter-spacing: .05em;
+      color: var(--muted);
+    }
+    .ticker-scroll {
+      overflow: hidden;
+      padding: 8px 0;
+    }
+    .ticker-track {
+      display: flex;
+      gap: 0;
+      width: max-content;
+      animation: scroll-left 50s linear infinite;
+    }
+    .ticker-track:hover { animation-play-state: paused; }
+    @keyframes scroll-left {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .ticker-item {
+      display: inline-flex; align-items: baseline; gap: 3px;
+      padding: 3px 6px 3px 14px;
+      white-space: nowrap;
+      cursor: default;
+    }
+    .ticker-item .tw {
+      font-size: .95rem; font-weight: 800;
+    }
+    .ticker-item .tr {
+      font-size: .7rem; color: var(--muted);
+    }
+    .ticker-sep {
+      display: inline-flex; align-items: center;
+      color: var(--line); font-size: 1rem; line-height: 1;
+      user-select: none; flex-shrink: 0;
+    }
+    .ticker-cg .tw { color: var(--cg); }
+    .ticker-wb .tw { color: var(--wb); }
+    .ticker-dr .tw { color: var(--dr); }
+
+    /* ============================
+       PRIMARY SOURCES
+    ============================ */
+    .sources-section { margin: 20px 0 28px; }
+    .sources-section h3 {
+      font-size: .9rem; font-weight: 800; color: var(--sub);
+      margin-bottom: 10px; letter-spacing: .04em;
+    }
+    .source-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 8px;
+    }
+    .source-link {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 12px 14px;
+      border: 1px solid var(--line); border-radius: var(--r-sm);
+      background: var(--white);
+      text-decoration: none; color: var(--ink);
+      box-shadow: 0 2px 8px rgba(10,30,70,.05);
+      transition: box-shadow .15s, border-color .15s;
+    }
+    .source-link:hover { border-color: #99b8e0; box-shadow: 0 4px 14px rgba(10,30,70,.1); }
+    .src-icon {
+      font-size: 1.3rem; flex-shrink: 0;
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: var(--r-sm); background: #f0f5fb;
+    }
+    .src-text strong { display: block; font-size: .88rem; color: var(--navy); line-height: 1.3; }
+    .src-text span   { font-size: .75rem; color: var(--muted); }
+
+    /* ============================
+       KEYWORD SECTION
+    ============================ */
+    .sec-head { margin: 44px 0 16px; }
+    .sec-label {
+      font-size: .74rem; font-weight: 800; letter-spacing: .08em; color: var(--muted);
+      margin-bottom: 5px;
+    }
+    .sec-head h2 { font-size: 1.45rem; color: var(--navy); margin-bottom: 6px; }
+    .sec-head p  { color: var(--sub); font-size: .91rem; }
+    .dict-banner {
+      display: flex; align-items: center; gap: 14px;
+      background: #eef4ff; border: 1px solid #bcd0f5;
+      border-radius: var(--r); padding: 14px 20px;
+      margin-bottom: 18px;
+      text-decoration: none; color: var(--ink);
+      transition: box-shadow .15s;
+    }
+    .dict-banner:hover { box-shadow: 0 4px 16px rgba(10,30,70,.1); }
+    .dict-icon { font-size: 1.8rem; }
+    .dict-banner strong { display: block; font-size: 1rem; color: var(--navy); }
+    .dict-banner span { font-size: .84rem; color: var(--sub); }
+    .dict-arrow { margin-left: auto; color: var(--wb); font-size: 1.1rem; }
+
+    .kw-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 10px;
+    }
+    .kw-card {
+      border: 1px solid var(--line); border-radius: var(--r);
+      background: var(--white); padding: 14px 16px;
+    }
+    .kw-word  { font-size: 1.1rem; font-weight: 800; color: var(--navy); margin-bottom: 2px; }
+    .kw-read  { font-size: .76rem; color: var(--muted); margin-bottom: 6px; }
+    .kw-def   { font-size: .87rem; color: var(--sub); line-height: 1.6; }
+    .kw-tag {
+      display: inline-flex; margin-top: 8px;
+      padding: 2px 9px; border-radius: 10px;
+      font-size: .73rem; font-weight: 800;
+    }
+    .kw-tag.cg { background: #d8f0e4; color: var(--cg); }
+    .kw-tag.wb { background: #d8e8ff; color: var(--wb); }
+    .kw-tag.dr { background: #ffe8dd; color: var(--dr); }
+
+    /* ============================
+       SLIDE GUIDE
+    ============================ */
+    .slide-guide { margin: 44px 0 0; }
+    .slide-flow {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 8px; margin-top: 14px;
+    }
+    .slide-step {
+      border: 1px solid var(--line); border-radius: var(--r);
+      background: #f8fafb; padding: 14px 12px; text-align: center;
+    }
+    .slide-num { font-size: 1.6rem; font-weight: 900; color: var(--navy); opacity: .22; display: block; }
+    .slide-step strong { display: block; font-size: .9rem; color: var(--navy); margin: 3px 0; }
+    .slide-step span { font-size: .78rem; color: var(--sub); }
+
+    /* ============================
+       TEACHER NOTES
+    ============================ */
+    .teacher-wrap {
+      margin-top: 50px;
+      border: 2px dashed #c2cdd8;
+      border-radius: var(--r);
+      overflow: hidden;
+    }
+    .teacher-summary {
+      padding: 13px 20px; background: #eef2f7;
+      cursor: pointer; font-size: .95rem; font-weight: 800; color: var(--navy);
+      list-style: none; display: flex; align-items: center; gap: 8px;
+    }
+    .teacher-summary::-webkit-details-marker { display: none; }
+    .teacher-body { padding: 22px 26px; display: grid; gap: 20px; }
+    .tb { border-left: 3px solid var(--line); padding-left: 16px; }
+    .tb h3 { font-size: .95rem; color: var(--navy); margin-bottom: 6px; }
+    .tb p, .tb li { font-size: .9rem; color: var(--sub); }
+    .tb ul { padding-left: 18px; margin-top: 6px; }
+    .tb li { margin: 4px 0; }
+    .tb-alert { border-left-color: #c03020; }
+    .tb-alert h3 { color: #c03020; }
+
+    /* ============================
+       FOOTER + TOAST
+    ============================ */
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 22px 16px; text-align: center;
+      color: var(--muted); font-size: .82rem;
+    }
+    footer a { color: var(--wb); text-decoration: underline; }
+
+    #toast {
+      position: fixed; left: 50%; bottom: 20px; z-index: 9999;
+      transform: translate(-50%, 70px); opacity: 0;
+      background: var(--navy); color: #fff;
+      padding: 8px 18px; border-radius: 20px;
+      font-size: .86rem; font-weight: 800;
+      box-shadow: var(--shadow);
+      transition: transform .2s, opacity .2s;
+      pointer-events: none;
+    }
+    #toast.on { transform: translate(-50%, 0); opacity: 1; }
+
+    /* ============================
+       SLIDESHOW LAUNCH BUTTON
+    ============================ */
+    .btn-board {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 16px; border-radius: 20px;
+      border: 1px solid rgba(255,255,255,.4);
+      background: rgba(255,255,255,.13);
+      color: #fff; font: inherit;
+      font-size: .88rem; font-weight: 800;
+      cursor: pointer; transition: background .15s;
+    }
+    .btn-board:hover { background: rgba(255,255,255,.25); }
+
+    /* ============================
+       SLIDESHOW (電子黒板モード)
+    ============================ */
+    #slideshow {
+      display: none; position: fixed; inset: 0; z-index: 9998;
+      flex-direction: column;
+    }
+    #slideshow.is-open { display: flex; }
+
+    .ss-header {
+      flex-shrink: 0; display: flex; align-items: center; gap: 14px;
+      padding: 10px 20px; background: rgba(0,0,0,.5);
+      color: rgba(255,255,255,.8);
+    }
+    .ss-counter { font-size: .9rem; font-weight: 800; flex-shrink: 0; min-width: 54px; }
+    .ss-hlabel  { flex: 1; font-size: .85rem; font-weight: 700; opacity: .65; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ss-hbtn {
+      border: 0; background: rgba(255,255,255,.18); color: #fff;
+      width: 34px; height: 34px; border-radius: 50%;
+      font-size: .95rem; cursor: pointer; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .15s;
+    }
+    .ss-hbtn:hover { background: rgba(255,255,255,.35); }
+
+    .ss-stage {
+      flex: 1; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* stage backgrounds */
+    .bg-navy   { background: #08193e; color: #fff; }
+    .bg-green  { background: #0e3e22; color: #fff; }
+    .bg-blue   { background: #092f6e; color: #fff; }
+    .bg-orange { background: #782200; color: #fff; }
+    .bg-teal   { background: #063636; color: #fff; }
+    .bg-purple { background: #28106a; color: #fff; }
+
+    .ss-content { width: min(1200px, 90%); padding: 40px 24px; }
+
+    .ss-slide-label {
+      font-size: clamp(.85rem, 1.5vw, 1.3rem);
+      font-weight: 800; letter-spacing: .07em; opacity: .55;
+      margin-bottom: .65em;
+    }
+    .ss-slide-title {
+      font-size: clamp(2rem, 5.5vw, 5.5rem);
+      font-weight: 900; line-height: 1.2; margin: 0 0 .45em;
+    }
+    .ss-slide-body {
+      font-size: clamp(1rem, 2.2vw, 2.1rem);
+      opacity: .85; margin: .3em 0 .8em; line-height: 1.65;
+    }
+    .ss-items { list-style: none; padding: 0; margin: .9em 0 0; }
+    .ss-items li {
+      font-size: clamp(1rem, 2.4vw, 2.3rem);
+      padding: .28em 0 .28em 1.6em; position: relative;
+      opacity: .9; line-height: 1.45;
+    }
+    .ss-items li::before { content: '▸'; position: absolute; left: 0; opacity: .45; }
+
+    /* compare type */
+    .ss-cmp-row {
+      display: grid; grid-template-columns: 1fr auto 1fr;
+      gap: 22px; margin-top: 1.1em; align-items: start;
+    }
+    .ss-cbox {
+      background: rgba(255,255,255,.1); border-radius: 14px;
+      padding: 18px 22px;
+    }
+    .ss-cbox-head {
+      font-size: clamp(1.1rem, 2.3vw, 2.2rem);
+      font-weight: 900; margin-bottom: .5em;
+    }
+    .ss-cbox ul { list-style: none; padding: 0; }
+    .ss-cbox li {
+      font-size: clamp(.85rem, 1.75vw, 1.7rem);
+      padding: .2em 0 .2em 1.1em; position: relative; opacity: .85;
+    }
+    .ss-cbox li::before { content: '•'; position: absolute; left: 0; }
+    .ss-vs {
+      font-size: clamp(1.2rem, 2.5vw, 2.4rem);
+      font-weight: 900; opacity: .35; align-self: center;
+    }
+
+    /* flow type */
+    .ss-steps { margin-top: .9em; display: grid; gap: 11px; }
+    .ss-step {
+      display: flex; align-items: center; gap: 18px;
+      background: rgba(255,255,255,.1); border-radius: 10px;
+      padding: 13px 20px;
+    }
+    .ss-step-n {
+      font-size: clamp(1.2rem, 2.2vw, 2.2rem);
+      font-weight: 900; opacity: .4;
+      flex-shrink: 0; width: 1.4em; text-align: center;
+    }
+    .ss-step span:last-child { font-size: clamp(.9rem, 1.85vw, 1.8rem); opacity: .9; }
+
+    /* vocab type */
+    .ss-vgrid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 16px; margin-top: .9em;
+    }
+    .ss-vcard {
+      background: rgba(255,255,255,.1); border-radius: 14px;
+      padding: 18px 22px;
+    }
+    .ss-vword { font-size: clamp(1.8rem, 4vw, 3.8rem); font-weight: 900; line-height: 1.1; }
+    .ss-vread { font-size: clamp(.75rem, 1.3vw, 1.2rem); opacity: .55; margin: 5px 0 8px; }
+    .ss-vdef  { font-size: clamp(.88rem, 1.65vw, 1.55rem); opacity: .82; line-height: 1.5; }
+
+    /* footer */
+    .ss-footer {
+      flex-shrink: 0; display: flex; align-items: center; gap: 14px;
+      padding: 10px 20px; background: rgba(0,0,0,.5);
+    }
+    .ss-nav {
+      border: 0; background: rgba(255,255,255,.22); color: #fff;
+      padding: 8px 20px; border-radius: 20px;
+      font-size: 1rem; font-weight: 900; cursor: pointer;
+      flex-shrink: 0; transition: background .15s;
+    }
+    .ss-nav:hover { background: rgba(255,255,255,.38); }
+    .ss-timer-bar {
+      flex: 1; height: 5px;
+      background: rgba(255,255,255,.2); border-radius: 3px; overflow: hidden;
+    }
+    .ss-timer-fill {
+      height: 100%; background: rgba(255,255,255,.75);
+      border-radius: 3px; width: 0%;
+    }
+    .ss-duration-note {
+      font-size: .75rem; color: rgba(255,255,255,.45); flex-shrink: 0; white-space: nowrap;
+    }
+    .ss-mode-btn {
+      border: 1px solid rgba(255,255,255,.28);
+      background: transparent; color: rgba(255,255,255,.75);
+      padding: 5px 13px; border-radius: 14px;
+      font: inherit; font-size: .82rem; font-weight: 800;
+      cursor: pointer; flex-shrink: 0; white-space: nowrap;
+      transition: background .15s, border-color .15s, color .15s;
+    }
+    .ss-mode-btn:hover { background: rgba(255,255,255,.15); }
+    .ss-mode-btn.is-on {
+      background: rgba(255,255,255,.22);
+      border-color: rgba(255,255,255,.7);
+      color: #fff;
+    }
+
+    /* ============================
+       RESPONSIVE
+    ============================ */
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 1.5rem; }
+      .prompt-grid, .kw-grid, .source-grid { grid-template-columns: 1fr; }
+      .slide-flow { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ========== HERO ========== -->
+<header class="hero">
+  <div class="wrap">
+    <a href="../index.html" style="display:inline-flex;align-items:center;gap:5px;font-size:.78rem;font-weight:800;opacity:.6;margin-bottom:12px;color:#fff;text-decoration:none;" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='.6'">← 子どものためのプロンプトライブラリ</a>
+    <div class="hero-eyebrow">社会科 4年生 ｜ 社会科見学</div>
+    <h1>見学で学ぼう！<br>Gemini プロンプト集</h1>
+    <p class="hero-lead">
+      飯塚市クリーンセンター・多々良浄水場・福岡市防災センターの見学に向けて、
+      AIを使って問いを立てたり、まとめたりしよう。
+    </p>
+    <div class="hero-badges">
+      <span class="badge badge-date">📅 見学日：2026年6月16日（火）</span>
+      <a class="badge badge-dict"
+         href="https://a-tozak.github.io/shakai-kotoba-jiten/"
+         target="_blank" rel="noopener">
+        📖 社会ことば辞典
+      </a>
+      <button class="btn-board" type="button" onclick="openSlideshow()">📺 電子黒板モード（約20分）</button>
+    </div>
+  </div>
+</header>
+
+<!-- ========== TAB NAV ========== -->
+<nav class="tab-nav">
+  <div class="wrap">
+    <button class="tab-btn is-active" data-tab="clean" type="button">
+      <span class="tab-dot"></span>飯塚市クリーンセンター
+    </button>
+    <button class="tab-btn" data-tab="water" type="button">
+      <span class="tab-dot"></span>多々良浄水場
+    </button>
+    <button class="tab-btn" data-tab="disaster" type="button">
+      <span class="tab-dot"></span>福岡市防災センター
+    </button>
+  </div>
+</nav>
+
+<main>
+<div class="wrap">
+
+  <!-- ==========================================
+       TAB 1 : 飯塚市クリーンセンター
+  =========================================== -->
+  <div class="tab-panel is-active" id="panel-clean">
+
+    <div class="place-intro cg">
+      <div class="place-tag">ごみ処理</div>
+      <h2>飯塚市クリーンセンター</h2>
+      <p class="desc">わたしたちが出したごみが、どのように集められ処理されるのか。施設の仕組みや働く人の工夫を知り、自分たちにできることを考えましょう。</p>
+      <div class="big-q">❓ わたしたちのごみは、どのように処理されているのだろう。</div>
+    </div>
+
+    <div class="know-box">
+      <h3>📚 みんなが知っていること（出発点）</h3>
+      <ul>
+        <li>週に2日、燃えるごみを集めている</li>
+        <li>ごみ処理場でごみを燃やして処理している</li>
+        <li>一部のごみは埋め立てていると聞いたことがある</li>
+        <li>何人が働いているか、機械の仕組みなどは知らない</li>
+      </ul>
+    </div>
+
+    <!-- 見学前 -->
+    <div class="phase-head">
+      <span class="phase-tag pt-before">見学前</span>
+      <span class="phase-head-title">問いを立てる・事前に調べる</span>
+    </div>
+    <div class="prompt-grid">
+
+      <div class="pc">
+        <div class="pc-strip cg"></div>
+        <div class="pc-body">
+          <div class="pc-phase-row"><span class="phase-tag pt-before">見学前</span></div>
+          <h3>知っていることと疑問を整理しよう</h3>
+          <p class="pc-desc">知っていることを整理して、「まだわからないこと」をはっきりさせます。</p>
+          <p class="pc-can">見学で確かめたいことが3つの文にまとまります。スライドの見出し案も出てきます。</p>
+          <details class="pc-details">
+            <summary>プロンプトを見る</summary>
+            <pre class="pc-prompt">あなたは小学校4年生の社会科の学習を助ける先生です。
+
+見学場所：飯塚市クリーンセンター（ごみを処理する施設）
+
+わたしが知っていること：
+・週に2日、燃えるごみを集めている
+・ごみ処理場でごみを燃やして処理している
+・一部のごみは埋め立てていると聞いたことがある
+
+これから見学に行きます。答えは先に教えず、次の形で出してください。
+
+1. 「まだ知らないこと・疑問に思うこと」を3つ
+2. 見学で確かめたい文（3つ）
+3. スライドにメモするとよい見出し（4つ）
+4. 「学習問題」として使える文の型（1つ）
+
+小学4年生にわかる言葉で答えてください。</pre>
+          </details>
+          <div class="pc-actions">
+            <button class="btn btn-copy" type="button" data-copy>コピーする</button>
+            <a class="btn btn-gemini" href="https://gemini.google.com/" target="_blank" rel="noopener">Geminiで開く</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pc">
+        <div class="pc-strip cg"></div>
+        <div class="pc-body">
+          <div class="pc-phase-row"><span class="phase-tag pt-before">見学前</span></div>
+          <h3>大事な言葉の意味を調べよう</h3>
+          <p class="pc-desc">ごみ処理に出てくる言葉を、見学前にひとつひとつ調べます。</p>
+          <p class="pc-can">難しい言葉が短い説明で出てきます。検索に使えるキーワードもわかります。</p>
+          <details class="pc-details">
+            <summary>プロンプトを見る</summary>
+            <pre class="pc-prompt">あなたは小学校4年生の社会科の学習を助ける先生です。
+
+次の言葉の意味を、小学生にわかるように説明してください。
+• 焼却（しょうきゃく）
+• 埋め立て処分場（うめたてしょぶんじょ）
+• 資源ごみ（しげんごみ）
+• 粗大ごみ（そだいごみ）
+
+それぞれについて、次の形で答えてください。
+・一言でわかる説明（15字以内）
+・なぜ社会科で大事な言葉なのか（1文）
+・調べるときに使うとよい検索ワード
+
+文字が多くならないよう、短く答えてください。</pre>
+          </details>
+          <div class="pc-actions">
+            <button class="btn btn-copy" type="button" data-copy>コピーする</button>
+            <a class="btn btn-gemini" href="https://gemini.google.com/" target="_blank" rel="noopener">Geminiで開く</a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /prompt-grid -->
+
+    <!-- AI検索 -->
+    <div class="ai-search-section">
+      <h3>🔍 Chromeの AI検索モードで調べよう</h3>
+      <div class="ai-search-row">
+        <input class="ai-search-input" type="text" id="q-clean"
+               placeholder="調べたいことを入力…" value="飯塚市 ごみ処理 仕組み">
+        <button class="btn-ai-search" type="button" onclick="aiSearch('q-clean')">AIで検索</button>
+      </div>
+      <div class="search-chips">
+        <a class="schip" href="https://www.google.com/search?udm=46&q=飯塚市+ごみ+収集+分別" target="_blank" rel="noopener">飯塚市 ごみ 分別</a>
+        <a class="schip" href="https://www.google.com/search?udm=46&q=クリーンセンター+焼却+仕組み" target="_blank" rel="noopener">焼却の仕組み</a>
+        <a class="schip" href="https://www.google.com/search?udm=46&q=資源ごみ+リサイクル+流れ" target="_blank" rel="noopener">リサイクルの流れ</a>
+        <a class="schip" href="https://www.google.com/search?udm=46&q=埋め立て処分場+問題+満杯" target="_blank" rel="noopener">埋め立て処分場の問題</a>
+        <a class="schip" href="https://www.google.com/search?udm=46&q=ごみ処理場+働く人+仕事" target="_blank" rel="noopener">ごみ処理場で働く人</a>
+      </div>
+      <p class="search-note">出てきたページは「どこが出している情報か（市役所・県・国など）」を確かめてから使いましょう。</p>
+    </div>
+
+    <!-- TICKER: ごみ処理 -->
+    <div class="ticker-wrap">
+      <div class="ticker-label-row">📌 一次資料に出てくる言葉　（マウスを乗せると止まります）</div>
+      <div class="ticker-scroll"><div class="ticker-track ticker-cg" aria-hidden="true">
+        <!-- 1セット -->
+        <span class="ticker-item"><span class="tw">可燃ごみ</span><span class="tr">かねんごみ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">不燃ごみ</span><span class="tr">ふねんごみ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">資源物</span><span class="tr">しげんぶつ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">収集日</span><span class="tr">しゅうしゅうび</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">粗大ごみ</span><span class="tr">そだいごみ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">搬入</span><span class="tr">はんにゅう</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">溶融炉</span><span class="tr">ようゆうろ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">排ガス処理</span><span class="tr">はいがすしょり</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">飛灰</span><span class="tr">ひばい</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">リサイクル率</span><span class="tr">りさいくるりつ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">事業系ごみ</span><span class="tr">じぎょうけいごみ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">ごみカレンダー</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">中継施設</span><span class="tr">ちゅうけいしせつ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">環境整備公社</span><span class="tr">かんきょうせいびこうしゃ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">処理手数料</span><span class="tr">しょりてすうりょう</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">遠賀川</span><span class="tr">おんががわ</span></span><span class="ticker-sep">／</span>
+        <!-- 2セット（ループ用） -->
+        <span class="ticker-item"><span class="tw">可燃ごみ</span><span class="tr">かねんごみ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">不燃ごみ</span><span class="tr">ふねんごみ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">資源物</span><span class="tr">しげんぶつ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">収集日</span><span class="tr">しゅうしゅうび</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">粗大ごみ</span><span class="tr">そだいごみ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">搬入</span><span class="tr">はんにゅう</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">溶融炉</span><span class="tr">ようゆうろ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">排ガス処理</span><span class="tr">はいがすしょり</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">飛灰</span><span class="tr">ひばい</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">リサイクル率</span><span class="tr">りさいくるりつ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">事業系ごみ</span><span class="tr">じぎょうけいごみ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">ごみカレンダー</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">中継施設</span><span class="tr">ちゅうけいしせつ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">環境整備公社</span><span class="tr">かんきょうせいびこうしゃ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">処理手数料</span><span class="tr">しょりてすうりょう</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">遠賀川</span><span class="tr">おんががわ</span></span><span class="ticker-sep">／</span>
+      </div></div>
+    </div>
+
+    <!-- 一次資料 -->
+    <div class="sources-section">
+      <h3>🔗 一次資料 — 直接アクセスしよう</h3>
+      <div class="source-grid">
+        <a class="source-link" href="https://www.city.iizuka.lg.jp/kankyou/gomi/index.html" target="_blank" rel="noopener">
+          <div class="src-icon">🏛️</div>
+          <div class="src-text">
+            <strong>飯塚市 ごみの出し方・分け方</strong>
+            <span>飯塚市公式ホームページ</span>
+          </div>
+        </a>
+        <a class="source-link" href="https://maps.google.com/maps?q=飯塚市クリーンセンター" target="_blank" rel="noopener">
+          <div class="src-icon">🗺️</div>
+          <div class="src-text">
+            <strong>クリーンセンターの場所を見る</strong>
+            <span>Googleマップ</span>
+          </div>
+        </a>
+        <a class="source-link" href="https://maps.gsi.go.jp/#13/33.641/130.696" target="_blank" rel="noopener">
+          <div class="src-icon">🌏</div>
+          <div class="src-text">
+            <strong>飯塚市の地図を見る</strong>
+            <span>国土地理院 地理院地図</span>
+          </div>
+        </a>
+        <a class="source-link" href="https://www.qsr.mlit.go.jp/onga/" target="_blank" rel="noopener">
+          <div class="src-icon">🌊</div>
+          <div class="src-text">
+            <strong>遠賀川について調べる</strong>
+            <span>国土交通省 遠賀川河川事務所</span>
+          </div>
+        </a>
+        <a class="source-link" href="https://www.city.iizuka.lg.jp/" target="_blank" rel="noopener">
+          <div class="src-icon">🏙️</div>
+          <div class="src-text">
+            <strong>飯塚市公式ホームページ</strong>
+            <span>行政・くらし・環境 など</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- 見学後 -->
+    <div class="phase-head">
+      <span class="phase-tag pt-after">見学後</span>
+      <span class="phase-head-title">見学メモをもとにまとめる</span>
+    </div>
+    <div class="prompt-grid">
+
+      <div class="pc">
+        <div class="pc-strip cg"></div>
+        <div class="pc-body">
+          <div class="pc-phase-row"><span class="phase-tag pt-after">見学後</span></div>
+          <h3>見学メモから学習問題をまとめよう</h3>
+          <p class="pc-desc">スライドのメモをGeminiに渡して、まとめの文を作る手伝いをしてもらいます。</p>
+          <p class="pc-can">まとめに使える文の型と大事な言葉が出てきます。自分にできることのヒントも出ます。</p>
+          <details class="pc-details">
+            <summary>プロンプトを見る</summary>
+            <pre class="pc-prompt">あなたは小学校4年生の社会科の学習を助ける先生です。
+
+見学場所：飯塚市クリーンセンター
+
+見学でわかったこと（スライドのメモをここに貼り付けてください）：
+▼ここにメモを貼る▼
+
+
+見学でびっくりしたこと：
+▼ここに書く▼
+
+
+メモをもとに、学習問題の答えをまとめる手伝いをしてください。
+ただし、答えを全部は作らないでください。
+
+1. 「わかったことまとめ」に使える文の型（2パターン）
+2. この見学で大事な言葉（3つ）
+3. 自分たちにできることを考えるヒント（2つ）
+4. もっと調べるとよいこと（1つ）
+
+スライドのメモに書いていないことは「わかりません」と言ってください。</pre>
+          </details>
+          <div class="pc-actions">
+            <button class="btn btn-copy" type="button" data-copy>コピーする</button>
+            <a class="btn btn-gemini" href="https://gemini.google.com/" target="_blank" rel="noopener">Geminiで開く</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pc">
+        <div class="pc-strip nb"></div>
+        <div class="pc-body">
+          <div class="pc-phase-row"><span class="phase-tag pt-notebook">NotebookLM</span></div>
+          <h3>教科書と見学メモをつなごう</h3>
+          <p class="pc-desc">NotebookLMに見学メモを入れて、教科書と照らし合わせます。</p>
+          <p class="pc-can">見学でわかったことと教科書がどこでつながるかが整理できます。</p>
+          <details class="pc-details">
+            <summary>プロンプトを見る</summary>
+            <pre class="pc-prompt">NotebookLMに入れた見学のメモだけをもとに答えてください。
+
+単元：ごみの処理
+
+教科書で読んだこと（思い出せる範囲で書いてください）：
+▼ここに書く▼
+
+
+次の形で整理してください。
+
+1. 見学メモと教科書で「同じこと・重なっていること」
+2. 見学メモにあるが教科書に詳しく書いていないこと
+3. 教科書に書いているが、見学でよくわからなかったこと
+4. 学習問題の答えとして使えそうな文（1つ）
+
+資料にないことは「わかりません」と言ってください。</pre>
+          </details>
+          <div class="pc-actions">
+            <button class="btn btn-copy" type="button" data-copy>コピーする</button>
+            <a class="btn btn-notebook" href="https://notebooklm.google.com/notebook/d3eec584-fe13-44c4-b249-c0e604d9f598" target="_blank" rel="noopener">NotebookLMを開く</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /panel-clean -->
+
+
+  <!-- ==========================================
+       TAB 2 : 多々良浄水場
+  =========================================== -->
+  <div class="tab-panel" id="panel-water">
+
+    <div class="place-intro wb">
+      <div class="place-tag">水道・浄水</div>
+      <h2>多々良浄水場</h2>
+      <p class="desc">雨や川の水が、どのようにしてわたしたちの家の蛇口まで届くのか。24時間休まず働き続ける人たちの努力や工夫を学びましょう。</p>
+      <div class="big-q">❓ 安全な水は、どのようにしてわたしたちのもとに届けられているのだろう。</div>
+    </div>
+
+    <div class="know-box">
+      <h3>📚 みんなが知っていること（出発点）</h3>
+      <ul>
+        <li>水道の水は雨水や川の水を使っている</li>
+        <li>どこかできれいにしているらしい</li>
+        <li>水が厳しい検査を通っていることは知らない</li>
+        <li>夜中も人が働いていることは知らない</li>
+      </ul>
+    </div>
+
+    <!-- 見学前 -->
+    <div class="phase-head">
+      <span class="phase-tag pt-before">見学前</span>
+      <span class="phase-head-title">問いを立てる・事前に調べる</span>
+    </div>
+    <div class="prompt-grid">
+
+      <div class="pc">
+        <div class="pc-strip wb"></div>
+        <div class="pc-body">
+          <div class="pc-phase-row"><span class="phase-tag pt-before">見学前</span></div>
+          <h3>知っていることと疑問を整理しよう</h3>
+          <p class="pc-desc">水が届くまでの仕組みについて、知っていることとまだわからないことを整理します。</p>
+          <p class="pc-can">見学で確かめたいことが文になります。スライドの見出し案も出てきます。</p>
+          <details class="pc-details">
+            <summary>プロンプトを見る</summary>
+            <pre class="pc-prompt">あなたは小学校4年生の社会科の学習を助ける先生です。
+
+見学場所：多々良浄水場（水をきれいにして家まで送る施設）
+
+わたしが知っていること：
+・水道の水は雨や川の水が使われている
+・どこかできれいにしているらしい
+
+答えは先に教えず、次の形で出してください。
+
+1. 「まだ知らないこと・疑問に思うこと」を3つ
+2. 見学で確かめたい文（3つ）
+3. スライドにメモするとよい見出し（4つ）
+4. 「学習問題」として使える文の型（1つ）
+
+小学4年生にわかる言葉で答えてください。</pre>
+          </details>
+          <div class="pc-actions">
+            <button class="btn btn-copy" type="button" data-copy>コピーする</button>
+            <a class="btn btn-gemini" href="https://gemini.google.com/" target="_blank" rel="noopener">Geminiで開く</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pc">
+        <div class="pc-strip wb"></div>
+        <div class="pc-body">
+          <div class="pc-phase-row"><span class="phase-tag pt-before">見学前</span></div>
+          <h3>大事な言葉の意味を調べよう</h3>
+          <p class="pc-desc">浄水場に関係する言葉を見学前に調べておきます。</p>
+          <p class="pc-can">5つの言葉が短い説明で出てきます。調べるときの検索ワードもわかります。</p>
+          <details class="pc-details">
+            <summary>プロンプトを見る</summary>
+            <pre class="pc-prompt">あなたは小学校4年生の社会科の学習を助ける先生です。
+
+次の言葉の意味を、小学生にわかるように説明してください。
+• 浄水場（じょうすいじょう）
+• 水源（すいげん）
+• 水質検査（すいしつけんさ）
+• 塩素（えんそ）
+• 配水管（はいすいかん）
+
+それぞれについて、次の形で答えてください。
+・一言でわかる説明（15字以内）
+・なぜ社会科で大事な言葉なのか（1文）
+・調べるときに使うとよい検索ワード
+
+短く、わかりやすく答えてください。</pre>
+          </details>
+          <div class="pc-actions">
+            <button class="btn btn-copy" type="button" data-copy>コピーする</button>
+            <a class="btn btn-gemini" href="https://gemini.google.com/" target="_blank" rel="noopener">Geminiで開く</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- AI検索 -->
+    <div class="ai-search-section">
+      <h3>🔍 Chromeの AI検索モードで調べよう</h3>
+      <div class="ai-search-row">
+        <input class="ai-search-input" type="text" id="q-water"
+               placeholder="調べたいことを入力…" value="多々良浄水場 水をきれいにする仕組み">
+        <button class="btn-ai-search" type="button" onclick="aiSearch('q-water')">AIで検索</button>
+      </div>
+      <div class="search-chips">
+        <a class="schip" href="https://www.google.com/search?udm=46&q=浄水場+水+きれいにする+仕組み" target="_blank" rel="noopener">浄水場の仕組み</a>
+        <a class="schip" href="https://www.google.com/search?udm=46&q=水道水+水質検査+何を調べる" target="_blank" rel="noopener">水質検査の内容</a>
+        <a class="schip" href="https://www.google.com/search?udm=46&q=水道+24時間+働く人+仕事" target="_blank" rel="noopener">24時間働く人</a>
+        <a class="schip" href="https://www.google.com/search?udm=46&q=多々良川+水源+どこ" target="_blank" rel="noopener">多々良川の水源</a>
+        <a class="schip" href="https://www.google.com/search?udm=46&q=福岡市水道局+水をつくる" target="_blank" rel="noopener">福岡市の水道</a>
+      </div>
+      <p class="search-note">出てきたページは「どこが出している情報か（市役所・県・国など）」を確かめてから使いましょう。</p>
+    </div>
+
+    <!-- TICKER: 水道・浄水場 -->
+    <div class="ticker-wrap">
+      <div class="ticker-label-row">📌 一次資料に出てくる言葉　（マウスを乗せると止まります）</div>
+      <div class="ticker-scroll"><div class="ticker-track ticker-wb" aria-hidden="true">
+        <!-- 1セット -->
+        <span class="ticker-item"><span class="tw">原水</span><span class="tr">げんすい</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">凝集</span><span class="tr">ぎょうしゅう</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">沈殿</span><span class="tr">ちんでん</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">ろ過</span><span class="tr">ろか</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">消毒</span><span class="tr">しょうどく</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">配水池</span><span class="tr">はいすいち</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">給水区域</span><span class="tr">きゅうすいくいき</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">残留塩素</span><span class="tr">ざんりゅうえんそ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">水道法</span><span class="tr">すいどうほう</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">取水口</span><span class="tr">しゅすいこう</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">ポンプ場</span><span class="tr">ぽんぷじょう</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">管路</span><span class="tr">かんろ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">水道管</span><span class="tr">すいどうかん</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">多々良川</span><span class="tr">たたらがわ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">浄水処理</span><span class="tr">じょうすいしょり</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">水道料金</span><span class="tr">すいどうりょうきん</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">久保白ダム</span><span class="tr">くぼしろだむ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">穂波川</span><span class="tr">ほなみがわ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">遠賀川水系</span><span class="tr">おんがかわすいけい</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">犬鳴川</span><span class="tr">いぬなきがわ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">飯塚市上水道</span><span class="tr">いいづかしじょうすいどう</span></span><span class="ticker-sep">／</span>
+        <!-- 2セット（ループ用） -->
+        <span class="ticker-item"><span class="tw">原水</span><span class="tr">げんすい</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">凝集</span><span class="tr">ぎょうしゅう</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">沈殿</span><span class="tr">ちんでん</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">ろ過</span><span class="tr">ろか</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">消毒</span><span class="tr">しょうどく</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">配水池</span><span class="tr">はいすいち</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">給水区域</span><span class="tr">きゅうすいくいき</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">残留塩素</span><span class="tr">ざんりゅうえんそ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">水道法</span><span class="tr">すいどうほう</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">取水口</span><span class="tr">しゅすいこう</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">ポンプ場</span><span class="tr">ぽんぷじょう</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">管路</span><span class="tr">かんろ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">水道管</span><span class="tr">すいどうかん</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">多々良川</span><span class="tr">たたらがわ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">浄水処理</span><span class="tr">じょうすいしょり</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">水道料金</span><span class="tr">すいどうりょうきん</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">久保白ダム</span><span class="tr">くぼしろだむ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">穂波川</span><span class="tr">ほなみがわ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">遠賀川水系</span><span class="tr">おんがかわすいけい</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">犬鳴川</span><span class="tr">いぬなきがわ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">飯塚市上水道</span><span class="tr">いいづかしじょうすいどう</span></span><span class="ticker-sep">／</span>
+      </div></div>
+    </div>
+
+    <!-- 一次資料 -->
+    <div class="sources-section">
+      <h3>🔗 一次資料 — 直接アクセスしよう</h3>
+      <div class="source-grid">
+        <a class="source-link" href="https://www.city.fukuoka.lg.jp/suidokyoku/" target="_blank" rel="noopener">
+          <div class="src-icon">🚰</div>
+          <div class="src-text">
+            <strong>福岡市水道局</strong>
+            <span>水のしくみ・施設情報</span>
+          </div>
+        </a>
+        <a class="source-link" href="https://maps.google.com/maps?q=多々良浄水場" target="_blank" rel="noopener">
+          <div class="src-icon">🗺️</div>
+          <div class="src-text">
+            <strong>多々良浄水場の場所を見る</strong>
+            <span>Googleマップ</span>
+          </div>
+        </a>
+        <a class="source-link" href="https://maps.gsi.go.jp/#13/33.652/130.416" target="_blank" rel="noopener">
+          <div class="src-icon">🌏</div>
+          <div class="src-text">
+            <strong>多々良川の地図を見る</strong>
+            <span>国土地理院 地理院地図</span>
+          </div>
+        </a>
+        <a class="source-link" href="https://www.qsr.mlit.go.jp/tatara/" target="_blank" rel="noopener">
+          <div class="src-icon">🌊</div>
+          <div class="src-text">
+            <strong>多々良川について調べる</strong>
+            <span>国土交通省 多々良川河川事務所</span>
+          </div>
+        </a>
+        <a class="source-link" href="https://www.city.fukuoka.lg.jp/" target="_blank" rel="noopener">
+          <div class="src-icon">🏙️</div>
+          <div class="src-text">
+            <strong>福岡市公式ホームページ</strong>
+            <span>水道・くらし など</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- 見学後 -->
+    <div class="phase-head">
+      <span class="phase-tag pt-after">見学後</span>
+      <span class="phase-head-title">見学メモをもとにまとめる</span>
+    </div>
+    <div class="prompt-grid">
+
+      <div class="pc">
+        <div class="pc-strip wb"></div>
+        <div class="pc-body">
+          <div class="pc-phase-row"><span class="phase-tag pt-after">見学後</span></div>
+          <h3>見学メモから学習問題をまとめよう</h3>
+          <p class="pc-desc">スライドのメモをGeminiに渡して、まとめの文を作る手伝いをしてもらいます。</p>
+          <p class="pc-can">水の仕組みと働く人の工夫、それぞれのまとめ文の型が出てきます。</p>
+          <details class="pc-details">
+            <summary>プロンプトを見る</summary>
+            <pre class="pc-prompt">あなたは小学校4年生の社会科の学習を助ける先生です。
+
+見学場所：多々良浄水場
+
+見学でわかったこと（スライドのメモをここに貼り付けてください）：
+▼ここにメモを貼る▼
+
+
+特に印象に残ったこと（働く人のことなど）：
+▼ここに書く▼
+
+
+メモをもとに、学習問題の答えをまとめる手伝いをしてください。
+
+1. 「水が届くしくみ」をまとめる文の型（2パターン）
+2. 「働く人の努力・工夫」をまとめる文の型（2パターン）
+3. この見学で大事な言葉（3つ）
+4. もっと調べるとよいこと（1つ）
+
+スライドのメモに書いていないことは「わかりません」と言ってください。</pre>
+          </details>
+          <div class="pc-actions">
+            <button class="btn btn-copy" type="button" data-copy>コピーする</button>
+            <a class="btn btn-gemini" href="https://gemini.google.com/" target="_blank" rel="noopener">Geminiで開く</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pc">
+        <div class="pc-strip nb"></div>
+        <div class="pc-body">
+          <div class="pc-phase-row"><span class="phase-tag pt-notebook">NotebookLM</span></div>
+          <h3>教科書と見学メモをつなごう</h3>
+          <p class="pc-desc">NotebookLMに見学メモを入れて、教科書と照らし合わせます。</p>
+          <p class="pc-can">見学でわかったことと教科書がどこでつながるかが整理できます。</p>
+          <details class="pc-details">
+            <summary>プロンプトを見る</summary>
+            <pre class="pc-prompt">NotebookLMに入れた見学のメモだけをもとに答えてください。
+
+単元：水はどこから
+
+教科書で読んだこと（思い出せる範囲で書いてください）：
+▼ここに書く▼
+
+
+次の形で整理してください。
+
+1. 見学メモと教科書で「同じこと・重なっていること」
+2. 見学メモにあるが教科書に詳しく書いていないこと
+3. 教科書に書いているが、見学でよくわからなかったこと
+4. 学習問題の答えとして使えそうな文（1つ）
+
+資料にないことは「わかりません」と言ってください。</pre>
+          </details>
+          <div class="pc-actions">
+            <button class="btn btn-copy" type="button" data-copy>コピーする</button>
+            <a class="btn btn-notebook" href="https://notebooklm.google.com/notebook/d3eec584-fe13-44c4-b249-c0e604d9f598" target="_blank" rel="noopener">NotebookLMを開く</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /panel-water -->
+
+
+  <!-- ==========================================
+       TAB 3 : 福岡市防災センター
+  =========================================== -->
+  <div class="tab-panel" id="panel-disaster">
+
+    <div class="place-intro dr">
+      <div class="place-tag">防災・地域の安全</div>
+      <h2>福岡市防災センター</h2>
+      <p class="desc">地震・火災・洪水などの災害から私たちの暮らしを守るために、どんな取り組みが行われているのか。自助・共助・公助のそれぞれの役割を知りましょう。</p>
+      <div class="big-q">❓ 災害から暮らしを守るために、どんな人や仕組みがあるのだろう。</div>
+    </div>
+
+    <div class="know-box">
+      <h3>📚 みんなが知っていること（出発点）</h3>
+      <ul>
+        <li>地震や火事のときに備えることが大事</li>
+        <li>避難場所がある</li>
+        <li>飯塚市は水害（洪水）が多い地域</li>
+        <li>自助・共助・公助という分け方は知らない</li>
+      </ul>
+    </div>
+
+    <!-- 見学前 -->
+    <div class="phase-head">
+      <span class="phase-tag pt-before">見学前</span>
+      <span class="phase-head-title">問いを立てる・事前に調べる</span>
+    </div>
+    <div class="prompt-grid">
+
+      <div class="pc">
+        <div class="pc-strip dr"></div>
+        <div class="pc-body">
+          <div class="pc-phase-row"><span class="phase-tag pt-before">見学前</span></div>
+          <h3>知っていることと疑問を整理しよう</h3>
+          <p class="pc-desc">防災について知っていることを整理して、見学で確かめることを決めます。</p>
+          <p class="pc-can">見学で確かめたいことが文になります。スライドの見出し案も出てきます。</p>
+          <details class="pc-details">
+            <summary>プロンプトを見る</summary>
+            <pre class="pc-prompt">あなたは小学校4年生の社会科の学習を助ける先生です。
+
+見学場所：福岡市防災センター（災害から暮らしを守る取り組みを学べる施設）
+
+わたしが知っていること：
+・地震や火事のときに備えることが大事
+・避難場所がある
+・飯塚市は洪水（水害）が多い地域と聞いたことがある
+
+答えは先に教えず、次の形で出してください。
+
+1. 「まだ知らないこと・疑問に思うこと」を3つ
+2. 見学で確かめたい文（3つ）
+3. スライドにメモするとよい見出し（4つ）
+4. 「学習問題」として使える文の型（1つ）
+
+小学4年生にわかる言葉で答えてください。</pre>
+          </details>
+          <div class="pc-actions">
+            <button class="btn btn-copy" type="button" data-copy>コピーする</button>
+            <a class="btn btn-gemini" href="https://gemini.google.com/" target="_blank" rel="noopener">Geminiで開く</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pc">
+        <div class="pc-strip dr"></div>
+        <div class="pc-body">
+          <div class="pc-phase-row"><span class="phase-tag pt-before">見学前</span></div>
+          <h3>大事な言葉の意味を調べよう</h3>
+          <p class="pc-desc">防災・減災に関係する言葉を見学前に調べておきます。</p>
+          <p class="pc-can">5つの言葉が短い説明で出てきます。自助・共助・公助の違いもわかります。</p>
+          <details class="pc-details">
+            <summary>プロンプトを見る</summary>
+            <pre class="pc-prompt">あなたは小学校4年生の社会科の学習を助ける先生です。
+
+次の言葉の意味を、小学生にわかるように説明してください。
+• 自助（じじょ）
+• 共助（きょうじょ）
+• 公助（こうじょ）
+• ハザードマップ
+• 避難所（ひなんじょ）
+
+それぞれについて、次の形で答えてください。
+・一言でわかる説明（15字以内）
+・なぜ社会科で大事な言葉なのか（1文）
+
+短く、わかりやすく答えてください。</pre>
+          </details>
+          <div class="pc-actions">
+            <button class="btn btn-copy" type="button" data-copy>コピーする</button>
+            <a class="btn btn-gemini" href="https://gemini.google.com/" target="_blank" rel="noopener">Geminiで開く</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- AI検索 -->
+    <div class="ai-search-section">
+      <h3>🔍 Chromeの AI検索モードで調べよう</h3>
+      <div class="ai-search-row">
+        <input class="ai-search-input" type="text" id="q-disaster"
+               placeholder="調べたいことを入力…" value="飯塚市 水害 ハザードマップ">
+        <button class="btn-ai-search" type="button" onclick="aiSearch('q-disaster')">AIで検索</button>
+      </div>
+      <div class="search-chips">
+        <a class="schip" href="https://www.google.com/search?udm=46&q=自助+共助+公助+違い" target="_blank" rel="noopener">自助・共助・公助</a>
+        <a class="schip" href="https://www.google.com/search?udm=46&q=ハザードマップ+見方+使い方" target="_blank" rel="noopener">ハザードマップの見方</a>
+        <a class="schip" href="https://www.google.com/search?udm=46&q=飯塚市+水害+歴史+洪水" target="_blank" rel="noopener">飯塚市の水害</a>
+        <a class="schip" href="https://www.google.com/search?udm=46&q=福岡市防災センター+体験+内容" target="_blank" rel="noopener">防災センターの内容</a>
+        <a class="schip" href="https://www.google.com/search?udm=46&q=災害+備え+小学生+できること" target="_blank" rel="noopener">小学生にできる備え</a>
+      </div>
+      <p class="search-note">出てきたページは「どこが出している情報か（市役所・県・国など）」を確かめてから使いましょう。</p>
+    </div>
+
+    <!-- TICKER: 防災 -->
+    <div class="ticker-wrap">
+      <div class="ticker-label-row">📌 一次資料に出てくる言葉　（マウスを乗せると止まります）</div>
+      <div class="ticker-scroll"><div class="ticker-track ticker-dr" aria-hidden="true">
+        <!-- 1セット -->
+        <span class="ticker-item"><span class="tw">警戒レベル</span><span class="tr">けいかいれべる</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">避難指示</span><span class="tr">ひなんしじ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">内水氾濫</span><span class="tr">ないすいはんらん</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">土砂災害</span><span class="tr">どしゃさいがい</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">特別警報</span><span class="tr">とくべつけいほう</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">消防団</span><span class="tr">しょうぼうだん</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">自主防災組織</span><span class="tr">じしゅぼうさいそしき</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">備蓄</span><span class="tr">びちく</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">避難訓練</span><span class="tr">ひなんくんれん</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">洪水</span><span class="tr">こうずい</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">浸水</span><span class="tr">しんすい</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">地域防災計画</span><span class="tr">ちいきぼうさいけいかく</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">防災無線</span><span class="tr">ぼうさいむせん</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">遠賀川</span><span class="tr">おんががわ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">罹災証明</span><span class="tr">りさいしょうめい</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">避難行動要支援者</span><span class="tr">ひなんこうどうようしえんしゃ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">穂波川</span><span class="tr">ほなみがわ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">遠賀川上流</span><span class="tr">おんがかわじょうりゅう</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">嘉穂消防署</span><span class="tr">かほしょうぼうしょ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">飯塚市ハザードマップ</span><span class="tr">いいづかしはざーどまっぷ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">内水氾濫</span><span class="tr">ないすいはんらん</span></span><span class="ticker-sep">／</span>
+        <!-- 2セット（ループ用） -->
+        <span class="ticker-item"><span class="tw">警戒レベル</span><span class="tr">けいかいれべる</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">避難指示</span><span class="tr">ひなんしじ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">内水氾濫</span><span class="tr">ないすいはんらん</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">土砂災害</span><span class="tr">どしゃさいがい</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">特別警報</span><span class="tr">とくべつけいほう</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">消防団</span><span class="tr">しょうぼうだん</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">自主防災組織</span><span class="tr">じしゅぼうさいそしき</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">備蓄</span><span class="tr">びちく</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">避難訓練</span><span class="tr">ひなんくんれん</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">洪水</span><span class="tr">こうずい</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">浸水</span><span class="tr">しんすい</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">地域防災計画</span><span class="tr">ちいきぼうさいけいかく</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">防災無線</span><span class="tr">ぼうさいむせん</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">遠賀川</span><span class="tr">おんががわ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">罹災証明</span><span class="tr">りさいしょうめい</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">避難行動要支援者</span><span class="tr">ひなんこうどうようしえんしゃ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">穂波川</span><span class="tr">ほなみがわ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">遠賀川上流</span><span class="tr">おんがかわじょうりゅう</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">嘉穂消防署</span><span class="tr">かほしょうぼうしょ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">飯塚市ハザードマップ</span><span class="tr">いいづかしはざーどまっぷ</span></span><span class="ticker-sep">／</span>
+        <span class="ticker-item"><span class="tw">内水氾濫</span><span class="tr">ないすいはんらん</span></span><span class="ticker-sep">／</span>
+      </div></div>
+    </div>
+
+    <!-- 一次資料 -->
+    <div class="sources-section">
+      <h3>🔗 一次資料 — 直接アクセスしよう</h3>
+      <div class="source-grid">
+        <a class="source-link" href="https://bosai.city.fukuoka.lg.jp/" target="_blank" rel="noopener">
+          <div class="src-icon">🏛️</div>
+          <div class="src-text">
+            <strong>福岡市防災センター公式</strong>
+            <span>体験・展示内容の紹介</span>
+          </div>
+        </a>
+        <a class="source-link" href="https://www.city.iizuka.lg.jp/kurashi/bousai/index.html" target="_blank" rel="noopener">
+          <div class="src-icon">🌧️</div>
+          <div class="src-text">
+            <strong>飯塚市 防災情報</strong>
+            <span>飯塚市公式ホームページ</span>
+          </div>
+        </a>
+        <a class="source-link" href="https://maps.google.com/maps?q=福岡市防災センター" target="_blank" rel="noopener">
+          <div class="src-icon">🗺️</div>
+          <div class="src-text">
+            <strong>防災センターの場所を見る</strong>
+            <span>Googleマップ</span>
+          </div>
+        </a>
+        <a class="source-link" href="https://www.qsr.mlit.go.jp/onga/" target="_blank" rel="noopener">
+          <div class="src-icon">🌊</div>
+          <div class="src-text">
+            <strong>遠賀川（水害を知る）</strong>
+            <span>国土交通省 遠賀川河川事務所</span>
+          </div>
+        </a>
+        <a class="source-link" href="https://maps.gsi.go.jp/#13/33.641/130.696" target="_blank" rel="noopener">
+          <div class="src-icon">🌏</div>
+          <div class="src-text">
+            <strong>飯塚市の地形を見る</strong>
+            <span>国土地理院 地理院地図</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- 見学後 -->
+    <div class="phase-head">
+      <span class="phase-tag pt-after">見学後</span>
+      <span class="phase-head-title">見学メモをもとにまとめる</span>
+    </div>
+    <div class="prompt-grid">
+
+      <div class="pc">
+        <div class="pc-strip dr"></div>
+        <div class="pc-body">
+          <div class="pc-phase-row"><span class="phase-tag pt-after">見学後</span></div>
+          <h3>見学メモから学習問題をまとめよう</h3>
+          <p class="pc-desc">スライドのメモをGeminiに渡して、まとめの文を作る手伝いをしてもらいます。</p>
+          <p class="pc-can">自助・共助・公助それぞれのまとめ文の型と、自分にできることのヒントが出ます。</p>
+          <details class="pc-details">
+            <summary>プロンプトを見る</summary>
+            <pre class="pc-prompt">あなたは小学校4年生の社会科の学習を助ける先生です。
+
+見学場所：福岡市防災センター
+
+見学でわかったこと（スライドのメモをここに貼り付けてください）：
+▼ここにメモを貼る▼
+
+
+特に印象に残ったこと：
+▼ここに書く▼
+
+
+メモをもとに、学習問題の答えをまとめる手伝いをしてください。
+
+1. 「自助・共助・公助」それぞれについてまとめる文の型（各1パターン）
+2. 「自分たちにできること」を考えるヒント（2つ）
+3. この見学で大事な言葉（3つ）
+4. もっと調べるとよいこと（1つ）
+
+スライドのメモに書いていないことは「わかりません」と言ってください。</pre>
+          </details>
+          <div class="pc-actions">
+            <button class="btn btn-copy" type="button" data-copy>コピーする</button>
+            <a class="btn btn-gemini" href="https://gemini.google.com/" target="_blank" rel="noopener">Geminiで開く</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pc">
+        <div class="pc-strip nb"></div>
+        <div class="pc-body">
+          <div class="pc-phase-row"><span class="phase-tag pt-notebook">NotebookLM</span></div>
+          <h3>教科書と見学メモをつなごう</h3>
+          <p class="pc-desc">NotebookLMに見学メモを入れて、教科書と照らし合わせます。</p>
+          <p class="pc-can">見学でわかったことと教科書がどこでつながるかが整理できます。</p>
+          <details class="pc-details">
+            <summary>プロンプトを見る</summary>
+            <pre class="pc-prompt">NotebookLMに入れた見学のメモだけをもとに答えてください。
+
+単元：地域の安全を守る
+
+教科書で読んだこと（思い出せる範囲で書いてください）：
+▼ここに書く▼
+
+
+次の形で整理してください。
+
+1. 見学メモと教科書で「同じこと・重なっていること」
+2. 見学メモにあるが教科書に詳しく書いていないこと
+3. 教科書に書いているが、見学でよくわからなかったこと
+4. 学習問題の答えとして使えそうな文（1つ）
+
+資料にないことは「わかりません」と言ってください。</pre>
+          </details>
+          <div class="pc-actions">
+            <button class="btn btn-copy" type="button" data-copy>コピーする</button>
+            <a class="btn btn-notebook" href="https://notebooklm.google.com/notebook/d3eec584-fe13-44c4-b249-c0e604d9f598" target="_blank" rel="noopener">NotebookLMを開く</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /panel-disaster -->
+
+
+  <!-- ==========================================
+       言葉の意味
+  =========================================== -->
+  <section>
+    <div class="sec-head">
+      <div class="sec-label">KEYWORDS</div>
+      <h2>この単元の大事な言葉</h2>
+      <p>わからない言葉が出てきたときはここで確認しよう。もっと詳しく知りたいときは社会ことば辞典へ。</p>
+    </div>
+
+    <a class="dict-banner" href="https://a-tozak.github.io/shakai-kotoba-jiten/" target="_blank" rel="noopener">
+      <div class="dict-icon">📖</div>
+      <div>
+        <strong>社会ことば辞典 を開く</strong>
+        <span>社会科の大事な言葉をくわしく調べられます（外部サイト）</span>
+      </div>
+      <span class="dict-arrow">→</span>
+    </a>
+
+    <div class="kw-grid">
+      <div class="kw-card">
+        <div class="kw-word">焼却</div>
+        <div class="kw-read">しょうきゃく</div>
+        <div class="kw-def">ごみを高温で燃やして灰にする処理のこと。</div>
+        <span class="kw-tag cg">ごみ処理</span>
+      </div>
+      <div class="kw-card">
+        <div class="kw-word">埋め立て処分場</div>
+        <div class="kw-read">うめたてしょぶんじょ</div>
+        <div class="kw-def">燃やせないごみや灰を土の中に埋める場所。いっぱいになると新しい場所が必要になる。</div>
+        <span class="kw-tag cg">ごみ処理</span>
+      </div>
+      <div class="kw-card">
+        <div class="kw-word">資源ごみ</div>
+        <div class="kw-read">しげんごみ</div>
+        <div class="kw-def">もう一度材料として使えるごみ。紙・缶・びん・ペットボトルなど。</div>
+        <span class="kw-tag cg">ごみ処理</span>
+      </div>
+      <div class="kw-card">
+        <div class="kw-word">リサイクル</div>
+        <div class="kw-read"></div>
+        <div class="kw-def">使い終わったものを材料として新しい製品に作り直すこと。</div>
+        <span class="kw-tag cg">ごみ処理</span>
+      </div>
+      <div class="kw-card">
+        <div class="kw-word">浄水場</div>
+        <div class="kw-read">じょうすいじょう</div>
+        <div class="kw-def">川などから取った水をきれいにして、家庭や学校に送り出す施設。</div>
+        <span class="kw-tag wb">水道</span>
+      </div>
+      <div class="kw-card">
+        <div class="kw-word">水源</div>
+        <div class="kw-read">すいげん</div>
+        <div class="kw-def">水道の水のもとになる川・ダム・地下水などのこと。</div>
+        <span class="kw-tag wb">水道</span>
+      </div>
+      <div class="kw-card">
+        <div class="kw-word">水質検査</div>
+        <div class="kw-read">すいしつけんさ</div>
+        <div class="kw-def">水が安全かどうかを調べる検査。水道水は51項目もの検査がある。</div>
+        <span class="kw-tag wb">水道</span>
+      </div>
+      <div class="kw-card">
+        <div class="kw-word">塩素</div>
+        <div class="kw-read">えんそ</div>
+        <div class="kw-def">水の中の細菌を殺すために加える薬品。安全のためにごくわずかだけ入れる。</div>
+        <span class="kw-tag wb">水道</span>
+      </div>
+      <div class="kw-card">
+        <div class="kw-word">自助</div>
+        <div class="kw-read">じじょ</div>
+        <div class="kw-def">自分の命は自分で守ること。食料の備蓄や避難経路の確認など。</div>
+        <span class="kw-tag dr">防災</span>
+      </div>
+      <div class="kw-card">
+        <div class="kw-word">共助</div>
+        <div class="kw-read">きょうじょ</div>
+        <div class="kw-def">地域の人が互いに助け合うこと。自治会・消防団など。</div>
+        <span class="kw-tag dr">防災</span>
+      </div>
+      <div class="kw-card">
+        <div class="kw-word">公助</div>
+        <div class="kw-read">こうじょ</div>
+        <div class="kw-def">国・県・市が行う救助や支援のこと。自衛隊・消防・警察など。</div>
+        <span class="kw-tag dr">防災</span>
+      </div>
+      <div class="kw-card">
+        <div class="kw-word">ハザードマップ</div>
+        <div class="kw-read"></div>
+        <div class="kw-def">洪水や土砂崩れなど、災害が起きやすい場所を示した地図。市役所が作っている。</div>
+        <span class="kw-tag dr">防災</span>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ==========================================
+       スライドの使い方
+  =========================================== -->
+  <section class="slide-guide">
+    <div class="sec-head">
+      <div class="sec-label">GOOGLE SLIDES</div>
+      <h2>スライドに何を書けばいい？</h2>
+      <p>見学のスライドは、この順番でページを作っていこう。</p>
+    </div>
+    <div class="slide-flow">
+      <div class="slide-step">
+        <span class="slide-num">1</span>
+        <strong>表紙</strong>
+        <span>見学場所・日付・名前</span>
+      </div>
+      <div class="slide-step">
+        <span class="slide-num">2</span>
+        <strong>知っていること・疑問</strong>
+        <span>見学前に書く（Gemini活用）</span>
+      </div>
+      <div class="slide-step">
+        <span class="slide-num">3</span>
+        <strong>調べること・予想</strong>
+        <span>Geminiの結果をもとに記入</span>
+      </div>
+      <div class="slide-step">
+        <span class="slide-num">4</span>
+        <strong>見学メモ①②</strong>
+        <span>当日どんどん書く</span>
+      </div>
+      <div class="slide-step">
+        <span class="slide-num">5</span>
+        <strong>わかったこと・考え</strong>
+        <span>見学後に書く（Gemini活用）</span>
+      </div>
+      <div class="slide-step">
+        <span class="slide-num">6</span>
+        <strong>もっと調べたいこと</strong>
+        <span>NotebookLMで続ける</span>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ==========================================
+       教師用メモ
+  =========================================== -->
+  <details class="teacher-wrap">
+    <summary class="teacher-summary">🗒️ 教師用メモ（授業者向け）</summary>
+    <div class="teacher-body">
+
+      <div class="tb">
+        <h3>単元の位置づけ（学習指導要領）</h3>
+        <p>第4学年 内容(3)「健康なくらしを守る仕事」に対応。<br>
+        ア：飲料水・廃棄物処理等の仕組みや関わりを理解する<br>
+        イ：生活環境を守るための取り組みについて自分の意見を表現する</p>
+      </div>
+
+      <div class="tb">
+        <h3>AI活用の設計意図</h3>
+        <ul>
+          <li>「問いを立てる」段階でGeminiを使うことで、既有知識が浅い子でも見学前の見通しが持てるようにする</li>
+          <li>プロンプトは details で隠し、画面が小さいiPadでも読みやすくする（「何ができるか」だけ表示）</li>
+          <li>Chrome AI検索は入力欄を設けることで、検索が苦手な子でも使いやすくする</li>
+          <li>見学後のGemini活用は「答えをもらう」ではなく「文の型をもらって自分でまとめる」設計</li>
+          <li>NotebookLMは単元の後半授業で各自のスライドメモを取り込み、教科書と対話させる想定</li>
+        </ul>
+      </div>
+
+      <div class="tb">
+        <h3>役割分担・仕事が少ない子への対応</h3>
+        <p>役割分担で仕事が少なくなった子には、3つの見学場所それぞれのスライドで事前調査を進めさせる。大きな問いを提示しつつ、このサイトのプロンプトを活用させることで「調べることの見通し」を持たせる。</p>
+      </div>
+
+      <div class="tb">
+        <h3>飯塚市クリーンセンター：指導ポイント</h3>
+        <ul>
+          <li>子どもが知っているのは「週2回収集・燃やす・埋め立て」程度。働く人数・機械の仕組みへの気づきを大切にする</li>
+          <li>1日の処理量・施設の大きさ・再利用される資源量など、数字への着目を促す</li>
+          <li>「分別」が最終処理の効率に直結することを、施設担当者から引き出せると理想</li>
+        </ul>
+      </div>
+
+      <div class="tb tb-alert">
+        <h3>⚠️ 飯塚市のごみ処理場問題（教師用・子どもには深く触れない）</h3>
+        <p>飯塚市では現在、新しいごみ処理場の建設場所をめぐって住民・行政間で議論が続いている。授業での扱いは以下にとどめることを推奨：</p>
+        <ul>
+          <li>「施設はいずれ老朽化する。新しい場所が必要になるとき、どこに作るかも社会の大事な問題だ」という程度</li>
+          <li>特定の立場・主張を示す資料・発言は避ける</li>
+          <li>二学期の水害学習と合わせて、地域課題として継続的に扱う視点も有効</li>
+        </ul>
+      </div>
+
+      <div class="tb">
+        <h3>多々良浄水場：指導ポイント</h3>
+        <ul>
+          <li>「24時間365日休まない」という事実に子どもを驚かせ、人への感謝につなげる</li>
+          <li>水質検査の51項目という具体的数字は有効な驚き</li>
+          <li>ダム→取水→浄水→配水のフローを施設見学で視覚的に確認させる</li>
+        </ul>
+      </div>
+
+      <div class="tb">
+        <h3>福岡市防災センター：指導ポイント</h3>
+        <ul>
+          <li>体験型施設なので、体験と概念（自助・共助・公助）の接続が課題</li>
+          <li>「飯塚は水害の町」という認識を引き出し、二学期の水害学習の伏線として扱う</li>
+          <li>ハザードマップを家族と確認する家庭学習設定も有効</li>
+          <li>センターでは地震・火災体験が主なため、水害は別途調べ学習で補完する</li>
+        </ul>
+      </div>
+
+      <div class="tb">
+        <h3>評価の視点</h3>
+        <ul>
+          <li>【知識・理解】各見学場所の仕組みや働く人の工夫を説明できるか</li>
+          <li>【思考・判断】スライドメモをもとに学習問題への自分の考えを表現できるか</li>
+          <li>【主体的な態度】「自分にできること」を具体的に考え記述しているか</li>
+        </ul>
+      </div>
+
+    </div>
+  </details>
+
+</div><!-- /wrap -->
+</main>
+
+<footer>
+  <p>神教材製作所 | 社会科見学 Geminiプロンプト集（4年生）</p>
+  <p>プロンプトはGeminiへのヒント。答えは自分の言葉でまとめよう。</p>
+  <p style="margin-top:8px"><a href="https://a-tozak.github.io/shakai-kotoba-jiten/" target="_blank" rel="noopener">📖 社会ことば辞典</a></p>
+</footer>
+
+<div id="toast">コピーしました！</div>
+
+<!-- ========== SLIDESHOW ========== -->
+<div id="slideshow" role="dialog" aria-modal="true" aria-label="電子黒板スライドショー">
+  <div class="ss-header">
+    <span class="ss-counter" id="ssCounter">1 / 22</span>
+    <span class="ss-hlabel" id="ssHLabel"></span>
+    <button class="ss-hbtn" id="ssPauseBtn" title="一時停止 [P]">⏸</button>
+    <button class="ss-hbtn" id="ssCloseBtn" title="閉じる [Esc]">✕</button>
+  </div>
+  <div class="ss-stage bg-navy" id="ssStage"></div>
+  <div class="ss-footer">
+    <button class="ss-nav" id="ssPrevBtn">← 前へ</button>
+    <div class="ss-timer-bar"><div class="ss-timer-fill" id="ssTimerFill"></div></div>
+    <button class="ss-mode-btn" id="ssSpeedBtn" title="速度切り替え">🕒 55秒</button>
+    <button class="ss-mode-btn" id="ssShuffleBtn" title="シャッフル">🔀 順番通り</button>
+    <span class="ss-duration-note">← → 送る　P 停止　F 速度　S シャッフル</span>
+    <button class="ss-nav" id="ssNextBtn">次へ →</button>
+  </div>
+</div>
+
+<script>
+  // タブ切り替え
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('is-active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('is-active'));
+      btn.classList.add('is-active');
+      document.getElementById('panel-' + btn.dataset.tab).classList.add('is-active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+
+  // コピー
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('[data-copy]');
+    if (!btn) return;
+    const text = btn.closest('.pc')?.querySelector('.pc-prompt')?.textContent ?? '';
+    navigator.clipboard.writeText(text.trim()).then(toast);
+  });
+
+  // AI検索
+  function aiSearch(inputId) {
+    const q = document.getElementById(inputId).value.trim();
+    if (!q) return;
+    window.open('https://www.google.com/search?udm=46&q=' + encodeURIComponent(q), '_blank', 'noopener');
+  }
+
+  // Enterキーで検索
+  ['q-clean','q-water','q-disaster'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('keydown', e => { if (e.key === 'Enter') aiSearch(id); });
+  });
+
+  // トースト
+  function toast() {
+    const t = document.getElementById('toast');
+    t.classList.add('on');
+    setTimeout(() => t.classList.remove('on'), 2000);
+  }
+
+  /* ===== SLIDESHOW ===== */
+  const SLIDE_SEC = 55;
+
+  const SS = [
+    { bg:'navy', type:'basic',
+      label:'社会科見学 2026年6月16日（火）',
+      title:'見学で\n学ぼう！',
+      items:['飯塚市クリーンセンター','多々良浄水場','福岡市防災センター']
+    },
+    { bg:'green', type:'basic',
+      label:'大きな問い①　ごみ処理',
+      title:'わたしたちのごみは、\nどのように処理されているのだろう。'
+    },
+    { bg:'blue', type:'basic',
+      label:'大きな問い②　水道',
+      title:'安全な水は、どのようにして\nわたしたちのもとに届けられているのだろう。'
+    },
+    { bg:'orange', type:'basic',
+      label:'大きな問い③　防災',
+      title:'災害から暮らしを守るために、\nどんな人や仕組みがあるのだろう。'
+    },
+    { bg:'teal', type:'basic',
+      label:'社会科の学び方 ①',
+      title:'事実をもとに\n考えよう',
+      body:'見てきたこと・調べたことをもとに\n自分の考えをつくる。'
+    },
+    { bg:'teal', type:'basic',
+      label:'社会科の学び方 ②',
+      title:'出どころを\n確かめよう',
+      body:'「だれが出した情報か」を確認しよう。\n市役所・国・新聞社など信頼できる出どころを選ぶ。'
+    },
+    { bg:'teal', type:'basic',
+      label:'社会科の学び方 ③',
+      title:'自分の言葉で\nまとめよう',
+      body:'AIの答えをそのまま写さない。\n出てきた情報をもとに、自分の言葉で書こう。'
+    },
+    { bg:'navy', type:'compare',
+      label:'AIツールの使い分け',
+      title:'GeminiとAI検索、\nどう違うの？',
+      left:{ head:'Gemini', items:['質問に答えてくれる','考えを整理する手伝い','プロンプトを入力して使う','答えは必ず自分で確かめる'] },
+      right:{ head:'Chrome AI検索', items:['信頼できる情報を探せる','一次資料にたどり着ける','検索バーから使える','出どころが表示される'] }
+    },
+    { bg:'navy', type:'basic',
+      label:'Geminiの使い方',
+      title:'プロンプトを\n貼り付けて使おう',
+      items:['このサイトのプロンプトをコピーする','Geminiに貼り付けて送信する','出てきた答えをスライドにメモする','そのまま写さず、自分の言葉に直す']
+    },
+    { bg:'blue', type:'basic',
+      label:'Chrome AI検索モードの使い方',
+      title:'キーワードで\n一次資料を探そう',
+      items:['Chromeの検索バーを開く','AIモードに切り替える','キーワードを入れて検索する','市役所・国などのページを確認する']
+    },
+    { bg:'purple', type:'flow',
+      label:'この単元の学習の進め方',
+      title:'学習の流れ',
+      steps:['見学前：問いを立てる（Gemini活用）','見学当日：スライドにメモを取る','見学後：Geminiでまとめの文を作る','NotebookLMで教科書とつなぐ','二学期の授業でさらにくわしく学ぶ']
+    },
+    { bg:'navy', type:'basic',
+      label:'Googleスライドの使い方',
+      title:'スライドに\n何を書く？',
+      items:['① 知っていること・疑問（見学前）','② 調べること・予想（Gemini活用）','③ 見学メモ（当日）','④ わかったこと・考え（見学後）','⑤ もっと調べたいこと（NotebookLM）']
+    },
+    { bg:'green', type:'vocab',
+      label:'ことば　ごみ処理',
+      words:[
+        { w:'焼却', r:'しょうきゃく', d:'高温でごみを燃やして灰にする処理' },
+        { w:'資源ごみ', r:'しげんごみ', d:'缶・紙・ペットボトルなどリサイクルできるごみ' },
+        { w:'溶融炉', r:'ようゆうろ', d:'超高温でごみを溶かして無害にする炉' },
+        { w:'埋め立て', r:'うめたて', d:'燃やせないごみや灰を土に埋める場所' },
+      ]
+    },
+    { bg:'blue', type:'vocab',
+      label:'ことば　水道',
+      words:[
+        { w:'浄水場', r:'じょうすいじょう', d:'川の水をきれいにして送り出す施設' },
+        { w:'久保白ダム', r:'くぼしろだむ', d:'飯塚市近くにある水源のダム' },
+        { w:'水質検査', r:'すいしつけんさ', d:'水の安全を調べる検査（51項目）' },
+        { w:'残留塩素', r:'ざんりゅうえんそ', d:'安全のために水に残す塩素の量' },
+      ]
+    },
+    { bg:'orange', type:'vocab',
+      label:'ことば　防災',
+      words:[
+        { w:'自助', r:'じじょ', d:'自分の命は自分で守ること' },
+        { w:'共助', r:'きょうじょ', d:'地域の人たちが助け合うこと' },
+        { w:'公助', r:'こうじょ', d:'国・県・市が人々を助けること' },
+        { w:'ハザードマップ', r:'', d:'洪水・土砂崩れの危険箇所を示した地図' },
+      ]
+    },
+    { bg:'teal', type:'basic',
+      label:'飯塚市ってどんな街？',
+      title:'遠賀川と穂波川が\n流れる盆地の街',
+      items:['遠賀川・穂波川・犬鳴川が合流する地域','久保白ダムが地域の水源のひとつ','水害（洪水）のリスクがある地域','二学期は水害についてくわしく学ぶ']
+    },
+    { bg:'green', type:'basic',
+      label:'見学で確かめること　ごみ処理',
+      title:'クリーンセンターで\n見てきたいこと',
+      items:['1日に何トンのごみを処理するの？','燃やしたあとはどうなるの？','何人の人が働いているの？','自分たちに何ができるだろう？']
+    },
+    { bg:'blue', type:'basic',
+      label:'見学で確かめること　水道',
+      title:'多々良浄水場で\n見てきたいこと',
+      items:['水がきれいになる工程は何段階？','24時間どうやって管理しているの？','水質検査って何を調べるの？','久保白ダムとはどうつながってる？']
+    },
+    { bg:'orange', type:'basic',
+      label:'見学で確かめること　防災',
+      title:'防災センターで\n見てきたいこと',
+      items:['自助・共助・公助の具体的な内容は？','飯塚市はなぜ水害が多いの？','避難するとき何を持っていく？','自分たちにできることは何？']
+    },
+    { bg:'purple', type:'basic',
+      label:'まとめ方のヒント',
+      title:'学習問題の答え\n文の型',
+      items:['「〇〇するために、〇〇が〇〇している。」','「〇〇のおかげで、わたしたちは〇〇できる。」','「〇〇という工夫によって、〇〇している。」','「〇〇という課題があるが、〇〇している。」']
+    },
+    { bg:'purple', type:'basic',
+      label:'NotebookLMについて',
+      title:'スライドのメモを\nNotebookLMに入れよう',
+      items:['見学後にスライドのメモを追加する','教科書のどこと関係するか聞ける','わかったことと、まだわからないことを整理','二学期の授業でさらに活用する']
+    },
+    { bg:'navy', type:'basic',
+      label:'さあ、見学に行こう！',
+      title:'見て・聞いて・考えて\n自分の言葉でまとめよう',
+      body:'2026年6月16日（火）'
+    },
+  ];
+
+  let ssCurrent = 0, ssPaused = false, ssIntervalId = null, ssStartTime = 0;
+  let ssSpeed = 55;        // seconds per slide
+  let ssShuffle = false;
+  let ssOrder = [];        // play order (sequential or shuffled)
+  let ssOrderPos = 0;
+
+  function ssBuildOrder(startIdx) {
+    if (ssShuffle) {
+      ssOrder = SS.map(function(_,i){ return i; });
+      for (var i = ssOrder.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = ssOrder[i]; ssOrder[i] = ssOrder[j]; ssOrder[j] = tmp;
+      }
+      ssOrderPos = 0;
+    } else {
+      ssOrder = SS.map(function(_,i){ return i; });
+      ssOrderPos = ((startIdx % SS.length) + SS.length) % SS.length;
+    }
+  }
+
+  function openSlideshow() {
+    document.getElementById('slideshow').classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    ssBuildOrder(0);
+    ssShowAt(0);
+  }
+
+  function closeSlideshow() {
+    document.getElementById('slideshow').classList.remove('is-open');
+    document.body.style.overflow = '';
+    ssClearTimer();
+  }
+
+  /* show the slide at ssOrder[pos] */
+  function ssShowAt(pos) {
+    ssOrderPos = ((pos % ssOrder.length) + ssOrder.length) % ssOrder.length;
+    ssCurrent  = ssOrder[ssOrderPos];
+    const s = SS[ssCurrent];
+    document.getElementById('ssCounter').textContent = (ssOrderPos + 1) + ' / ' + ssOrder.length;
+    document.getElementById('ssHLabel').textContent = s.label || '';
+    const stage = document.getElementById('ssStage');
+    stage.className = 'ss-stage bg-' + s.bg;
+    stage.innerHTML = ssRender(s);
+    ssStartTimer();
+  }
+
+  /* keep old ssShow(n) for direct index calls during testing */
+  function ssShow(n) {
+    if (!ssShuffle) {
+      ssShowAt(((n % SS.length) + SS.length) % SS.length);
+    } else {
+      ssOrderPos = ((ssOrderPos + (n - ssCurrent)) % ssOrder.length + ssOrder.length) % ssOrder.length;
+      ssShowAt(ssOrderPos);
+    }
+  }
+
+  function esc(t) {
+    return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function ssRender(s) {
+    if (s.type === 'compare') {
+      return '<div class="ss-content">'
+        + '<div class="ss-slide-label">' + esc(s.label) + '</div>'
+        + '<h2 class="ss-slide-title">' + esc(s.title).replace(/\n/g,'<br>') + '</h2>'
+        + '<div class="ss-cmp-row">'
+        + '<div class="ss-cbox"><div class="ss-cbox-head">' + esc(s.left.head) + '</div><ul>'
+        + s.left.items.map(function(i){return '<li>'+esc(i)+'</li>';}).join('') + '</ul></div>'
+        + '<div class="ss-vs">vs</div>'
+        + '<div class="ss-cbox"><div class="ss-cbox-head">' + esc(s.right.head) + '</div><ul>'
+        + s.right.items.map(function(i){return '<li>'+esc(i)+'</li>';}).join('') + '</ul></div>'
+        + '</div></div>';
+    }
+    if (s.type === 'flow') {
+      return '<div class="ss-content">'
+        + '<div class="ss-slide-label">' + esc(s.label) + '</div>'
+        + '<h2 class="ss-slide-title">' + esc(s.title) + '</h2>'
+        + '<div class="ss-steps">'
+        + s.steps.map(function(t,i){
+            return '<div class="ss-step"><span class="ss-step-n">'+(i+1)+'</span><span>'+esc(t)+'</span></div>';
+          }).join('')
+        + '</div></div>';
+    }
+    if (s.type === 'vocab') {
+      return '<div class="ss-content">'
+        + '<div class="ss-slide-label">' + esc(s.label) + '</div>'
+        + '<div class="ss-vgrid">'
+        + s.words.map(function(w){
+            return '<div class="ss-vcard">'
+              + '<div class="ss-vword">'+esc(w.w)+'</div>'
+              + (w.r ? '<div class="ss-vread">'+esc(w.r)+'</div>' : '')
+              + '<div class="ss-vdef">'+esc(w.d)+'</div>'
+              + '</div>';
+          }).join('')
+        + '</div></div>';
+    }
+    var h = '<div class="ss-content">';
+    if (s.label) h += '<div class="ss-slide-label">' + esc(s.label) + '</div>';
+    if (s.title) h += '<h2 class="ss-slide-title">' + esc(s.title).replace(/\n/g,'<br>') + '</h2>';
+    if (s.body)  h += '<p class="ss-slide-body">' + esc(s.body).replace(/\n/g,'<br>') + '</p>';
+    if (s.items) h += '<ul class="ss-items">' + s.items.map(function(i){return '<li>'+esc(i)+'</li>';}).join('') + '</ul>';
+    h += '</div>';
+    return h;
+  }
+
+  function ssStartTimer() {
+    ssClearTimer();
+    ssStartTime = Date.now();
+    var fill = document.getElementById('ssTimerFill');
+    fill.style.width = '0%';
+    if (ssPaused) return;
+    var total = ssSpeed * 1000;
+    var tick  = ssSpeed <= 5 ? 50 : 150;
+    ssIntervalId = setInterval(function() {
+      if (ssPaused) return;
+      var pct = Math.min(((Date.now() - ssStartTime) / total) * 100, 100);
+      fill.style.width = pct + '%';
+      if (pct >= 100) ssShowAt(ssOrderPos + 1);
+    }, tick);
+  }
+
+  function ssClearTimer() {
+    if (ssIntervalId) { clearInterval(ssIntervalId); ssIntervalId = null; }
+  }
+
+  function ssTogglePause() {
+    ssPaused = !ssPaused;
+    document.getElementById('ssPauseBtn').textContent = ssPaused ? '▶' : '⏸';
+    if (!ssPaused) { ssStartTime = Date.now(); ssStartTimer(); }
+  }
+
+  function ssToggleSpeed() {
+    ssSpeed = ssSpeed === 55 ? 3 : 55;
+    var btn = document.getElementById('ssSpeedBtn');
+    btn.textContent = ssSpeed === 3 ? '⚡ 3秒' : '🕒 55秒';
+    btn.classList.toggle('is-on', ssSpeed === 3);
+    ssStartTimer(); // restart with new speed
+  }
+
+  function ssToggleShuffle() {
+    ssShuffle = !ssShuffle;
+    var btn = document.getElementById('ssShuffleBtn');
+    btn.textContent = ssShuffle ? '🔀 シャッフル中' : '🔀 順番通り';
+    btn.classList.toggle('is-on', ssShuffle);
+    ssBuildOrder(ssCurrent);
+    ssShowAt(0);
+  }
+
+  document.getElementById('ssCloseBtn').addEventListener('click', closeSlideshow);
+  document.getElementById('ssPrevBtn').addEventListener('click', function(){ ssShowAt(ssOrderPos - 1); });
+  document.getElementById('ssNextBtn').addEventListener('click', function(){ ssShowAt(ssOrderPos + 1); });
+  document.getElementById('ssPauseBtn').addEventListener('click', ssTogglePause);
+  document.getElementById('ssSpeedBtn').addEventListener('click', ssToggleSpeed);
+  document.getElementById('ssShuffleBtn').addEventListener('click', ssToggleShuffle);
+
+  document.addEventListener('keydown', function(e) {
+    if (!document.getElementById('slideshow').classList.contains('is-open')) return;
+    if (e.key === 'Escape') closeSlideshow();
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); ssShowAt(ssOrderPos + 1); }
+    if (e.key === 'ArrowLeft') ssShowAt(ssOrderPos - 1);
+    if (e.key === 'p' || e.key === 'P') ssTogglePause();
+    if (e.key === 's' || e.key === 'S') ssToggleShuffle();
+    if (e.key === 'f' || e.key === 'F') ssToggleSpeed();
+  });
+</script>
+
+</body>
+</html>

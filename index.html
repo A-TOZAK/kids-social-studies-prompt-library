@@ -739,6 +739,29 @@
       background: #f4f7fb;
     }
 
+    .unit-section {
+      margin-top: 32px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: 0 10px 24px rgba(23, 32, 51, .06);
+    }
+    .unit-section h2 { margin: 5px 0 8px; color: var(--navy); font-size: 1.4rem; }
+    .unit-section p  { margin: 0 0 14px; color: var(--sub); }
+    .unit-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+    .unit-card {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 16px 18px;
+      border: 1px solid var(--line); border-radius: var(--radius);
+      background: var(--wash); text-decoration: none; color: var(--ink);
+      transition: box-shadow .15s, border-color .15s;
+    }
+    .unit-card:hover { border-color: #99b8e0; box-shadow: 0 4px 14px rgba(23,32,51,.1); }
+    .unit-card-icon { font-size: 1.6rem; flex-shrink: 0; }
+    .unit-card strong { display: block; color: var(--navy); font-size: 1rem; margin-bottom: 4px; }
+    .unit-card span { font-size: .84rem; color: var(--sub); }
+
     footer {
       border-top: 1px solid var(--line);
       padding: 26px 16px 36px;
@@ -854,6 +877,7 @@
       <div class="hero-actions">
         <a class="btn btn-primary" href="#builder">使ってみる</a>
         <button class="btn btn-line" type="button" data-open-manual>使い方を見る</button>
+        <a class="btn btn-line" href="examples.html">試した事例を見る</a>
       </div>
     </div>
   </header>
@@ -937,6 +961,21 @@
           <strong>4. 教科書と比べる</strong>
           <span>AIの答えをそのまま信じず、教科書・資料・先生の話と照らし合わせます。</span>
         </div>
+      </div>
+    </section>
+
+    <section class="unit-section" aria-label="単元別プロンプト集">
+      <span class="section-label">単元別プロンプト集</span>
+      <h2>見学・調べ学習にそのまま使えるセット</h2>
+      <p>単元ごとに場所・問い・プロンプト・一次資料リンクをまとめました。</p>
+      <div class="unit-cards">
+        <a class="unit-card" href="kengaku/index.html">
+          <div class="unit-card-icon">🏭</div>
+          <div>
+            <strong>社会科見学 2026（4年生）</strong>
+            <span>飯塚市クリーンセンター・多々良浄水場・福岡市防災センター。見学前後のGeminiプロンプト・AI検索・一次資料リンク・電子黒板モード搭載。</span>
+          </div>
+        </a>
       </div>
     </section>
 

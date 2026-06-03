@@ -57,7 +57,7 @@
       margin-bottom: 8px;
     }
     .hero h1 {
-      font-size: clamp(1.55rem, 4.5vw, 2.3rem);
+      font-size: 2.3rem;
       line-height: 1.25;
       margin-bottom: 10px;
     }
@@ -554,14 +554,13 @@
     ============================ */
     #slideshow {
       display: none; position: fixed; inset: 0; z-index: 9998;
-      flex-direction: column;
+      background: #08193e;
+      color: #fff;
     }
-    #slideshow.is-open { display: flex; }
+    #slideshow.is-open { display: block; }
 
     .ss-header {
-      flex-shrink: 0; display: flex; align-items: center; gap: 14px;
-      padding: 10px 20px; background: rgba(0,0,0,.5);
-      color: rgba(255,255,255,.8);
+      display: none;
     }
     .ss-counter { font-size: .9rem; font-weight: 800; flex-shrink: 0; min-width: 54px; }
     .ss-hlabel  { flex: 1; font-size: .85rem; font-weight: 700; opacity: .65; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -575,40 +574,70 @@
     .ss-hbtn:hover { background: rgba(255,255,255,.35); }
 
     .ss-stage {
-      flex: 1; overflow: hidden;
+      position: absolute; inset: 0;
+      overflow: hidden;
       display: flex; align-items: center; justify-content: center;
+    }
+    .ss-stage::before {
+      content: "";
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(255,255,255,.12), transparent 22%),
+        radial-gradient(circle at 82% 72%, rgba(255,255,255,.1), transparent 24%),
+        linear-gradient(135deg, rgba(255,255,255,.08) 0 1px, transparent 1px 34px),
+        linear-gradient(45deg, rgba(255,255,255,.05) 0 1px, transparent 1px 42px);
+      opacity: .75;
+    }
+    .ss-stage::after {
+      content: "N";
+      position: absolute;
+      right: 42px; top: 34px;
+      width: 52px; height: 52px;
+      border: 2px solid rgba(255,255,255,.2);
+      border-radius: 50%;
+      display: grid; place-items: center;
+      color: rgba(255,255,255,.42);
+      font-size: 1.1rem; font-weight: 900;
+      pointer-events: none;
     }
 
     /* stage backgrounds */
-    .bg-navy   { background: #08193e; color: #fff; }
-    .bg-green  { background: #0e3e22; color: #fff; }
-    .bg-blue   { background: #092f6e; color: #fff; }
-    .bg-orange { background: #782200; color: #fff; }
-    .bg-teal   { background: #063636; color: #fff; }
-    .bg-purple { background: #28106a; color: #fff; }
+    .bg-navy   { background: linear-gradient(135deg, #071a3d, #12315f); color: #fff; }
+    .bg-green  { background: linear-gradient(135deg, #0d3a22, #1d6d42); color: #fff; }
+    .bg-blue   { background: linear-gradient(135deg, #092f6e, #1670a8); color: #fff; }
+    .bg-orange { background: linear-gradient(135deg, #783018, #b65322); color: #fff; }
+    .bg-teal   { background: linear-gradient(135deg, #063636, #13736b); color: #fff; }
+    .bg-purple { background: linear-gradient(135deg, #28106a, #5940a8); color: #fff; }
 
-    .ss-content { width: min(1200px, 90%); padding: 40px 24px; }
+    .ss-content {
+      position: relative; z-index: 1;
+      width: min(1120px, 88%);
+      padding: 56px 30px 78px;
+      text-align: center;
+    }
 
     .ss-slide-label {
-      font-size: clamp(.85rem, 1.5vw, 1.3rem);
+      font-size: 1.15rem;
       font-weight: 800; letter-spacing: .07em; opacity: .55;
-      margin-bottom: .65em;
+      margin-bottom: 20px;
     }
     .ss-slide-title {
-      font-size: clamp(2rem, 5.5vw, 5.5rem);
-      font-weight: 900; line-height: 1.2; margin: 0 0 .45em;
+      font-size: 4.4rem;
+      font-weight: 900; line-height: 1.2; margin: 0 auto 30px;
+      max-width: 13em;
     }
     .ss-slide-body {
-      font-size: clamp(1rem, 2.2vw, 2.1rem);
-      opacity: .85; margin: .3em 0 .8em; line-height: 1.65;
+      font-size: 1.9rem;
+      opacity: .88; margin: 0 auto 24px; line-height: 1.55;
+      max-width: 26em;
     }
-    .ss-items { list-style: none; padding: 0; margin: .9em 0 0; }
+    .ss-items { list-style: none; padding: 0; margin: 24px auto 0; max-width: 34em; }
     .ss-items li {
-      font-size: clamp(1rem, 2.4vw, 2.3rem);
-      padding: .28em 0 .28em 1.6em; position: relative;
+      font-size: 1.85rem;
+      padding: 8px 0; position: relative;
       opacity: .9; line-height: 1.45;
     }
-    .ss-items li::before { content: '▸'; position: absolute; left: 0; opacity: .45; }
+    .ss-items li::before { content: none; }
 
     /* compare type */
     .ss-cmp-row {
@@ -620,17 +649,17 @@
       padding: 18px 22px;
     }
     .ss-cbox-head {
-      font-size: clamp(1.1rem, 2.3vw, 2.2rem);
+      font-size: 2rem;
       font-weight: 900; margin-bottom: .5em;
     }
     .ss-cbox ul { list-style: none; padding: 0; }
     .ss-cbox li {
-      font-size: clamp(.85rem, 1.75vw, 1.7rem);
+      font-size: 1.45rem;
       padding: .2em 0 .2em 1.1em; position: relative; opacity: .85;
     }
     .ss-cbox li::before { content: '•'; position: absolute; left: 0; }
     .ss-vs {
-      font-size: clamp(1.2rem, 2.5vw, 2.4rem);
+      font-size: 2.2rem;
       font-weight: 900; opacity: .35; align-self: center;
     }
 
@@ -642,11 +671,11 @@
       padding: 13px 20px;
     }
     .ss-step-n {
-      font-size: clamp(1.2rem, 2.2vw, 2.2rem);
+      font-size: 2rem;
       font-weight: 900; opacity: .4;
       flex-shrink: 0; width: 1.4em; text-align: center;
     }
-    .ss-step span:last-child { font-size: clamp(.9rem, 1.85vw, 1.8rem); opacity: .9; }
+    .ss-step span:last-child { font-size: 1.55rem; opacity: .9; }
 
     /* vocab type */
     .ss-vgrid {
@@ -657,14 +686,13 @@
       background: rgba(255,255,255,.1); border-radius: 14px;
       padding: 18px 22px;
     }
-    .ss-vword { font-size: clamp(1.8rem, 4vw, 3.8rem); font-weight: 900; line-height: 1.1; }
-    .ss-vread { font-size: clamp(.75rem, 1.3vw, 1.2rem); opacity: .55; margin: 5px 0 8px; }
-    .ss-vdef  { font-size: clamp(.88rem, 1.65vw, 1.55rem); opacity: .82; line-height: 1.5; }
+    .ss-vword { font-size: 3.3rem; font-weight: 900; line-height: 1.1; }
+    .ss-vread { font-size: 1rem; opacity: .55; margin: 5px 0 8px; }
+    .ss-vdef  { font-size: 1.35rem; opacity: .82; line-height: 1.5; }
 
     /* footer */
     .ss-footer {
-      flex-shrink: 0; display: flex; align-items: center; gap: 14px;
-      padding: 10px 20px; background: rgba(0,0,0,.5);
+      display: none;
     }
     .ss-nav {
       border: 0; background: rgba(255,255,255,.22); color: #fff;
@@ -698,6 +726,17 @@
       border-color: rgba(255,255,255,.7);
       color: #fff;
     }
+    .ss-copyright {
+      position: absolute;
+      left: 0; right: 0; bottom: 22px;
+      z-index: 2;
+      text-align: center;
+      color: rgba(255,255,255,.5);
+      font-size: .82rem;
+      letter-spacing: .08em;
+      font-weight: 800;
+      pointer-events: none;
+    }
 
     /* ============================
        RESPONSIVE
@@ -706,6 +745,11 @@
       .hero h1 { font-size: 1.5rem; }
       .prompt-grid, .kw-grid, .source-grid { grid-template-columns: 1fr; }
       .slide-flow { grid-template-columns: 1fr 1fr; }
+      .ss-content { width: min(100% - 24px, 680px); padding: 36px 10px 68px; }
+      .ss-slide-label { font-size: .86rem; margin-bottom: 14px; }
+      .ss-slide-title { font-size: 2.35rem; }
+      .ss-slide-body, .ss-items li { font-size: 1.18rem; }
+      .ss-stage::after { right: 18px; top: 18px; width: 40px; height: 40px; }
     }
   </style>
 </head>
@@ -1915,7 +1959,7 @@
 <!-- ========== SLIDESHOW ========== -->
 <div id="slideshow" role="dialog" aria-modal="true" aria-label="電子黒板スライドショー">
   <div class="ss-header">
-    <span class="ss-counter" id="ssCounter">1 / 22</span>
+    <span class="ss-counter" id="ssCounter">1 / 13</span>
     <span class="ss-hlabel" id="ssHLabel"></span>
     <button class="ss-hbtn" id="ssPauseBtn" title="一時停止 [P]">⏸</button>
     <button class="ss-hbtn" id="ssCloseBtn" title="閉じる [Esc]">✕</button>
@@ -1929,6 +1973,7 @@
     <span class="ss-duration-note">← → 送る　P 停止　F 速度　S シャッフル</span>
     <button class="ss-nav" id="ssNextBtn">次へ →</button>
   </div>
+  <div class="ss-copyright">Akihiro Tozaki</div>
 </div>
 
 <script>
@@ -1972,127 +2017,69 @@
   }
 
   /* ===== SLIDESHOW ===== */
-  const SLIDE_SEC = 55;
-
   const SS = [
     { bg:'navy', type:'basic',
-      label:'社会科見学 2026年6月16日（火）',
-      title:'見学で\n学ぼう！',
-      items:['飯塚市クリーンセンター','多々良浄水場','福岡市防災センター']
+      label:'社会科見学 2026',
+      title:'見学で\n問いをつくろう',
+      items:['クリーンセンター','多々良浄水場','福岡市防災センター']
+    },
+    { bg:'teal', type:'basic',
+      label:'見学の合言葉',
+      title:'見て、聞いて、\n地図で考える'
     },
     { bg:'green', type:'basic',
-      label:'大きな問い①　ごみ処理',
-      title:'わたしたちのごみは、\nどのように処理されているのだろう。'
-    },
-    { bg:'blue', type:'basic',
-      label:'大きな問い②　水道',
-      title:'安全な水は、どのようにして\nわたしたちのもとに届けられているのだろう。'
-    },
-    { bg:'orange', type:'basic',
-      label:'大きな問い③　防災',
-      title:'災害から暮らしを守るために、\nどんな人や仕組みがあるのだろう。'
-    },
-    { bg:'teal', type:'basic',
-      label:'社会科の学び方 ①',
-      title:'事実をもとに\n考えよう',
-      body:'見てきたこと・調べたことをもとに\n自分の考えをつくる。'
-    },
-    { bg:'teal', type:'basic',
-      label:'社会科の学び方 ②',
-      title:'出どころを\n確かめよう',
-      body:'「だれが出した情報か」を確認しよう。\n市役所・国・新聞社など信頼できる出どころを選ぶ。'
-    },
-    { bg:'teal', type:'basic',
-      label:'社会科の学び方 ③',
-      title:'自分の言葉で\nまとめよう',
-      body:'AIの答えをそのまま写さない。\n出てきた情報をもとに、自分の言葉で書こう。'
-    },
-    { bg:'navy', type:'compare',
-      label:'AIツールの使い分け',
-      title:'GeminiとAI検索、\nどう違うの？',
-      left:{ head:'Gemini', items:['質問に答えてくれる','考えを整理する手伝い','プロンプトを入力して使う','答えは必ず自分で確かめる'] },
-      right:{ head:'Chrome AI検索', items:['信頼できる情報を探せる','一次資料にたどり着ける','検索バーから使える','出どころが表示される'] }
-    },
-    { bg:'navy', type:'basic',
-      label:'Geminiの使い方',
-      title:'プロンプトを\n貼り付けて使おう',
-      items:['このサイトのプロンプトをコピーする','Geminiに貼り付けて送信する','出てきた答えをスライドにメモする','そのまま写さず、自分の言葉に直す']
-    },
-    { bg:'blue', type:'basic',
-      label:'Chrome AI検索モードの使い方',
-      title:'キーワードで\n一次資料を探そう',
-      items:['Chromeの検索バーを開く','AIモードに切り替える','キーワードを入れて検索する','市役所・国などのページを確認する']
-    },
-    { bg:'purple', type:'flow',
-      label:'この単元の学習の進め方',
-      title:'学習の流れ',
-      steps:['見学前：問いを立てる（Gemini活用）','見学当日：スライドにメモを取る','見学後：Geminiでまとめの文を作る','NotebookLMで教科書とつなぐ','二学期の授業でさらにくわしく学ぶ']
-    },
-    { bg:'navy', type:'basic',
-      label:'Googleスライドの使い方',
-      title:'スライドに\n何を書く？',
-      items:['① 知っていること・疑問（見学前）','② 調べること・予想（Gemini活用）','③ 見学メモ（当日）','④ わかったこと・考え（見学後）','⑤ もっと調べたいこと（NotebookLM）']
-    },
-    { bg:'green', type:'vocab',
-      label:'ことば　ごみ処理',
-      words:[
-        { w:'焼却', r:'しょうきゃく', d:'高温でごみを燃やして灰にする処理' },
-        { w:'資源ごみ', r:'しげんごみ', d:'缶・紙・ペットボトルなどリサイクルできるごみ' },
-        { w:'溶融炉', r:'ようゆうろ', d:'超高温でごみを溶かして無害にする炉' },
-        { w:'埋め立て', r:'うめたて', d:'燃やせないごみや灰を土に埋める場所' },
-      ]
-    },
-    { bg:'blue', type:'vocab',
-      label:'ことば　水道',
-      words:[
-        { w:'浄水場', r:'じょうすいじょう', d:'川の水をきれいにして送り出す施設' },
-        { w:'久保白ダム', r:'くぼしろだむ', d:'飯塚市近くにある水源のダム' },
-        { w:'水質検査', r:'すいしつけんさ', d:'水の安全を調べる検査（51項目）' },
-        { w:'残留塩素', r:'ざんりゅうえんそ', d:'安全のために水に残す塩素の量' },
-      ]
-    },
-    { bg:'orange', type:'vocab',
-      label:'ことば　防災',
-      words:[
-        { w:'自助', r:'じじょ', d:'自分の命は自分で守ること' },
-        { w:'共助', r:'きょうじょ', d:'地域の人たちが助け合うこと' },
-        { w:'公助', r:'こうじょ', d:'国・県・市が人々を助けること' },
-        { w:'ハザードマップ', r:'', d:'洪水・土砂崩れの危険箇所を示した地図' },
-      ]
-    },
-    { bg:'teal', type:'basic',
-      label:'飯塚市ってどんな街？',
-      title:'遠賀川と穂波川が\n流れる盆地の街',
-      items:['遠賀川・穂波川・犬鳴川が合流する地域','久保白ダムが地域の水源のひとつ','水害（洪水）のリスクがある地域','二学期は水害についてくわしく学ぶ']
+      label:'ごみ処理',
+      title:'ごみはどこから来て、\nどこへ行く？',
+      items:['収集車の動き','燃やした後のゆくえ','分別とリサイクル']
     },
     { bg:'green', type:'basic',
-      label:'見学で確かめること　ごみ処理',
-      title:'クリーンセンターで\n見てきたいこと',
-      items:['1日に何トンのごみを処理するの？','燃やしたあとはどうなるの？','何人の人が働いているの？','自分たちに何ができるだろう？']
+      label:'クリーンセンター',
+      title:'なぜこの場所に\nあるのだろう',
+      body:'道路・川・住宅地との関係を見る。'
     },
     { bg:'blue', type:'basic',
-      label:'見学で確かめること　水道',
-      title:'多々良浄水場で\n見てきたいこと',
-      items:['水がきれいになる工程は何段階？','24時間どうやって管理しているの？','水質検査って何を調べるの？','久保白ダムとはどうつながってる？']
+      label:'水道',
+      title:'安全な水は、\nどう届く？',
+      items:['水源から取水へ','浄水から配水へ','24時間の管理']
+    },
+    { bg:'blue', type:'basic',
+      label:'多々良浄水場',
+      title:'水の流れを\n矢印で追う',
+      body:'川・ダム・浄水場・家をつなげる。'
     },
     { bg:'orange', type:'basic',
-      label:'見学で確かめること　防災',
-      title:'防災センターで\n見てきたいこと',
-      items:['自助・共助・公助の具体的な内容は？','飯塚市はなぜ水害が多いの？','避難するとき何を持っていく？','自分たちにできることは何？']
+      label:'防災',
+      title:'災害から暮らしを\nどう守る？',
+      items:['自分で備える','地域で助け合う','市や消防が支える']
     },
-    { bg:'purple', type:'basic',
-      label:'まとめ方のヒント',
-      title:'学習問題の答え\n文の型',
-      items:['「〇〇するために、〇〇が〇〇している。」','「〇〇のおかげで、わたしたちは〇〇できる。」','「〇〇という工夫によって、〇〇している。」','「〇〇という課題があるが、〇〇している。」']
+    { bg:'orange', type:'basic',
+      label:'防災センター',
+      title:'体験を、\n飯塚市につなげる',
+      body:'水害・避難場所・ハザードマップを見る。'
     },
-    { bg:'purple', type:'basic',
-      label:'NotebookLMについて',
-      title:'スライドのメモを\nNotebookLMに入れよう',
-      items:['見学後にスライドのメモを追加する','教科書のどこと関係するか聞ける','わかったことと、まだわからないことを整理','二学期の授業でさらに活用する']
+    { bg:'teal', type:'basic',
+      label:'AIの使い方',
+      title:'答えではなく、\n見る視点をもらう',
+      items:['何を調べるか','どこを見るか','何を質問するか']
     },
     { bg:'navy', type:'basic',
-      label:'さあ、見学に行こう！',
-      title:'見て・聞いて・考えて\n自分の言葉でまとめよう',
+      label:'情報の見方',
+      title:'だれが出した情報か\nたしかめよう',
+      body:'市・県・国などの一次資料を大切にする。'
+    },
+    { bg:'purple', type:'basic',
+      label:'スライドメモ',
+      title:'事実と考えを\n分けて書く',
+      items:['見たこと','聞いたこと','自分の考え']
+    },
+    { bg:'purple', type:'basic',
+      label:'まとめ',
+      title:'自分の言葉で\n学習問題に答える',
+      body:'AIの文をそのまま写さない。'
+    },
+    { bg:'navy', type:'basic',
+      label:'出発',
+      title:'見て・聞いて・考えて\n社会科を始めよう',
       body:'2026年6月16日（火）'
     },
   ];

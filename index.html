@@ -16,6 +16,8 @@
       --paper: #fbfaf6;
       --panel: #ffffff;
       --wash: #f5f8fc;
+      --sky: #eaf5ff;
+      --leaf: #e9f8ef;
       --green: #217a55;
       --blue: #1f5fa8;
       --gold: #b78113;
@@ -36,7 +38,9 @@
     body {
       margin: 0;
       color: var(--ink);
-      background: var(--paper);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(33, 122, 85, .08), transparent 28%),
+        linear-gradient(180deg, #fbfaf6 0%, #f4f8f5 48%, #fbfaf6 100%);
       font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
       line-height: 1.65;
     }
@@ -740,27 +744,104 @@
     }
 
     .unit-section {
-      margin-top: 32px;
-      padding: 22px;
-      border: 1px solid var(--line);
+      margin: 34px 0 32px;
+    }
+    .mission-card {
+      display: grid;
+      grid-template-columns: minmax(0, .92fr) minmax(340px, 1.08fr);
+      gap: 0;
+      overflow: hidden;
+      border: 1px solid #bed6c9;
       border-radius: var(--radius);
-      background: var(--panel);
-      box-shadow: 0 10px 24px rgba(23, 32, 51, .06);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.96), rgba(233,248,239,.92)),
+        repeating-linear-gradient(45deg, rgba(31,95,168,.06) 0 1px, transparent 1px 18px);
+      box-shadow: var(--shadow);
+      color: var(--ink);
+      text-decoration: none;
     }
-    .unit-section h2 { margin: 5px 0 8px; color: var(--navy); font-size: 1.4rem; }
-    .unit-section p  { margin: 0 0 14px; color: var(--sub); }
-    .unit-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
-    .unit-card {
-      display: flex; align-items: flex-start; gap: 14px;
-      padding: 16px 18px;
-      border: 1px solid var(--line); border-radius: var(--radius);
-      background: var(--wash); text-decoration: none; color: var(--ink);
-      transition: box-shadow .15s, border-color .15s;
+    .mission-copy {
+      padding: 26px;
+      display: grid;
+      align-content: center;
+      gap: 14px;
     }
-    .unit-card:hover { border-color: #99b8e0; box-shadow: 0 4px 14px rgba(23,32,51,.1); }
-    .unit-card-icon { font-size: 1.6rem; flex-shrink: 0; }
-    .unit-card strong { display: block; color: var(--navy); font-size: 1rem; margin-bottom: 4px; }
-    .unit-card span { font-size: .84rem; color: var(--sub); }
+    .mission-kicker {
+      width: fit-content;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #dff3e8;
+      color: #17613e;
+      font-size: .8rem;
+      font-weight: 900;
+      letter-spacing: .04em;
+    }
+    .mission-copy h2 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 2.05rem;
+      line-height: 1.25;
+    }
+    .mission-copy p {
+      margin: 0;
+      color: #40506a;
+      font-size: .98rem;
+    }
+    .mission-points {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .mission-point {
+      min-height: 76px;
+      padding: 10px;
+      border: 1px solid rgba(12,43,90,.12);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.76);
+    }
+    .mission-point strong {
+      display: block;
+      color: var(--navy);
+      font-size: .9rem;
+      margin-bottom: 3px;
+    }
+    .mission-point span {
+      color: var(--sub);
+      font-size: .8rem;
+      line-height: 1.45;
+    }
+    .mission-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+    .mission-cta {
+      display: inline-flex;
+      align-items: center;
+      min-height: 42px;
+      padding: 9px 16px;
+      border-radius: var(--radius);
+      background: var(--navy);
+      color: #fff;
+      font-weight: 900;
+    }
+    .mission-note {
+      color: var(--muted);
+      font-size: .84rem;
+      font-weight: 800;
+    }
+    .mission-art {
+      min-height: 330px;
+      background: url("assets/social-field-trip-exploration.png") center / cover no-repeat;
+      position: relative;
+    }
+    .mission-art::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(255,255,255,.2), transparent 38%);
+    }
 
     footer {
       border-top: 1px solid var(--line);
@@ -795,7 +876,8 @@
       .toolbar-inner,
       .builder,
       .feedback-section,
-      .manual-step {
+      .manual-step,
+      .mission-card {
         grid-template-columns: 1fr;
       }
 
@@ -813,6 +895,11 @@
 
       .upload-steps {
         grid-template-columns: 1fr 1fr;
+      }
+
+      .mission-art {
+        min-height: 260px;
+        order: -1;
       }
 
       .teacher-note {
@@ -861,6 +948,22 @@
 
       .upload-steps {
         grid-template-columns: 1fr;
+      }
+
+      .mission-copy {
+        padding: 20px;
+      }
+
+      .mission-copy h2 {
+        font-size: 1.55rem;
+      }
+
+      .mission-points {
+        grid-template-columns: 1fr;
+      }
+
+      .mission-art {
+        min-height: 220px;
       }
     }
   </style>
@@ -964,19 +1067,33 @@
       </div>
     </section>
 
-    <section class="unit-section" aria-label="単元別プロンプト集">
-      <span class="section-label">単元別プロンプト集</span>
-      <h2>見学・調べ学習にそのまま使えるセット</h2>
-      <p>単元ごとに場所・問い・プロンプト・一次資料リンクをまとめました。</p>
-      <div class="unit-cards">
-        <a class="unit-card" href="kengaku/index.html">
-          <div class="unit-card-icon">🏭</div>
-          <div>
-            <strong>社会科見学 2026（4年生）</strong>
-            <span>飯塚市クリーンセンター・多々良浄水場・福岡市防災センター。見学前後のGeminiプロンプト・AI検索・一次資料リンク・電子黒板モード搭載。</span>
+    <section class="unit-section" aria-label="社会科見学プロンプトセット">
+      <a class="mission-card" href="kengaku/index.html">
+        <div class="mission-copy">
+          <span class="mission-kicker">FIELD TRIP SET</span>
+          <h2>今日の見学ミッションを、問いに変える。</h2>
+          <p>飯塚市クリーンセンター・多々良浄水場・福岡市防災センターを、地図・流れ・働く人の視点から調べるためのプロンプトセットです。</p>
+          <div class="mission-points" aria-label="セットに含まれる内容">
+            <div class="mission-point">
+              <strong>見学前</strong>
+              <span>何を調べるか、どこを見るかを決める</span>
+            </div>
+            <div class="mission-point">
+              <strong>見学中</strong>
+              <span>地図・車・水・人の動きをメモする</span>
+            </div>
+            <div class="mission-point">
+              <strong>見学後</strong>
+              <span>メモをもとに自分の言葉でまとめる</span>
+            </div>
           </div>
-        </a>
-      </div>
+          <div class="mission-actions">
+            <span class="mission-cta">社会科見学セットを開く</span>
+            <span class="mission-note">AI検索・一次資料リンク・電子黒板モードつき</span>
+          </div>
+        </div>
+        <div class="mission-art" aria-hidden="true"></div>
+      </a>
     </section>
 
     <section class="message-bar" aria-label="使うときの約束">

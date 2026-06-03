@@ -772,7 +772,7 @@
          target="_blank" rel="noopener">
         📖 社会ことば辞典
       </a>
-      <button class="btn-board" type="button" onclick="openSlideshow()">📺 電子黒板モード（約20分）</button>
+      <button class="btn-board" type="button" onclick="openSlideshow()">📺 問いカードを開く</button>
     </div>
   </div>
 </header>
@@ -1957,9 +1957,9 @@
 <div id="toast">コピーしました！</div>
 
 <!-- ========== SLIDESHOW ========== -->
-<div id="slideshow" role="dialog" aria-modal="true" aria-label="電子黒板スライドショー">
+<div id="slideshow" role="dialog" aria-modal="true" aria-label="社会科見学の問いカード">
   <div class="ss-header">
-    <span class="ss-counter" id="ssCounter">1 / 13</span>
+    <span class="ss-counter" id="ssCounter">1 / 23</span>
     <span class="ss-hlabel" id="ssHLabel"></span>
     <button class="ss-hbtn" id="ssPauseBtn" title="一時停止 [P]">⏸</button>
     <button class="ss-hbtn" id="ssCloseBtn" title="閉じる [Esc]">✕</button>
@@ -2027,6 +2027,18 @@
       label:'見学の合言葉',
       title:'見て、聞いて、\n地図で考える'
     },
+    { bg:'teal', type:'basic',
+      label:'問いのつくり方',
+      title:'どこにある？\nなぜそこ？'
+    },
+    { bg:'teal', type:'basic',
+      label:'問いのつくり方',
+      title:'何が動く？\nだれが支える？'
+    },
+    { bg:'teal', type:'basic',
+      label:'問いのつくり方',
+      title:'数字で見ると\n何がわかる？'
+    },
     { bg:'green', type:'basic',
       label:'ごみ処理',
       title:'ごみはどこから来て、\nどこへ行く？',
@@ -2036,6 +2048,11 @@
       label:'クリーンセンター',
       title:'なぜこの場所に\nあるのだろう',
       body:'道路・川・住宅地との関係を見る。'
+    },
+    { bg:'green', type:'basic',
+      label:'クリーンセンター',
+      title:'働く人は何を\n守っている？',
+      body:'安全・におい・煙・機械の点検を見る。'
     },
     { bg:'blue', type:'basic',
       label:'水道',
@@ -2047,6 +2064,11 @@
       title:'水の流れを\n矢印で追う',
       body:'川・ダム・浄水場・家をつなげる。'
     },
+    { bg:'blue', type:'basic',
+      label:'多々良浄水場',
+      title:'安心はどこで\nつくられる？',
+      body:'検査・管理・働く人の工夫を見る。'
+    },
     { bg:'orange', type:'basic',
       label:'防災',
       title:'災害から暮らしを\nどう守る？',
@@ -2056,6 +2078,11 @@
       label:'防災センター',
       title:'体験を、\n飯塚市につなげる',
       body:'水害・避難場所・ハザードマップを見る。'
+    },
+    { bg:'orange', type:'basic',
+      label:'防災センター',
+      title:'自分なら\nどう動く？',
+      body:'家族と地域の備えを考える。'
     },
     { bg:'teal', type:'basic',
       label:'AIの使い方',
@@ -2067,15 +2094,35 @@
       title:'だれが出した情報か\nたしかめよう',
       body:'市・県・国などの一次資料を大切にする。'
     },
+    { bg:'navy', type:'basic',
+      label:'見学中',
+      title:'今日わかったことは\n何だろう？',
+      body:'見た事実を一つ選んでメモする。'
+    },
+    { bg:'navy', type:'basic',
+      label:'見学中',
+      title:'なぜそう言える？\n根拠はどこ？',
+      body:'写真・数字・説明とつなげる。'
+    },
     { bg:'purple', type:'basic',
       label:'スライドメモ',
       title:'事実と考えを\n分けて書く',
       items:['見たこと','聞いたこと','自分の考え']
     },
     { bg:'purple', type:'basic',
+      label:'スライドメモ',
+      title:'びっくりしたことを\n問いに戻す',
+      body:'驚きは、次の調べたいことになる。'
+    },
+    { bg:'purple', type:'basic',
       label:'まとめ',
       title:'自分の言葉で\n学習問題に答える',
       body:'AIの文をそのまま写さない。'
+    },
+    { bg:'purple', type:'basic',
+      label:'まとめ',
+      title:'まだわからないことも\n大事な学び',
+      body:'次に調べる問いとして残す。'
     },
     { bg:'navy', type:'basic',
       label:'出発',
@@ -2127,7 +2174,7 @@
     const stage = document.getElementById('ssStage');
     stage.className = 'ss-stage bg-' + s.bg;
     stage.innerHTML = ssRender(s);
-    ssStartTimer();
+    ssClearTimer();
   }
 
   /* keep old ssShow(n) for direct index calls during testing */
@@ -2194,15 +2241,6 @@
     ssStartTime = Date.now();
     var fill = document.getElementById('ssTimerFill');
     fill.style.width = '0%';
-    if (ssPaused) return;
-    var total = ssSpeed * 1000;
-    var tick  = ssSpeed <= 5 ? 50 : 150;
-    ssIntervalId = setInterval(function() {
-      if (ssPaused) return;
-      var pct = Math.min(((Date.now() - ssStartTime) / total) * 100, 100);
-      fill.style.width = pct + '%';
-      if (pct >= 100) ssShowAt(ssOrderPos + 1);
-    }, tick);
   }
 
   function ssClearTimer() {
@@ -2210,9 +2248,8 @@
   }
 
   function ssTogglePause() {
-    ssPaused = !ssPaused;
-    document.getElementById('ssPauseBtn').textContent = ssPaused ? '▶' : '⏸';
-    if (!ssPaused) { ssStartTime = Date.now(); ssStartTimer(); }
+    ssPaused = true;
+    ssClearTimer();
   }
 
   function ssToggleSpeed() {
@@ -2220,7 +2257,6 @@
     var btn = document.getElementById('ssSpeedBtn');
     btn.textContent = ssSpeed === 5 ? '⚡ 5秒' : '🕒 55秒';
     btn.classList.toggle('is-on', ssSpeed === 5);
-    ssStartTimer(); // restart with new speed
   }
 
   function ssToggleShuffle() {
@@ -2244,9 +2280,6 @@
     if (e.key === 'Escape') closeSlideshow();
     if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); ssShowAt(ssOrderPos + 1); }
     if (e.key === 'ArrowLeft') ssShowAt(ssOrderPos - 1);
-    if (e.key === 'p' || e.key === 'P') ssTogglePause();
-    if (e.key === 's' || e.key === 'S') ssToggleShuffle();
-    if (e.key === 'f' || e.key === 'F') ssToggleSpeed();
   });
 </script>
 

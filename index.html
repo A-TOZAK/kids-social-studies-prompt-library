@@ -174,6 +174,7 @@
     .scene-tab[data-scene="shiraberu"] .n { background: var(--c2); }
     .scene-tab[data-scene="matomeru"] .n { background: var(--c3); }
     .scene-tab[data-scene="ikasu"] .n { background: var(--c4); }
+    .scene-tab[data-scene="furikaeri"] .n { background: #9b82b8; }
     .scene-tab[aria-selected="true"] { border-color: var(--ink); background: var(--ink); color: #fff; }
 
     .template-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin-bottom: 32px; }
@@ -421,7 +422,7 @@
         <a href="#check">たしかめる</a>
         <a href="#howto">つかいかた</a>
         <a href="#units">たんげん</a>
-        <a href="#teachers">先生の方へ</a>
+        <a href="#teachers">先生方へ</a>
       </nav>
     </div>
   </header>
@@ -542,6 +543,7 @@
           <button class="scene-tab" role="tab" data-scene="shiraberu" aria-selected="false"><span class="n">2</span>しらべる</button>
           <button class="scene-tab" role="tab" data-scene="matomeru" aria-selected="false"><span class="n">3</span>まとめる</button>
           <button class="scene-tab" role="tab" data-scene="ikasu" aria-selected="false"><span class="n">4</span>いかす</button>
+          <button class="scene-tab" role="tab" data-scene="furikaeri" aria-selected="false"><span class="n">✓</span>ふりかえり</button>
         </div>
 
         <div class="template-list" id="templateList"></div>
@@ -719,7 +721,7 @@
     <!-- ================= TEACHERS ================= -->
     <section id="teachers" class="teachers">
       <div class="wrap teachers-inner">
-        <h2 class="section-title">先生の方へ</h2>
+        <h2 class="section-title">先生方へ</h2>
         <p>このサイトは、社会科の問題解決的な学習の流れ(つかむ・調べる・まとめる・いかす)に沿って、児童が場面に合ったAIの使い方を選べるように作っています。プロンプトはどれも「答えを先に教えない」「そのまま写させない」設計です。</p>
         <table>
           <tr><th>場面</th><th>プロンプトのねらい</th></tr>
@@ -744,21 +746,19 @@
           </div>
         </div>
         <div class="message-body">
-          <p>このサイトをつくったのは、小学校の先生です。</p>
           <p>AIは、うまく使うと心強い相手です。考えを広げたいとき、それが本当かどうか<ruby>確<rt>たし</rt></ruby>かめたいとき、うまく言葉にできないときに、「例えば、こう考えたら?」と手がかりをくれます。</p>
           <p>でも、使っていて「自分の力になっていないな」と思ったら、いちど画面を閉じてみてください。</p>
           <p>社会科でいちばん大切なのは、自分の目で見ることです。人に会って、話を聞く。その場所に行って、感じ取る。そして、気づいたことをメモして「はてな?」を見つける。そこからが、本当のはじまりです。</p>
           <p>社会科を学ぶと、これまで見えなかったものが見えてきます。知らないところで、がんばっている人がいたこと。関係ないと思っていた<ruby>警察<rt>けいさつ</rt></ruby>と<ruby>消防<rt>しょうぼう</rt></ruby>が、じつはつながっていたこと。<ruby>農家<rt>のうか</rt></ruby>の人もスーパーマーケットも、<ruby>市役所<rt>しやくしょ</rt></ruby>の人も、どこかでつながっています。</p>
           <p>見つけた「はてな?」を、調べて、<ruby>予想<rt>よそう</rt></ruby>して、たしかめる。その力は、大人になったとき、きっとあなたを助けます。18さいで<ruby>選挙<rt>せんきょ</rt></ruby>にいくとき、「自分はこれがいい」と自分で選ぶ力にもなります。</p>
           <p>あなたは、社会の<ruby>一員<rt>いちいん</rt></ruby>です。この社会をいっしょにつくっていく<ruby>仲間<rt>なかま</rt></ruby>です。このサイトを<ruby>通<rt>つう</rt></ruby>じて、その<ruby>第一歩<rt>だいいっぽ</rt></ruby>を手伝うことができたら<ruby>幸<rt>さいわ</rt></ruby>いです。</p>
-          <p class="message-last">たくさんの「はてな?」を見つけてください。</p>
         </div>
         <div class="author-card">
           <img src="assets/author.jpg" alt="外﨑顯博の写真" width="240" height="240" decoding="async">
           <div>
             <div class="al">AUTHOR</div>
             <div class="an"><ruby>外﨑顯博<rt>とざき あきひろ</rt></ruby></div>
-            <div class="ap">福岡県<ruby>飯塚市<rt>いいづかし</rt></ruby>の<b>公立小学校教員</b>。<b>GEG Chikuho</b> <ruby>共同<rt>きょうどう</rt></ruby>リーダー。<br>先生のための無料の教材と道具の棚「<b>School Stock</b>」をつくっています。</div>
+            <div class="ap">福岡県<ruby>飯塚市<rt>いいづかし</rt></ruby>の<b>公立小学校教員</b>。<b>Google Educators Group Chikuho</b> Co-Leader。<br>先生のための無料の教材と道具の棚「<b>School Stock</b>」をつくっています。</div>
           </div>
         </div>
       </div>
@@ -785,7 +785,7 @@
           <ul>
             <li><a href="kengaku/">社会科見学セット(4年)</a></li>
             <li><a href="examples.html">試した事例</a></li>
-            <li><a href="#teachers">先生の方へ</a></li>
+            <li><a href="#teachers">先生方へ</a></li>
             <li><a href="#message">外﨑先生から、きみへ</a></li>
           </ul>
         </div>
@@ -813,7 +813,8 @@
       { id: "tsukamu",  label: "つかむ" },
       { id: "shiraberu", label: "しらべる" },
       { id: "matomeru", label: "まとめる" },
-      { id: "ikasu",    label: "いかす" }
+      { id: "ikasu",    label: "いかす" },
+      { id: "furikaeri", label: "ふりかえり" }
     ];
 
     function value(input, fallback) {
@@ -1233,6 +1234,144 @@
 2. 自分の生活とつながるところ
 3. まねできそうなこと
 4. 資料だけではわからないこと`;
+        }
+      },
+      {
+        id: "group-table",
+        scene: "matomeru",
+        step: "まとめる 2 考えを深める",
+        title: "班で話し合ったことを、表に整理しよう",
+        description: "班や全体で出た意見を、くらべる観点で表にまとめます。",
+        fields: [
+          { id: "unit", label: "単元や場面", placeholder: "例: 5年 これからの食料生産" },
+          { id: "theme", label: "話し合ったこと(テーマ)", placeholder: "例: 食料を安定して届けるためには何が大切か", type: "textarea" },
+          { id: "opinions", label: "班で出た意見", placeholder: "例: 地元の野菜を買う。輸入にたよりすぎない。作る人を増やす。出た意見をそのまま書く", type: "textarea" }
+        ],
+        teacher: ["ねらい: 意見を観点で分類・比較して考えを深める", "使う場面: 班・全体での話し合いのあと", "支援: 観点(だれが・何を・なぜ)を先に決めると整理しやすい"],
+        gemini(values) {
+          return `あなたは小学校4年生以上の社会科で、話し合いの整理を助ける先生です。
+
+単元や場面: ${value(values.unit, "社会科の単元")}
+話し合ったこと: ${value(values.theme, "まだ決まっていません")}
+班で出た意見: ${value(values.opinions, "まだ書けていません")}
+
+出た意見を表に整理する手伝いをしてください。
+次の形で短く出してください。
+
+1. 意見を仲間分けする観点の案を2つ
+2. その観点で意見を整理した表
+3. 表のあいているところ(まだ出ていない意見)
+4. 表を見て気づくことを考えるヒント
+
+最後に「表から、わたしは〜と考えました。なぜなら〜」の文の型を出してください。
+意見の中身を勝手に作らず、書かれた意見だけを使ってください。`;
+        },
+        notebook(values) {
+          return `NotebookLMに入れた資料だけをもとに答えてください。
+
+単元や場面: ${value(values.unit, "社会科の単元")}
+話し合ったこと: ${value(values.theme, "まだ決まっていません")}
+班で出た意見: ${value(values.opinions, "まだ書けていません")}
+
+出た意見と資料をつなげて、表に整理してください。
+次の形で答えてください。
+
+1. それぞれの意見を支える根拠が、資料のどこにあるか
+2. 意見と根拠を整理した表
+3. 資料の中にある、まだ話し合いに出ていない視点
+4. 資料だけでは確認できないこと`;
+        }
+      },
+      {
+        id: "canvas-card-board",
+        scene: "matomeru",
+        step: "まとめる 2 考えを深める",
+        title: "Canvasで、意見カードをならべよう",
+        description: "GeminiのCanvas機能で、意見をカードにして動かせるボードを作ります。",
+        fields: [
+          { id: "lessonQuestion", label: "学習問題", placeholder: "例: ごみをへらすために、わたしたちに何ができるのだろう", type: "textarea" },
+          { id: "meate", label: "きょうのめあて", placeholder: "例: 出た意見を仲間分けして、考えを深める", type: "textarea" },
+          { id: "opinions", label: "カードにしたい意見", placeholder: "例: 分別をていねいにする。マイバッグを使う。給食を残さない", type: "textarea" }
+        ],
+        teacher: ["ねらい: 意見の分類・関係づけを、カード操作で行う", "使う場面: 話し合いの整理・考えの共有(GeminiのCanvasで)", "支援: 仲間分けの名前(ラベル)は子どもが自分で決める"],
+        gemini(values) {
+          return `GeminiのCanvas機能を使って、小学生が使う「意見カードボード」を作ってください。
+1つの画面で動くようにしてください。
+
+学習問題: ${value(values.lessonQuestion, "あとで入力します")}
+きょうのめあて: ${value(values.meate, "あとで入力します")}
+最初に入れておく意見: ${value(values.opinions, "まだありません")}
+
+作ってほしいもの:
+1. 画面の上に「学習問題」と「きょうのめあて」を表示する。あとから書きかえられるように、入力らんにする
+2. 意見を書きこむ入力らんと「カードを追加」ボタンをつける。書いた文が、付せんのようなカードになる
+3. カードはドラッグして自由に動かせる。にた意見を近くに集められるようにする
+4. カードの色を3色から選べるようにする(仲間分けに使う)
+5. カードをまちがえたときのために、カードを消せるようにする
+6. 「最初に入れておく意見」を、1つずつカードにして、はじめから置いておく
+7. 文字は大きめ、すべて日本語で、小学生がすぐ使えるかんたんな見た目にする
+
+答えや分け方はAIが決めず、子どもが自分で動かして考えられるようにしてください。`;
+        },
+        notebook(values) {
+          return `NotebookLMに入れた資料だけをもとに答えてください。
+(カードボードづくりはGeminiのCanvas機能で行います。ここでは、カードに書く材料を資料から集めます。)
+
+学習問題: ${value(values.lessonQuestion, "まだ決まっていません")}
+きょうのめあて: ${value(values.meate, "まだ決まっていません")}
+いま出ている意見: ${value(values.opinions, "まだありません")}
+
+次の形で答えてください。
+
+1. 資料から見つかる、カードに書けそうな事実
+2. いま出ている意見と関係する資料の場所
+3. まだ意見に出ていない視点
+4. 資料だけでは確認できないこと`;
+        }
+      },
+      {
+        id: "reflection",
+        scene: "furikaeri",
+        step: "ふりかえり(どの時間でも)",
+        title: "きょうの学習を、ふりかえろう",
+        description: "どの時間の終わりにも使えます。ふりかえりを書く手伝いをしてもらいます。",
+        fields: [
+          { id: "unit", label: "単元や場面", placeholder: "例: 4年 ごみのしょりと利用" },
+          { id: "meate", label: "きょうのめあて", placeholder: "例: ごみのゆくえを図にまとめる", type: "textarea" },
+          { id: "did", label: "きょうやったこと・わかったこと", placeholder: "例: クリーンセンターの働きを調べた。ごみが電気になることがわかった", type: "textarea" }
+        ],
+        teacher: ["ねらい: 学習を自分の言葉で意味づける", "使う場面: どの時間の終わりでも・単元の節目でも", "支援: 「わかった・できた・次に知りたい」の3つで書く"],
+        gemini(values) {
+          return `あなたは小学校4年生以上の社会科で、ふりかえりを助ける先生です。
+
+単元や場面: ${value(values.unit, "社会科の単元")}
+きょうのめあて: ${value(values.meate, "まだ書けていません")}
+きょうやったこと・わかったこと: ${value(values.did, "まだうまく書けません")}
+
+ふりかえりの文を代わりに書かないでください。
+次の形で短く出してください。
+
+1. めあてとくらべてどうだったか、たしかめる質問を2つ
+2. きょうの学習の大事な言葉を3つ
+3. ふりかえりの書き出しの型を3つ(わかったこと・できるようになったこと・次に知りたいこと)
+4. 次の時間につながる「はてな?」を1つ
+
+小学生にわかる言葉で、自分の言葉で書きたくなるようにしてください。`;
+        },
+        notebook(values) {
+          return `NotebookLMに入れた資料だけをもとに答えてください。
+
+単元や場面: ${value(values.unit, "社会科の単元")}
+きょうのめあて: ${value(values.meate, "まだ書けていません")}
+きょうやったこと・わかったこと: ${value(values.did, "まだうまく書けません")}
+
+きょうの学習をふりかえる材料を、資料から整理してください。
+次の形で答えてください。
+
+1. きょう使った資料の中で、大事だったところ
+2. わかったことと資料のつながり
+3. まだ読めていない資料・たしかめていないこと
+4. 次の時間に調べるとよさそうなこと`;
         }
       }
     ];

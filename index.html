@@ -4,1174 +4,769 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>子どものためのプロンプトライブラリ | 社会科</title>
-  <meta name="description" content="小学校4年生以上の社会科で、調べるヒント・自分の考えづくり・まとめを助ける子ども向けAIプロンプト集。">
+  <meta name="description" content="社会科の学習の流れ(つかむ・しらべる・まとめる・いかす)に合わせて、AIへの聞き方をえらべる子ども向けプロンプト集。一次情報のリンク集つき。">
   <link rel="icon" href="data:,">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
   <style>
     :root {
-      --navy: #0c2b5a;
-      --ink: #172033;
-      --sub: #536076;
-      --muted: #7b8797;
-      --line: #d4dbe7;
-      --paper: #fbfaf6;
+      --paper: #fdfbf6;
       --panel: #ffffff;
-      --wash: #f5f8fc;
-      --sky: #eaf5ff;
-      --leaf: #e9f8ef;
-      --green: #217a55;
-      --blue: #1f5fa8;
-      --gold: #b78113;
-      --teal: #18736f;
-      --purple: #6449a8;
-      --shadow: 0 14px 34px rgba(23, 32, 51, .1);
-      --radius: 8px;
+      --ink: #4c4337;
+      --sub: #8a7f6f;
+      --line: #ecdfc9;
+      --accent: #4a76b8;
+      --accent-deep: #3b619c;
+      --accent-wash: #edf3fa;
+      --c1: #e08b6d; --c1-wash: #fbeee7;
+      --c2: #6f9fc8; --c2-wash: #ebf3f9;
+      --c3: #7fae72; --c3-wash: #eff6eb;
+      --c4: #d9a83f; --c4-wash: #faf2de;
+      --radius: 18px;
+      --shadow: 0 8px 26px rgba(76, 67, 55, .09);
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
-    html {
-      scroll-behavior: smooth;
-    }
+    html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
       color: var(--ink);
-      background:
-        radial-gradient(circle at 12% 8%, rgba(33, 122, 85, .08), transparent 28%),
-        linear-gradient(180deg, #fbfaf6 0%, #f4f8f5 48%, #fbfaf6 100%);
-      font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
-      line-height: 1.65;
+      background: var(--paper);
+      font-family: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Hiragino Sans", "Yu Gothic", sans-serif;
+      font-weight: 500;
+      font-size: 17px;
+      line-height: 1.95;
+      -webkit-font-smoothing: antialiased;
     }
 
-    body.is-modal-open {
-      overflow: hidden;
-    }
+    button, input, textarea { font: inherit; color: inherit; }
+    a { color: inherit; }
+    ruby rt { font-size: 0.5em; color: var(--sub); font-weight: 500; }
+    img { max-width: 100%; height: auto; }
 
-    button,
-    input,
-    textarea {
-      font: inherit;
-    }
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
 
-    a {
-      color: inherit;
-    }
-
-    .hero {
+    /* ===== header ===== */
+    .site-head {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(253, 251, 246, .93);
       border-bottom: 1px solid var(--line);
-      background:
-        linear-gradient(90deg, rgba(251, 250, 246, .98) 0%, rgba(251, 250, 246, .94) 48%, rgba(251, 250, 246, .54) 72%, rgba(251, 250, 246, .28) 100%),
-        url("assets/classroom-ai-social-studies.png") center right / cover no-repeat;
-    }
-
-    .hero-inner,
-    .toolbar-inner,
-    .shell {
-      width: min(1160px, calc(100% - 40px));
-      margin: 0 auto;
-    }
-
-    .hero-inner {
-      min-height: 330px;
-      display: grid;
-      align-content: center;
-      padding: 34px 0 28px;
-    }
-
-    .eyebrow {
-      color: var(--navy);
-      font-weight: 900;
-      margin-bottom: 8px;
-    }
-
-    h1 {
-      max-width: 720px;
-      margin: 0 0 10px;
-      color: var(--navy);
-      font-size: 2.55rem;
-      line-height: 1.18;
-    }
-
-    .hero-copy {
-      max-width: 720px;
-      margin: 0;
-      color: #263247;
-      font-size: 1.02rem;
-    }
-
-    .hero-search {
-      max-width: 620px;
-      margin-top: 18px;
-      position: relative;
-    }
-
-    .hero-search input {
-      width: 100%;
-      min-height: 50px;
-      border: 1px solid #9da9ba;
-      border-radius: var(--radius);
-      background: rgba(255, 255, 255, .9);
-      color: var(--ink);
-      padding: 12px 16px 12px 44px;
-      font-size: 1rem;
-      box-shadow: 0 6px 20px rgba(23, 32, 51, .06);
-    }
-
-    .hero-search::before {
-      content: "";
-      position: absolute;
-      left: 17px;
-      top: 50%;
-      width: 15px;
-      height: 15px;
-      border: 2px solid #687386;
-      border-radius: 50%;
-      transform: translateY(-55%);
-    }
-
-    .hero-search::after {
-      content: "";
-      position: absolute;
-      left: 31px;
-      top: 31px;
-      width: 9px;
-      height: 2px;
-      background: #687386;
-      transform: rotate(45deg);
-      transform-origin: left center;
-    }
-
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 16px;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      min-height: 42px;
-      padding: 9px 16px;
-      border: 1px solid transparent;
-      border-radius: var(--radius);
-      background: #fff;
-      color: var(--ink);
-      cursor: pointer;
-      font-weight: 900;
-      text-decoration: none;
-      transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
-      white-space: nowrap;
-    }
-
-    .btn:hover {
-      transform: translateY(-1px);
-    }
-
-    .btn-primary {
-      background: var(--navy);
-      color: #fff;
-      box-shadow: 0 12px 26px rgba(12, 43, 90, .2);
-    }
-
-    .btn-line {
-      border-color: var(--line);
-      color: var(--navy);
-    }
-
-    .btn-open {
-      background: var(--active-color, var(--green));
-      color: #fff;
-    }
-
-    .toolbar {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      border-bottom: 1px solid var(--line);
-      background: rgba(251, 250, 246, .94);
-      backdrop-filter: blur(14px);
-    }
-
-    .toolbar-inner {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 22px;
-      align-items: center;
-      min-height: 72px;
-      padding: 10px 0;
-    }
-
-    .tool-switch {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      min-width: 270px;
-      border: 1px solid #9aa8bb;
-      border-radius: var(--radius);
-      overflow: hidden;
-      background: #fff;
-    }
-
-    .tool-switch button {
-      border: 0;
-      background: #fff;
-      color: var(--ink);
-      min-height: 42px;
-      padding: 8px 14px;
-      cursor: pointer;
-      font-weight: 900;
-    }
-
-    .tool-switch button.is-active {
-      background: var(--navy);
-      color: #fff;
-    }
-
-    .category-row {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-      gap: 10px;
-    }
-
-    .category-row button {
-      display: inline-flex;
-      align-items: center;
-      flex: 0 0 auto;
-      min-height: 42px;
-      padding: 8px 16px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: #fff;
-      color: var(--navy);
-      cursor: pointer;
-      font-weight: 900;
-      white-space: nowrap;
-    }
-
-    .category-row button.is-active {
-      border-color: var(--active-color, var(--green));
-      background: #f1faf6;
-      color: var(--active-color, var(--green));
-    }
-
-    .shell {
-      padding: 28px 0 76px;
-    }
-
-    .builder {
-      display: grid;
-      grid-template-columns: minmax(0, .95fr) minmax(360px, 1.05fr);
-      gap: 18px;
-      align-items: stretch;
-      margin-bottom: 30px;
-    }
-
-    .builder-card,
-    .preview-card,
-    .prompt-card,
-    .message-bar {
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--panel);
-      box-shadow: var(--shadow);
-    }
-
-    .builder-card,
-    .preview-card {
-      padding: 22px;
-    }
-
-    .builder-label,
-    .section-label {
-      color: var(--active-color, var(--green));
-      font-size: .88rem;
-      font-weight: 900;
-    }
-
-    h2 {
-      margin: 5px 0 8px;
-      color: var(--navy);
-      font-size: 1.55rem;
-      line-height: 1.35;
-    }
-
-    .lead {
-      margin: 0;
-      color: var(--sub);
-    }
-
-    .field-grid {
-      display: grid;
-      gap: 14px;
-      margin-top: 18px;
-    }
-
-    label {
-      display: grid;
-      gap: 7px;
-      color: var(--ink);
-      font-weight: 900;
-    }
-
-    input,
-    textarea {
-      width: 100%;
-      border: 1px solid #c8d1df;
-      border-radius: var(--radius);
-      background: #fff;
-      color: var(--ink);
-      padding: 11px 12px;
-    }
-
-    textarea {
-      min-height: 112px;
-      resize: vertical;
-    }
-
-    .hint-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 14px;
-    }
-
-    .hint-chip {
-      border: 1px solid #cfdecf;
-      border-radius: 6px;
-      background: #f4fbf4;
-      color: #2a5d3f;
-      padding: 3px 8px;
-      font-size: .82rem;
-      font-weight: 800;
-    }
-
-    .preview-card {
-      display: grid;
-      gap: 14px;
-      align-content: start;
-    }
-
-    .preview-top {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      align-items: start;
-    }
-
-    .tool-badge {
-      display: inline-flex;
-      align-items: center;
-      min-height: 28px;
-      padding: 3px 9px;
-      border-radius: 6px;
-      background: var(--navy);
-      color: #fff;
-      font-size: .82rem;
-      font-weight: 900;
-    }
-
-    .prompt-output {
-      min-height: 250px;
-      margin: 0;
-      padding: 16px;
-      border: 1px solid #cbd5e1;
-      border-radius: var(--radius);
-      background: #f7fafc;
-      color: #223047;
-      font-family: inherit;
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
-    }
-
-    .preview-actions {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-      gap: 10px;
-    }
-
-    .message-bar {
-      display: grid;
-      grid-template-columns: auto minmax(0, 1fr) auto;
-      gap: 18px;
-      align-items: center;
-      margin: 20px 0 30px;
-      padding: 14px 20px;
-      border-color: #e2c77e;
-      background: #fffaf0;
-    }
-
-    .message-icon {
-      width: 54px;
-      height: 54px;
-      border: 2px solid #d5a21d;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      color: var(--navy);
-      font-size: 1.5rem;
-      font-weight: 900;
-    }
-
-    .message-bar strong {
-      display: block;
-      color: var(--navy);
-      font-size: 1.24rem;
-    }
-
-    .message-bar span {
-      color: var(--sub);
-    }
-
-    .library-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: end;
-      gap: 18px;
-      margin-bottom: 14px;
-    }
-
-    .library-head p {
-      margin: 4px 0 0;
-      color: var(--sub);
-    }
-
-    .prompt-list {
-      display: grid;
-      gap: 12px;
-    }
-
-    .prompt-card {
-      display: grid;
-      grid-template-columns: 8px minmax(0, 1fr) 320px;
-      overflow: hidden;
-    }
-
-    .strip {
-      background: var(--card-color, var(--green));
-    }
-
-    .prompt-main {
-      padding: 18px 20px;
-    }
-
-    .prompt-main .category {
-      color: var(--card-color, var(--green));
-      font-weight: 900;
-      font-size: .88rem;
-    }
-
-    .prompt-main h3 {
-      margin: 4px 0 5px;
-      color: var(--navy);
-      font-size: 1.22rem;
-      line-height: 1.35;
-    }
-
-    .prompt-main p {
-      margin: 0;
-      color: var(--sub);
-    }
-
-    .mini-prompt {
-      margin-top: 12px;
-      padding: 11px 12px;
-      border: 1px solid #d7e2d9;
-      border-radius: var(--radius);
-      background: #f8fbf8;
-      color: #263247;
-      font-size: .92rem;
-    }
-
-    .card-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .teacher-note {
-      border-left: 1px solid var(--line);
-      padding: 18px;
-      background: #fffdfa;
-    }
-
-    .teacher-note h4 {
-      margin: 0 0 8px;
-      color: var(--ink);
-    }
-
-    .teacher-note ul {
-      margin: 0;
-      padding-left: 18px;
-      color: var(--sub);
-      font-size: .92rem;
-    }
-
-    .teacher-note li {
-      margin: 6px 0;
-    }
-
-    .lesson-examples {
-      margin-top: 32px;
-    }
-
-    .example-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .example-card {
-      display: grid;
-      gap: 10px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--panel);
-      padding: 18px;
-      box-shadow: 0 10px 24px rgba(23, 32, 51, .07);
-    }
-
-    .example-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-      color: var(--sub);
-      font-size: .84rem;
-      font-weight: 900;
-    }
-
-    .grade-badge {
-      display: inline-flex;
-      align-items: center;
-      min-height: 26px;
-      padding: 2px 8px;
-      border-radius: 6px;
-      background: #eef5ff;
-      color: var(--blue);
-    }
-
-    .example-card h3 {
-      margin: 0;
-      color: var(--navy);
-      font-size: 1.05rem;
-      line-height: 1.45;
-    }
-
-    .example-question {
-      margin: 0;
-      padding: 10px 12px;
-      border-left: 4px solid var(--active-color, var(--green));
-      background: #f7fafc;
-      color: #243148;
-      font-weight: 900;
-    }
-
-    .example-card ul {
-      margin: 0;
-      padding-left: 18px;
-      color: var(--sub);
-      font-size: .92rem;
-    }
-
-    .example-card li {
-      margin: 5px 0;
-    }
-
-    .source-note {
-      margin: 12px 0 0;
-      color: var(--muted);
-      font-size: .84rem;
-    }
-
-    .upload-guide {
-      margin-top: 28px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: #f8fbff;
-      padding: 22px;
-      box-shadow: 0 10px 24px rgba(23, 32, 51, .06);
-    }
-
-    .upload-guide h2 {
-      margin-top: 0;
-    }
-
-    .upload-steps {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 14px;
-    }
-
-    .upload-step {
-      border: 1px solid #d7e2ef;
-      border-radius: var(--radius);
-      background: #fff;
-      padding: 14px;
-    }
-
-    .upload-step strong {
-      display: block;
-      color: var(--navy);
-      margin-bottom: 4px;
-    }
-
-    .upload-step span {
-      color: var(--sub);
-      font-size: .92rem;
-    }
-
-    .feedback-section {
-      margin-top: 28px;
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 20px;
-      align-items: center;
-      border-radius: var(--radius);
-      background: #14213a;
-      color: #fff;
-      padding: 24px;
-    }
-
-    .feedback-section h2 {
-      color: #fff;
-    }
-
-    .feedback-section p {
-      color: rgba(255, 255, 255, .78);
-      margin: 8px 0 0;
-    }
-
-    .manual-modal[hidden] {
-      display: none;
-    }
-
-    .manual-modal {
-      position: fixed;
-      inset: 0;
-      z-index: 1500;
-      display: grid;
-      align-items: center;
-      padding: 24px;
-      background: rgba(12, 20, 35, .72);
-      overflow-y: auto;
-    }
-
-    .manual-dialog {
-      width: min(980px, 100%);
-      max-height: min(860px, calc(100vh - 48px));
-      margin: auto;
-      display: grid;
-      grid-template-rows: auto minmax(0, 1fr);
-      background: var(--panel);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    .manual-header {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 14px;
-      padding: 20px 24px;
-      border-bottom: 1px solid var(--line);
-      background: #f8fbff;
-    }
-
-    .manual-header h2 {
-      margin: 0;
-      color: var(--navy);
-    }
-
-    .manual-header p {
-      margin: 4px 0 0;
-      color: var(--sub);
-    }
-
-    .manual-close {
-      width: 42px;
-      height: 42px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: #fff;
-      cursor: pointer;
-      font-size: 1.25rem;
-      font-weight: 900;
-    }
-
-    .manual-body {
-      padding: 22px 24px;
-      overflow-y: auto;
-    }
-
-    .manual-flow {
-      display: grid;
-      gap: 16px;
-    }
-
-    .manual-step {
-      display: grid;
-      grid-template-columns: minmax(220px, .7fr) minmax(0, 1fr);
-      gap: 16px;
-      padding: 16px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: #fffdfa;
-    }
-
-    .manual-step h3 {
-      margin: 0 0 8px;
-    }
-
-    .manual-step p,
-    .manual-step li {
-      color: var(--sub);
-    }
-
-    .manual-shot {
-      width: 100%;
-      display: block;
-      border: 1px solid #cdd6e4;
-      border-radius: var(--radius);
-      background: #f4f7fb;
-    }
-
-    .unit-section {
-      margin: 34px 0 32px;
-    }
-    .mission-card {
-      display: grid;
-      grid-template-columns: minmax(0, .92fr) minmax(340px, 1.08fr);
-      gap: 0;
-      overflow: hidden;
-      border: 1px solid #bed6c9;
-      border-radius: var(--radius);
-      background:
-        linear-gradient(135deg, rgba(255,255,255,.96), rgba(233,248,239,.92)),
-        repeating-linear-gradient(45deg, rgba(31,95,168,.06) 0 1px, transparent 1px 18px);
-      box-shadow: var(--shadow);
-      color: var(--ink);
-      text-decoration: none;
-    }
-    .mission-copy {
-      padding: 26px;
-      display: grid;
-      align-content: center;
-      gap: 14px;
-    }
-    .mission-kicker {
-      width: fit-content;
-      padding: 4px 10px;
+      backdrop-filter: blur(6px);
+    }
+    .site-head .wrap {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; padding-top: 10px; padding-bottom: 10px;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 15px; }
+    .brand svg { display: block; }
+    .global-nav { display: flex; gap: 6px; font-size: 13.5px; font-weight: 700; }
+    .global-nav a { text-decoration: none; color: var(--sub); padding: 5px 12px; border-radius: 999px; }
+    .global-nav a:hover { color: var(--ink); background: var(--c4-wash); }
+    @media (max-width: 900px) { .global-nav { display: none; } }
+
+    /* ===== hero ===== */
+    .hero { padding: 52px 0 44px; border-bottom: 1px solid var(--line); overflow: hidden; }
+    .hero-grid {
+      display: grid; grid-template-columns: 1.05fr .95fr; gap: 40px; align-items: center;
+    }
+    .hero-grid > * { min-width: 0; }
+    @media (max-width: 860px) { .hero-grid { grid-template-columns: 1fr; gap: 26px; } }
+    .kicker {
+      display: inline-block; font-size: 13px; font-weight: 700; letter-spacing: .08em;
+      color: var(--accent-deep); background: var(--accent-wash);
+      padding: 5px 16px; border-radius: 999px; margin-bottom: 18px;
+    }
+    .hero h1 {
+      margin: 0 0 8px; font-size: clamp(27px, 4.4vw, 40px);
+      line-height: 1.4; font-weight: 900;
+    }
+    .hero .backbone {
+      margin: 16px 0 6px; font-size: clamp(19px, 2.7vw, 25px);
+      font-weight: 700; line-height: 1.7;
+    }
+    .hero .backbone .u {
+      background: linear-gradient(transparent 62%, var(--c4-wash) 62%);
+      border-bottom: 3px solid var(--c4); padding-bottom: 1px;
+    }
+    .hero .lead { margin: 12px 0 26px; color: var(--sub); font-size: 16px; max-width: 34em; }
+    .cta {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--accent); color: #fff; text-decoration: none;
+      font-weight: 700; font-size: 17px; padding: 15px 32px;
+      border-radius: 999px; box-shadow: var(--shadow);
+    }
+    .cta:hover { background: var(--accent-deep); }
+    .cta .arrow { font-size: 14px; }
+    .hero-art img { display: block; width: 100%; height: auto; border-radius: 24px; mix-blend-mode: multiply; }
+
+    /* hero flow figure */
+    .flow-figure { margin: 44px 0 0; }
+    .flow-figure svg { width: 100%; height: auto; display: block; }
+    @media (max-width: 640px) { .flow-figure { display: none; } }
+
+    /* ===== section base ===== */
+    section { padding: 68px 0; }
+    section + section { border-top: 1px solid var(--line); }
+    .section-title {
+      margin: 0 0 12px; font-size: clamp(23px, 3.4vw, 31px);
+      line-height: 1.55; font-weight: 900;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .section-title::before {
+      content: ""; flex: none; width: 14px; height: 14px; border-radius: 50%;
+      background: var(--accent);
+    }
+    #scenes .section-title::before { background: var(--c1); }
+    #builder .section-title::before { background: var(--c2); }
+    #check .section-title::before { background: var(--c3); }
+    #howto .section-title::before { background: var(--c4); }
+    #units .section-title::before { background: var(--c2); }
+    #fieldtrip .section-title::before { background: var(--c1); }
+    #teachers .section-title::before { background: var(--sub); }
+    .section-lead { margin: 0 0 38px; color: var(--sub); max-width: 42em; }
+
+    /* ===== scenes ===== */
+    .scene-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    @media (max-width: 860px) { .scene-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 480px) { .scene-grid { grid-template-columns: 1fr; } }
+    .scene-card {
+      border: 0; border-radius: var(--radius); overflow: hidden;
+      padding: 0 0 20px; text-align: left; cursor: pointer;
+      background: var(--panel); box-shadow: var(--shadow);
+      transition: transform .25s ease;
+    }
+    .scene-card:hover { transform: translateY(-4px); }
+    .scene-card .scene-art { display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: cover; }
+    .scene-card .scene-body { padding: 14px 18px 0; }
+    .scene-num {
+      display: inline-block; font-size: 12.5px; font-weight: 900; letter-spacing: .06em;
+      color: #fff; border-radius: 999px; padding: 2px 12px; margin-bottom: 8px;
+    }
+    .scene-1 .scene-num { background: var(--c1); }
+    .scene-2 .scene-num { background: var(--c2); }
+    .scene-3 .scene-num { background: var(--c3); }
+    .scene-4 .scene-num { background: var(--c4); }
+    .scene-name { font-size: 21px; font-weight: 900; margin: 0 0 4px; }
+    .scene-desc { font-size: 14px; color: var(--sub); line-height: 1.8; margin: 0; }
+
+    /* ===== builder ===== */
+    .scene-tabs { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; }
+    .scene-tab {
+      display: inline-flex; align-items: center; gap: 8px;
+      border: 2px solid var(--line); background: var(--panel);
+      padding: 9px 20px; cursor: pointer; font-weight: 700; font-size: 15.5px;
       border-radius: 999px;
-      background: #dff3e8;
-      color: #17613e;
-      font-size: .8rem;
-      font-weight: 900;
-      letter-spacing: .04em;
     }
-    .mission-copy h2 {
-      margin: 0;
-      color: var(--navy);
-      font-size: 2.05rem;
-      line-height: 1.25;
+    .scene-tab .n {
+      width: 22px; height: 22px; border-radius: 50%; color: #fff;
+      font-size: 12.5px; font-weight: 900; display: inline-flex;
+      align-items: center; justify-content: center;
     }
-    .mission-copy p {
-      margin: 0;
-      color: #40506a;
-      font-size: .98rem;
+    .scene-tab[data-scene="tsukamu"] .n { background: var(--c1); }
+    .scene-tab[data-scene="shiraberu"] .n { background: var(--c2); }
+    .scene-tab[data-scene="matomeru"] .n { background: var(--c3); }
+    .scene-tab[data-scene="ikasu"] .n { background: var(--c4); }
+    .scene-tab[aria-selected="true"] { border-color: var(--ink); background: var(--ink); color: #fff; }
+
+    .template-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin-bottom: 32px; }
+    .template-chip {
+      text-align: left; border: 2px solid var(--line); background: var(--panel);
+      padding: 15px 18px; cursor: pointer; border-radius: 14px;
     }
-    .mission-points {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 8px;
+    .template-chip:hover { border-color: var(--accent); }
+    .template-chip[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-wash); }
+    .template-chip .step { font-size: 11.5px; font-weight: 900; letter-spacing: .05em; color: var(--accent-deep); display: block; margin-bottom: 5px; }
+    .template-chip .t { font-weight: 700; font-size: 15.5px; line-height: 1.6; display: block; }
+
+    .builder { display: grid; grid-template-columns: 1fr 1.1fr; gap: 24px; align-items: start; }
+    @media (max-width: 900px) { .builder { grid-template-columns: 1fr; } }
+    .builder-pane {
+      background: var(--panel); border-radius: var(--radius);
+      padding: 26px; box-shadow: var(--shadow);
     }
-    .mission-point {
-      min-height: 76px;
-      padding: 10px;
-      border: 1px solid rgba(12,43,90,.12);
-      border-radius: var(--radius);
-      background: rgba(255,255,255,.76);
+    .builder-pane h3 { margin: 0 0 4px; font-size: 20px; font-weight: 900; }
+    .builder-pane .desc { margin: 0 0 20px; font-size: 14px; color: var(--sub); }
+    .field { margin-bottom: 16px; }
+    .field label { display: block; font-weight: 700; font-size: 14px; margin-bottom: 6px; }
+    .field input, .field textarea {
+      width: 100%; border: 2px solid var(--line); background: var(--paper);
+      padding: 10px 14px; font-size: 15px; line-height: 1.7; border-radius: 12px;
     }
-    .mission-point strong {
-      display: block;
-      color: var(--navy);
-      font-size: .9rem;
-      margin-bottom: 3px;
+    .field textarea { min-height: 76px; resize: vertical; }
+    .field input:focus, .field textarea:focus { outline: none; border-color: var(--accent); }
+
+    .prompt-pane { position: sticky; top: 74px; }
+    .prompt-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+    .prompt-head h3 { margin: 0; font-size: 20px; font-weight: 900; }
+    .tool-switch { display: inline-flex; border: 2px solid var(--line); border-radius: 999px; overflow: hidden; }
+    .tool-switch button { border: 0; background: var(--panel); padding: 6px 16px; font-size: 13px; font-weight: 700; cursor: pointer; }
+    .tool-switch button[aria-selected="true"] { background: var(--ink); color: #fff; }
+    .prompt-box {
+      background: var(--accent-wash); border-radius: 14px;
+      padding: 18px; font-size: 14.5px; line-height: 1.85; white-space: pre-wrap;
+      max-height: 380px; overflow-y: auto; margin-bottom: 14px;
     }
-    .mission-point span {
-      color: var(--sub);
-      font-size: .8rem;
-      line-height: 1.45;
+    .prompt-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
+      border: 2px solid var(--accent); background: var(--accent); color: #fff;
+      padding: 10px 22px; font-weight: 700; font-size: 15px; cursor: pointer;
+      border-radius: 999px;
     }
-    .mission-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
+    .btn:hover { background: var(--accent-deep); border-color: var(--accent-deep); }
+    .btn.ghost { background: var(--panel); color: var(--accent-deep); }
+    .btn.ghost:hover { background: var(--accent-wash); }
+
+    .teacher-memo { margin-top: 18px; border-top: 2px dashed var(--line); padding-top: 14px; }
+    .teacher-memo summary { cursor: pointer; font-size: 13px; font-weight: 700; color: var(--sub); }
+    .teacher-memo ul { margin: 10px 0 0; padding-left: 18px; font-size: 13.5px; color: var(--sub); }
+    .teacher-memo li { margin-bottom: 4px; }
+
+    .toast {
+      position: fixed; left: 50%; bottom: 30px; transform: translateX(-50%) translateY(20px);
+      background: var(--ink); color: #fff; padding: 10px 26px; font-size: 14px; font-weight: 700;
+      border-radius: 999px;
+      opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s; z-index: 90;
     }
-    .mission-cta {
-      display: inline-flex;
-      align-items: center;
-      min-height: 42px;
-      padding: 9px 16px;
-      border-radius: var(--radius);
-      background: var(--navy);
-      color: #fff;
-      font-weight: 900;
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ===== check (primary sources) ===== */
+    .check-intro { display: grid; grid-template-columns: 1.3fr .7fr; gap: 32px; align-items: center; margin-bottom: 8px; }
+    .check-intro > * { min-width: 0; }
+    @media (max-width: 780px) { .check-intro { grid-template-columns: 1fr; } }
+    .check-intro img { display: block; width: 100%; height: auto; border-radius: 20px; mix-blend-mode: multiply; }
+    .habit-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 30px 0 44px; }
+    @media (max-width: 780px) { .habit-row { grid-template-columns: 1fr; } }
+    .habit { border-radius: var(--radius); background: var(--c3-wash); padding: 20px 22px; }
+    .habit .h-num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 30px; height: 30px; border-radius: 50%; background: var(--c3); color: #fff;
+      font-size: 14px; font-weight: 900;
     }
-    .mission-note {
-      color: var(--muted);
-      font-size: .84rem;
-      font-weight: 800;
+    .habit h3 { margin: 8px 0 4px; font-size: 18px; font-weight: 900; }
+    .habit p { margin: 0; font-size: 14px; color: var(--sub); line-height: 1.85; }
+
+    .source-groups { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px 36px; }
+    @media (max-width: 780px) { .source-groups { grid-template-columns: 1fr; } }
+    .source-group h3 {
+      margin: 0 0 12px; font-size: 16.5px; font-weight: 900;
+      display: flex; align-items: center; gap: 10px;
     }
-    .mission-art {
-      min-height: 330px;
-      background: url("assets/social-field-trip-exploration.png") center / cover no-repeat;
-      position: relative;
+    .source-group h3 .gicon {
+      flex: none; width: 38px; height: 38px; border-radius: 50%;
+      background: var(--accent-wash); display: inline-flex; align-items: center; justify-content: center;
     }
-    .mission-art::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(90deg, rgba(255,255,255,.2), transparent 38%);
+    .source-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+    .source-list a {
+      display: block; text-decoration: none; padding: 13px 18px;
+      background: var(--panel); border-radius: 14px; box-shadow: var(--shadow);
     }
+    .source-list a:hover { background: var(--accent-wash); }
+    .source-name { font-weight: 700; font-size: 15.5px; }
+    .source-name .ext { font-size: 11px; color: var(--accent); margin-left: 6px; }
+    .source-meta { font-size: 13px; color: var(--sub); display: block; margin-top: 2px; }
 
-    footer {
-      border-top: 1px solid var(--line);
-      padding: 26px 16px 36px;
-      color: var(--muted);
-      text-align: center;
-      font-size: .86rem;
+    /* ===== how to ===== */
+    .step-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 44px; }
+    @media (max-width: 780px) { .step-grid { grid-template-columns: 1fr; } }
+    .step-card {
+      border-radius: var(--radius); background: var(--panel); box-shadow: var(--shadow);
+      padding: 26px 24px; text-align: center;
     }
-
-    #toast {
-      position: fixed;
-      left: 50%;
-      bottom: 24px;
-      z-index: 2000;
-      transform: translate(-50%, 80px);
-      opacity: 0;
-      border-radius: var(--radius);
-      background: var(--ink);
-      color: #fff;
-      padding: 10px 14px;
-      box-shadow: var(--shadow);
-      font-weight: 900;
-      transition: transform .2s ease, opacity .2s ease;
+    .step-card .pict { margin: 4px auto 14px; width: 92px; }
+    .step-card h3 { margin: 0 0 6px; font-size: 18px; font-weight: 900; }
+    .step-card h3 .n {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 26px; height: 26px; border-radius: 50%; background: var(--c4); color: #fff;
+      font-size: 14px; margin-right: 8px;
     }
+    .step-card p { margin: 0; font-size: 14px; color: var(--sub); line-height: 1.85; }
 
-    #toast.is-visible {
-      transform: translate(-50%, 0);
-      opacity: 1;
+    .upload-note { border-radius: var(--radius); background: var(--c2-wash); padding: 28px; }
+    .upload-note h3 { margin: 0 0 14px; font-size: 19px; font-weight: 900; }
+    .upload-note ol { margin: 0; padding-left: 0; list-style: none; counter-reset: up; display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px 28px; }
+    @media (max-width: 780px) { .upload-note ol { grid-template-columns: 1fr; } }
+    .upload-note li { counter-increment: up; font-size: 14.5px; color: var(--sub); padding-left: 38px; position: relative; }
+    .upload-note li::before {
+      content: counter(up); position: absolute; left: 0; top: 2px;
+      width: 27px; height: 27px; border-radius: 50%; background: var(--c2); color: #fff;
+      font-size: 14px; font-weight: 900; display: flex; align-items: center; justify-content: center;
     }
+    .upload-note li strong { color: var(--ink); display: block; font-size: 15px; }
 
-    @media (max-width: 900px) {
-      .toolbar-inner,
-      .builder,
-      .feedback-section,
-      .manual-step,
-      .mission-card {
-        grid-template-columns: 1fr;
-      }
-
-      .category-row {
-        justify-content: flex-start;
-      }
-
-      .prompt-card {
-        grid-template-columns: 8px minmax(0, 1fr);
-      }
-
-      .example-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .upload-steps {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .mission-art {
-        min-height: 260px;
-        order: -1;
-      }
-
-      .teacher-note {
-        grid-column: 2;
-        border-left: 0;
-        border-top: 1px solid var(--line);
-      }
+    /* ===== units ===== */
+    .unit-grade { margin-bottom: 30px; }
+    .unit-grade h3 {
+      margin: 0 0 12px; font-size: 15px; font-weight: 900;
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--c2-wash); color: var(--accent-deep);
+      border-radius: 999px; padding: 4px 18px;
     }
+    .unit-row {
+      background: var(--panel); border-radius: var(--radius); box-shadow: var(--shadow);
+      padding: 20px 24px; margin-bottom: 12px;
+      display: grid; grid-template-columns: 250px 1fr; gap: 18px;
+    }
+    @media (max-width: 780px) { .unit-row { grid-template-columns: 1fr; gap: 8px; } }
+    .unit-name { font-weight: 900; font-size: 16.5px; line-height: 1.65; }
+    .unit-q { font-size: 13.5px; color: var(--sub); margin-top: 4px; }
+    .unit-uses { list-style: none; margin: 0; padding: 0; font-size: 14px; color: var(--sub); }
+    .unit-uses li { padding-left: 20px; position: relative; margin-bottom: 5px; }
+    .unit-uses li::before {
+      content: ""; position: absolute; left: 2px; top: 11px;
+      width: 8px; height: 8px; border-radius: 50%; background: var(--c4);
+    }
+    .unit-uses .u-scene { font-weight: 700; color: var(--ink); }
 
-    @media (max-width: 560px) {
-      .hero {
-        background:
-          linear-gradient(0deg, rgba(251, 250, 246, .98), rgba(251, 250, 246, .86) 58%, rgba(251, 250, 246, .48)),
-          url("assets/classroom-ai-social-studies.png") center / cover no-repeat;
-      }
+    /* ===== field trip / examples ===== */
+    .out-links { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 780px) { .out-links { grid-template-columns: 1fr; } }
+    .out-card {
+      border-radius: var(--radius); background: var(--panel); box-shadow: var(--shadow);
+      padding: 0 0 22px; text-decoration: none; overflow: hidden;
+      transition: transform .25s ease;
+    }
+    .out-card:hover { transform: translateY(-4px); }
+    .out-card .out-art { display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; margin-bottom: 16px; }
+    .out-card .out-pict { margin: 26px 0 10px 26px; }
+    .out-card h3 { margin: 0 26px 6px; font-size: 19px; font-weight: 900; }
+    .out-card p { margin: 0 26px 10px; font-size: 14px; color: var(--sub); line-height: 1.85; }
+    .out-card .go { font-size: 14px; font-weight: 700; color: var(--accent-deep); margin: 0 26px; }
 
-      .hero-inner,
-      .toolbar-inner,
-      .shell {
-        width: min(100% - 24px, 1160px);
-      }
+    /* ===== teachers ===== */
+    .teachers { background: var(--panel); }
+    .teachers-inner { max-width: 760px; }
+    .teachers p { color: var(--sub); font-size: 15px; }
+    .teachers table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 14px; margin: 18px 0 26px; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); }
+    .teachers th, .teachers td { border-bottom: 1px solid var(--line); padding: 10px 14px; text-align: left; vertical-align: top; }
+    .teachers tr:last-child th, .teachers tr:last-child td { border-bottom: 0; }
+    .teachers th { background: var(--paper); font-size: 13px; white-space: nowrap; }
+    .teachers .src { font-size: 12.5px; color: var(--sub); }
 
-      h1 {
-        font-size: 1.82rem;
-      }
+    /* ===== footer / sitemap ===== */
+    footer { padding: 52px 0 40px; border-top: 1px solid var(--line); }
+    .sitemap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-bottom: 40px; }
+    @media (max-width: 780px) { .sitemap { grid-template-columns: 1fr; gap: 20px; } }
+    .sitemap h3 { margin: 0 0 10px; font-size: 13px; font-weight: 900; color: var(--sub); }
+    .sitemap ul { list-style: none; margin: 0; padding: 0; font-size: 14.5px; }
+    .sitemap li { margin-bottom: 8px; padding-left: 16px; position: relative; }
+    .sitemap li::before {
+      content: ""; position: absolute; left: 0; top: 12px;
+      width: 7px; height: 7px; border-radius: 50%; background: var(--line);
+    }
+    .sitemap a { text-decoration: none; }
+    .sitemap a:hover { color: var(--accent-deep); text-decoration: underline; }
+    .foot-note { border-top: 1px solid var(--line); padding-top: 20px; display: flex; justify-content: space-between; gap: 14px; flex-wrap: wrap; font-size: 13px; color: var(--sub); }
 
-      .tool-switch {
-        min-width: 0;
-      }
-
-      .hero-actions .btn,
-      .preview-actions .btn,
-      .feedback-section .btn {
-        width: 100%;
-      }
-
-      .category-row {
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        padding-bottom: 2px;
-      }
-
-      .message-bar {
-        grid-template-columns: 1fr;
-      }
-
-      .upload-steps {
-        grid-template-columns: 1fr;
-      }
-
-      .mission-copy {
-        padding: 20px;
-      }
-
-      .mission-copy h2 {
-        font-size: 1.55rem;
-      }
-
-      .mission-points {
-        grid-template-columns: 1fr;
-      }
-
-      .mission-art {
-        min-height: 220px;
-      }
+    /* ===== motion ===== */
+    .fade { opacity: 0; transform: translateY(14px); transition: opacity .55s ease, transform .55s ease; }
+    .fade.in { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .fade { opacity: 1; transform: none; transition: none; }
+      .toast { transition: none; }
+      .scene-card, .out-card { transition: none; }
     }
   </style>
 </head>
 <body>
-  <header class="hero">
-    <div class="hero-inner">
-      <div class="eyebrow">社会科 | 小学校4年生以上向け</div>
-      <h1>子どものためのプロンプトライブラリ</h1>
-      <p class="hero-copy">学習問題をもとに、調べるヒント・自分の考え・まとめを助ける、社会科のAIプロンプト集</p>
-      <label class="hero-search" aria-label="キーワード検索">
-        <input id="searchInput" type="search" placeholder="キーワードでさがす">
-      </label>
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="#builder">使ってみる</a>
-        <button class="btn btn-line" type="button" data-open-manual>使い方を見る</button>
-        <a class="btn btn-line" href="examples.html">試した事例を見る</a>
-      </div>
+
+  <header class="site-head">
+    <div class="wrap">
+      <a href="#top" class="brand" style="text-decoration:none;">
+        <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="12.5" fill="#faf2de" stroke="#d9a83f" stroke-width="2"/><path d="M8 18 L14 9 L20 18" fill="none" stroke="#4a76b8" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="14" cy="9" r="2" fill="#e08b6d"/></svg>
+        子どものためのプロンプトライブラリ
+      </a>
+      <nav class="global-nav" aria-label="サイト内">
+        <a href="#scenes">いま、どこ?</a>
+        <a href="#builder">プロンプト</a>
+        <a href="#check">たしかめる</a>
+        <a href="#howto">つかいかた</a>
+        <a href="#units">たんげん</a>
+        <a href="#teachers">先生の方へ</a>
+      </nav>
     </div>
   </header>
 
-  <div class="toolbar" aria-label="AIと場面の切り替え">
-    <div class="toolbar-inner">
-      <div class="tool-switch" aria-label="使うAI">
-        <button type="button" class="is-active" data-tool="gemini">Gemini</button>
-        <button type="button" data-tool="notebook">NotebookLM</button>
+  <main id="top">
+
+    <!-- ================= HERO ================= -->
+    <div class="hero">
+      <div class="wrap hero-grid">
+        <div class="hero-text">
+          <span class="kicker">小学4年生から | 社会科</span>
+          <h1>子どものためのプロンプトライブラリ</h1>
+          <p class="backbone">AIは、考える<ruby>手助<rt>てだす</rt></ruby>け。<br>書くのは、<span class="u">自分のことば</span>で。</p>
+          <p class="lead">じゅぎょうの「いま」に合わせて、AIへの聞き方をえらべる社会科の道具箱です。こたえを写すためではなく、自分で考えるために使います。</p>
+          <a class="cta" href="#scenes">いまの場面からえらぶ <span class="arrow">▼</span></a>
+        </div>
+        <div class="hero-art">
+          <img src="assets/kidslib_01_hero.jpg" alt="地図帳をひらいて、ふたりで調べ学習をする子ども(水彩イラスト)" width="1200" height="800">
+        </div>
       </div>
-      <div class="category-row" id="categoryRow"></div>
+      <div class="wrap">
+        <figure class="flow-figure" aria-label="社会科の学習の流れ。1 つかむ、2 しらべる、3 まとめる、4 いかす">
+          <svg viewBox="0 0 1040 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+            <line x1="40" y1="150" x2="1000" y2="150" stroke="#ecdfc9" stroke-width="3" stroke-linecap="round"/>
+            <!-- step 1: つかむ (?) -->
+            <g>
+              <circle cx="160" cy="90" r="52" fill="#fbeee7" stroke="#e08b6d" stroke-width="3"/>
+              <text x="160" y="108" font-size="52" font-weight="700" text-anchor="middle" fill="#e08b6d" font-family="Zen Maru Gothic, Hiragino Sans, sans-serif">?</text>
+              <line x1="160" y1="142" x2="160" y2="158" stroke="#e08b6d" stroke-width="3" stroke-linecap="round"/>
+              <text x="160" y="190" font-size="22" font-weight="700" text-anchor="middle" fill="#4c4337" font-family="Zen Maru Gothic, Hiragino Sans, sans-serif">① つかむ</text>
+            </g>
+            <path d="M228 90 h56 m-13 -9 l13 9 l-13 9" fill="none" stroke="#c9b8a2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- step 2: しらべる (虫めがね) -->
+            <g>
+              <circle cx="400" cy="90" r="52" fill="#ebf3f9" stroke="#6f9fc8" stroke-width="3"/>
+              <circle cx="392" cy="80" r="19" fill="none" stroke="#6f9fc8" stroke-width="5"/>
+              <line x1="406" y1="94" x2="424" y2="112" stroke="#6f9fc8" stroke-width="6" stroke-linecap="round"/>
+              <line x1="400" y1="142" x2="400" y2="158" stroke="#6f9fc8" stroke-width="3" stroke-linecap="round"/>
+              <text x="400" y="190" font-size="22" font-weight="700" text-anchor="middle" fill="#4c4337" font-family="Zen Maru Gothic, Hiragino Sans, sans-serif">② しらべる</text>
+            </g>
+            <path d="M468 90 h56 m-13 -9 l13 9 l-13 9" fill="none" stroke="#c9b8a2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- step 3: まとめる (えんぴつ) -->
+            <g>
+              <circle cx="640" cy="90" r="52" fill="#eff6eb" stroke="#7fae72" stroke-width="3"/>
+              <g transform="rotate(45 640 90)">
+                <rect x="632" y="62" width="16" height="40" rx="3" fill="none" stroke="#7fae72" stroke-width="4"/>
+                <path d="M632 102 l8 14 l8 -14 z" fill="#7fae72"/>
+              </g>
+              <line x1="640" y1="142" x2="640" y2="158" stroke="#7fae72" stroke-width="3" stroke-linecap="round"/>
+              <text x="640" y="190" font-size="22" font-weight="700" text-anchor="middle" fill="#4c4337" font-family="Zen Maru Gothic, Hiragino Sans, sans-serif">③ まとめる</text>
+            </g>
+            <path d="M708 90 h56 m-13 -9 l13 9 l-13 9" fill="none" stroke="#c9b8a2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- step 4: いかす (ふたば) -->
+            <g>
+              <circle cx="880" cy="90" r="52" fill="#faf2de" stroke="#d9a83f" stroke-width="3"/>
+              <line x1="880" y1="114" x2="880" y2="84" stroke="#d9a83f" stroke-width="5" stroke-linecap="round"/>
+              <path d="M880 88 C 866 84, 858 72, 860 60 C 872 62, 880 72, 880 88 Z" fill="#d9a83f"/>
+              <path d="M880 92 C 894 88, 902 76, 900 64 C 888 66, 880 76, 880 92 Z" fill="none" stroke="#d9a83f" stroke-width="3.4"/>
+              <line x1="866" y1="114" x2="894" y2="114" stroke="#d9a83f" stroke-width="4" stroke-linecap="round"/>
+              <line x1="880" y1="142" x2="880" y2="158" stroke="#d9a83f" stroke-width="3" stroke-linecap="round"/>
+              <text x="880" y="190" font-size="22" font-weight="700" text-anchor="middle" fill="#4c4337" font-family="Zen Maru Gothic, Hiragino Sans, sans-serif">④ いかす</text>
+            </g>
+          </svg>
+        </figure>
+      </div>
     </div>
-  </div>
 
-  <main class="shell">
-    <section class="builder" id="builder" aria-label="プロンプト作成">
-      <div class="builder-card">
-        <span class="builder-label" id="builderCategory"></span>
-        <h2 id="builderTitle"></h2>
-        <p class="lead" id="builderLead"></p>
-        <div class="field-grid" id="fieldGrid"></div>
-        <div class="hint-row" id="hintRow"></div>
+    <!-- ================= SCENES ================= -->
+    <section id="scenes">
+      <div class="wrap">
+        <h2 class="section-title">いま、学習のどこ?</h2>
+        <p class="section-lead">社会科の学習は「つかむ → しらべる → まとめる → いかす」の順にすすみます。いまの場面をえらぶと、使えるプロンプトが出てきます。</p>
+        <div class="scene-grid" role="list">
+          <button class="scene-card scene-1 fade" data-goto="tsukamu" role="listitem">
+            <img class="scene-art" src="assets/kidslib_02_tsukamu.jpg" alt="ほおづえをついて、ふしぎに思ったことを考える子ども(水彩イラスト)" width="600" height="600">
+            <div class="scene-body">
+              <span class="scene-num">① つかむ</span>
+              <p class="scene-name">?を見つける</p>
+              <p class="scene-desc"><ruby>学習問題<rt>がくしゅうもんだい</rt></ruby>をつくって、しらべる見通しを立てる。</p>
+            </div>
+          </button>
+          <button class="scene-card scene-2 fade" data-goto="shiraberu" role="listitem">
+            <img class="scene-art" src="assets/kidslib_03_shiraberu.jpg" alt="虫めがねで地図帳をくわしく見る手もと(水彩イラスト)" width="600" height="600">
+            <div class="scene-body">
+              <span class="scene-num">② しらべる</span>
+              <p class="scene-name">じっくり見る</p>
+              <p class="scene-desc"><ruby>資料<rt>しりょう</rt></ruby>やインターネットから、たしかな<ruby>情報<rt>じょうほう</rt></ruby>を集める。</p>
+            </div>
+          </button>
+          <button class="scene-card scene-3 fade" data-goto="matomeru" role="listitem">
+            <img class="scene-art" src="assets/kidslib_04_matomeru.jpg" alt="ノートにえんぴつでまとめを書く子ども(水彩イラスト)" width="600" height="600">
+            <div class="scene-body">
+              <span class="scene-num">③ まとめる</span>
+              <p class="scene-name">ことばにする</p>
+              <p class="scene-desc">考えをつくり、<ruby>根拠<rt>こんきょ</rt></ruby>を入れて自分のことばで書く。</p>
+            </div>
+          </button>
+          <button class="scene-card scene-4 fade" data-goto="ikasu" role="listitem">
+            <img class="scene-art" src="assets/kidslib_05_ikasu.jpg" alt="ペットボトルをリサイクルの箱に入れる子ども(水彩イラスト)" width="600" height="600">
+            <div class="scene-body">
+              <span class="scene-num">④ いかす</span>
+              <p class="scene-name">くらしへ</p>
+              <p class="scene-desc">学んだことを、くらしや<ruby>地域<rt>ちいき</rt></ruby>にいかす方法を考える。</p>
+            </div>
+          </button>
+        </div>
       </div>
-      <div class="preview-card">
-        <div class="preview-top">
+    </section>
+
+    <!-- ================= BUILDER ================= -->
+    <section id="builder">
+      <div class="wrap">
+        <h2 class="section-title">プロンプトをつかう</h2>
+        <p class="section-lead">場面をえらんで、わくに書きこむと、AIに送る文が自動でできあがります。書きこまなくても、そのまま使えます。</p>
+
+        <div class="scene-tabs" role="tablist" aria-label="学習の場面">
+          <button class="scene-tab" role="tab" data-scene="tsukamu" aria-selected="true"><span class="n">1</span>つかむ</button>
+          <button class="scene-tab" role="tab" data-scene="shiraberu" aria-selected="false"><span class="n">2</span>しらべる</button>
+          <button class="scene-tab" role="tab" data-scene="matomeru" aria-selected="false"><span class="n">3</span>まとめる</button>
+          <button class="scene-tab" role="tab" data-scene="ikasu" aria-selected="false"><span class="n">4</span>いかす</button>
+        </div>
+
+        <div class="template-list" id="templateList"></div>
+
+        <div class="builder">
+          <div class="builder-pane">
+            <h3 id="tplTitle"></h3>
+            <p class="desc" id="tplDesc"></p>
+            <div id="fieldArea"></div>
+            <details class="teacher-memo">
+              <summary>先生向けメモ</summary>
+              <ul id="teacherMemo"></ul>
+            </details>
+          </div>
+          <div class="builder-pane prompt-pane">
+            <div class="prompt-head">
+              <h3>AIに<ruby>送<rt>おく</rt></ruby>る文</h3>
+              <div class="tool-switch" role="tablist" aria-label="使うAI">
+                <button role="tab" data-tool="gemini" aria-selected="true">Gemini</button>
+                <button role="tab" data-tool="notebook" aria-selected="false">NotebookLM</button>
+              </div>
+            </div>
+            <div class="prompt-box" id="promptBox"></div>
+            <div class="prompt-actions">
+              <button class="btn" id="copyBtn">コピーする</button>
+              <a class="btn ghost" id="openTool" href="https://gemini.google.com/" target="_blank" rel="noopener">Geminiで開く</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CHECK ================= -->
+    <section id="check">
+      <div class="wrap">
+        <div class="check-intro">
           <div>
-            <span class="builder-label">自動で変わるプロンプト</span>
-            <h2>AIに送る文</h2>
+            <h2 class="section-title">AIのこたえは、ほんものでたしかめる</h2>
+            <p class="section-lead" style="margin-bottom:0;">AIはまちがえることがあります。国や市など、<ruby>情報<rt>じょうほう</rt></ruby>を出しているところ(<ruby>一次情報<rt>いちじじょうほう</rt></ruby>)を自分の目で見るのが、社会科の力です。</p>
           </div>
-          <span class="tool-badge" id="toolBadge">Gemini用</span>
+          <img src="assets/kidslib_06_tashikameru.jpg" alt="教科書とタブレットを見くらべる手もと(水彩イラスト)" width="600" height="600" loading="lazy">
         </div>
-        <pre class="prompt-output" id="promptOutput"></pre>
-        <div class="preview-actions">
-          <button class="btn btn-line" type="button" id="copyPromptButton">コピーする</button>
-          <a class="btn btn-open" id="openAiLink" href="https://gemini.google.com/" target="_blank" rel="noopener">Geminiで開く</a>
-        </div>
-      </div>
-    </section>
 
-    <section aria-label="よく使うプロンプト">
-      <div class="library-head">
-        <div>
-          <span class="section-label">よく使うプロンプト</span>
-          <h2>授業のどこで使うかで選ぶ</h2>
-          <p>カードを選ぶと、上の入力欄とプロンプトが切り替わります。</p>
-        </div>
-      </div>
-      <div class="prompt-list" id="promptList"></div>
-    </section>
-
-    <section class="lesson-examples" aria-label="授業での活用例">
-      <div class="library-head">
-        <div>
-          <span class="section-label">授業での活用例</span>
-          <h2>年間指導計画に合わせた使いどころ</h2>
-          <p>学習問題をつくる、資料で調べる、自分の考えをまとめる場面に合わせています。</p>
-        </div>
-      </div>
-      <div class="example-grid" id="lessonExamples"></div>
-      <p class="source-note">参考: 小学校学習指導要領解説 社会編、教育出版 令和6年度版『小学社会』年間指導計画・評価計画（案）。</p>
-    </section>
-
-    <section class="upload-guide" aria-label="Geminiで資料を読む流れ">
-      <span class="section-label">ネット資料を読むとき</span>
-      <h2>難しいページは、資料として入れてから聞く</h2>
-      <p class="lead">自治体のPDFや統計ページは、URLだけでなく、スクショ・PDF・コピーした文章も一緒に入れると読み取りやすくなります。</p>
-      <div class="upload-steps">
-        <div class="upload-step">
-          <strong>1. 出どころを見る</strong>
-          <span>市役所・県・国・新聞社など、だれが出した情報かを確認します。</span>
-        </div>
-        <div class="upload-step">
-          <strong>2. 資料を入れる</strong>
-          <span>Geminiの「ファイルを追加」からPDFや画像を入れます。</span>
-        </div>
-        <div class="upload-step">
-          <strong>3. プロンプトを貼る</strong>
-          <span>このサイトで作った文を貼って、やさしく読み取ってもらいます。</span>
-        </div>
-        <div class="upload-step">
-          <strong>4. 教科書と比べる</strong>
-          <span>AIの答えをそのまま信じず、教科書・資料・先生の話と照らし合わせます。</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="unit-section" aria-label="社会科見学プロンプトセット">
-      <a class="mission-card" href="kengaku/index.html">
-        <div class="mission-copy">
-          <span class="mission-kicker">FIELD TRIP SET</span>
-          <h2>今日の見学ミッションを、問いに変える。</h2>
-          <p>飯塚市クリーンセンター・多々良浄水場・福岡市防災センターを、地図・流れ・働く人の視点から調べるためのプロンプトセットです。</p>
-          <div class="mission-points" aria-label="セットに含まれる内容">
-            <div class="mission-point">
-              <strong>見学前</strong>
-              <span>何を調べるか、どこを見るかを決める</span>
-            </div>
-            <div class="mission-point">
-              <strong>見学中</strong>
-              <span>地図・車・水・人の動きをメモする</span>
-            </div>
-            <div class="mission-point">
-              <strong>見学後</strong>
-              <span>メモをもとに自分の言葉でまとめる</span>
-            </div>
+        <div class="habit-row">
+          <div class="habit fade">
+            <span class="h-num">1</span>
+            <h3>出どころを見る</h3>
+            <p>だれが出した<ruby>情報<rt>じょうほう</rt></ruby>か。国・市・会社・こじん、どれかで信じられる度合いがかわります。</p>
           </div>
-          <div class="mission-actions">
-            <span class="mission-cta">社会科見学セットを開く</span>
-            <span class="mission-note">AI検索・一次資料リンク・電子黒板モードつき</span>
+          <div class="habit fade">
+            <span class="h-num">2</span>
+            <h3>日付を見る</h3>
+            <p>いつの<ruby>情報<rt>じょうほう</rt></ruby>か。古い数字は、いまとちがうことがあります。</p>
+          </div>
+          <div class="habit fade">
+            <span class="h-num">3</span>
+            <h3>くらべる</h3>
+            <p>教科書・<ruby>資料集<rt>しりょうしゅう</rt></ruby>・先生の話とくらべて、同じかどうかたしかめます。</p>
           </div>
         </div>
-        <div class="mission-art" aria-hidden="true"></div>
-      </a>
+
+        <div class="source-groups">
+          <div class="source-group fade">
+            <h3><span class="gicon"><svg width="20" height="20" viewBox="0 0 22 22" aria-hidden="true"><path d="M2 6 L8 3 L14 6 L20 3 V16 L14 19 L8 16 L2 19 Z" fill="none" stroke="#4a76b8" stroke-width="1.8" stroke-linejoin="round"/><line x1="8" y1="3" x2="8" y2="16" stroke="#4a76b8" stroke-width="1.4"/><line x1="14" y1="6" x2="14" y2="19" stroke="#4a76b8" stroke-width="1.4"/></svg></span>ちず・土地</h3>
+            <ul class="source-list">
+              <li><a href="https://maps.gsi.go.jp/" target="_blank" rel="noopener"><span class="source-name">地理院地図 <span class="ext">↗</span></span><span class="source-meta">国土地理院 | 国の正式な地図。土地の高さ・使われ方・昔の空中写真</span></a></li>
+              <li><a href="https://earth.google.com/" target="_blank" rel="noopener"><span class="source-name">Google Earth <span class="ext">↗</span></span><span class="source-meta">Google | 空から地形やまちのようすを見る</span></a></li>
+            </ul>
+          </div>
+          <div class="source-group fade">
+            <h3><span class="gicon"><svg width="20" height="20" viewBox="0 0 22 22" aria-hidden="true"><line x1="3" y1="19" x2="19" y2="19" stroke="#4a76b8" stroke-width="1.8" stroke-linecap="round"/><rect x="5" y="11" width="3.4" height="8" rx="1" fill="#4a76b8"/><rect x="10" y="6" width="3.4" height="13" rx="1" fill="none" stroke="#4a76b8" stroke-width="1.8"/><rect x="15" y="9" width="3.4" height="10" rx="1" fill="#4a76b8"/></svg></span>かず・グラフ</h3>
+            <ul class="source-list">
+              <li><a href="https://dashboard.e-stat.go.jp/kids/" target="_blank" rel="noopener"><span class="source-name">キッズすたっと <span class="ext">↗</span></span><span class="source-meta">総務省統計局など | 小中学生向けの国の統計。人口・産業・くらし</span></a></li>
+              <li><a href="https://www.stat.go.jp/naruhodo/" target="_blank" rel="noopener"><span class="source-name">なるほど統計学園 <span class="ext">↗</span></span><span class="source-meta">総務省統計局 | 統計の見方・グラフの読み方を学ぶ</span></a></li>
+            </ul>
+          </div>
+          <div class="source-group fade">
+            <h3><span class="gicon"><svg width="20" height="20" viewBox="0 0 22 22" aria-hidden="true"><path d="M6 15 a4.5 4.5 0 1 1 1.4 -8.8 a5.4 5.4 0 0 1 10.3 1.6 a3.6 3.6 0 0 1 -0.6 7.2 Z" fill="none" stroke="#4a76b8" stroke-width="1.8" stroke-linejoin="round"/><line x1="8" y1="18" x2="7" y2="20.5" stroke="#4a76b8" stroke-width="1.8" stroke-linecap="round"/><line x1="12" y1="18" x2="11" y2="20.5" stroke="#4a76b8" stroke-width="1.8" stroke-linecap="round"/><line x1="16" y1="18" x2="15" y2="20.5" stroke="#4a76b8" stroke-width="1.8" stroke-linecap="round"/></svg></span>天気・ぼうさい</h3>
+            <ul class="source-list">
+              <li><a href="https://www.jma.go.jp/jma/index.html" target="_blank" rel="noopener"><span class="source-name">気象庁 <span class="ext">↗</span></span><span class="source-meta">国 | 天気・地震・防災情報のおおもと</span></a></li>
+              <li><a href="https://www.city.iizuka.lg.jp/" target="_blank" rel="noopener"><span class="source-name">飯塚市ホームページ <span class="ext">↗</span></span><span class="source-meta">飯塚市役所 | ごみ・ぼうさい・くらしの市の情報</span></a></li>
+            </ul>
+          </div>
+          <div class="source-group fade">
+            <h3><span class="gicon"><svg width="20" height="20" viewBox="0 0 22 22" aria-hidden="true"><path d="M3 18 C5 12, 8 10, 11 10 C15 10, 18 7, 19 4 C19 12, 15 18, 8 18 Z" fill="none" stroke="#4a76b8" stroke-width="1.8" stroke-linejoin="round"/><path d="M3 18 C7 15, 12 13, 16 13" fill="none" stroke="#4a76b8" stroke-width="1.4"/></svg></span>しごと・くらし</h3>
+            <ul class="source-list">
+              <li><a href="https://www.maff.go.jp/j/kids/" target="_blank" rel="noopener"><span class="source-name">農林水産省 こどもページ <span class="ext">↗</span></span><span class="source-meta">国 | 食料・農業・漁業のこども向け資料</span></a></li>
+              <li><a href="https://www.nta.go.jp/taxes/kids/" target="_blank" rel="noopener"><span class="source-name">税の学習コーナー <span class="ext">↗</span></span><span class="source-meta">国税庁 | 税金のしくみを学ぶ(6年の政治の学習に)</span></a></li>
+            </ul>
+          </div>
+          <div class="source-group fade">
+            <h3><span class="gicon"><svg width="20" height="20" viewBox="0 0 22 22" aria-hidden="true"><rect x="4" y="9" width="14" height="9" rx="1" fill="none" stroke="#4a76b8" stroke-width="1.8"/><path d="M2 9 L11 3 L20 9" fill="none" stroke="#4a76b8" stroke-width="1.8" stroke-linejoin="round"/><rect x="9.3" y="12.5" width="3.4" height="5.5" fill="#4a76b8"/></svg></span>れきし・文化</h3>
+            <ul class="source-list">
+              <li><a href="https://colbase.nich.go.jp/" target="_blank" rel="noopener"><span class="source-name">ColBase <span class="ext">↗</span></span><span class="source-meta">国立の博物館 | 国宝や昔の道具の写真をさがせる</span></a></li>
+              <li><a href="https://www.digital.archives.go.jp/" target="_blank" rel="noopener"><span class="source-name">国立公文書館デジタルアーカイブ <span class="ext">↗</span></span><span class="source-meta">国 | 昔の本物の文書や絵図</span></a></li>
+            </ul>
+          </div>
+          <div class="source-group fade">
+            <h3><span class="gicon"><svg width="20" height="20" viewBox="0 0 22 22" aria-hidden="true"><rect x="3" y="5" width="16" height="11" rx="2" fill="none" stroke="#4a76b8" stroke-width="1.8"/><path d="M9.5 8.5 L13.5 10.5 L9.5 12.5 Z" fill="#4a76b8"/><line x1="8" y1="19" x2="14" y2="19" stroke="#4a76b8" stroke-width="1.8" stroke-linecap="round"/></svg></span>まなぶ・うごき</h3>
+            <ul class="source-list">
+              <li><a href="https://www.nhk.or.jp/school/" target="_blank" rel="noopener"><span class="source-name">NHK for School <span class="ext">↗</span></span><span class="source-meta">NHK | 社会科の動画教材。見学に行けない場所も見られる</span></a></li>
+              <li><a href="https://www.pref.fukuoka.lg.jp/" target="_blank" rel="noopener"><span class="source-name">福岡県ホームページ <span class="ext">↗</span></span><span class="source-meta">福岡県庁 | 県の産業・くらし・ぼうさいの情報</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <section class="message-bar" aria-label="使うときの約束">
-      <div class="message-icon">✓</div>
-      <div>
-        <strong>こたえをそのまま写さず、自分の言葉でまとめよう。</strong>
-        <span>AIは考える手助け。書くのは自分のことばで。</span>
+    <!-- ================= HOW TO ================= -->
+    <section id="howto">
+      <div class="wrap">
+        <h2 class="section-title">つかいかた</h2>
+        <p class="section-lead">やることは3つだけです。</p>
+
+        <div class="step-grid">
+          <div class="step-card fade">
+            <div class="pict"><svg viewBox="0 0 88 72" aria-hidden="true"><rect x="8" y="8" width="52" height="20" rx="7" fill="none" stroke="#ecdfc9" stroke-width="3"/><rect x="8" y="38" width="52" height="20" rx="7" fill="none" stroke="#4a76b8" stroke-width="3.4"/><path d="M66 44 l8 6 l14 -16" fill="none" stroke="#7fae72" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <h3><span class="n">1</span>えらぶ</h3>
+            <p>いまの場面に合うプロンプトをえらび、わくに書きこむ。</p>
+          </div>
+          <div class="step-card fade">
+            <div class="pict"><svg viewBox="0 0 88 72" aria-hidden="true"><rect x="14" y="6" width="44" height="58" rx="6" fill="none" stroke="#ecdfc9" stroke-width="3"/><rect x="28" y="1" width="16" height="10" rx="4" fill="#fdfbf6" stroke="#d9a83f" stroke-width="3"/><line x1="24" y1="24" x2="48" y2="24" stroke="#6f9fc8" stroke-width="3.6" stroke-linecap="round"/><line x1="24" y1="34" x2="48" y2="34" stroke="#6f9fc8" stroke-width="3.6" stroke-linecap="round"/><line x1="24" y1="44" x2="38" y2="44" stroke="#6f9fc8" stroke-width="3.6" stroke-linecap="round"/><path d="M62 50 h16 m-7 -6 l7 6 l-7 6" fill="none" stroke="#e08b6d" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <h3><span class="n">2</span>はりつける</h3>
+            <p>「コピーする」をおして、GeminiやNotebookLMにはりつける。</p>
+          </div>
+          <div class="step-card fade">
+            <div class="pict"><svg viewBox="0 0 88 72" aria-hidden="true"><rect x="10" y="8" width="48" height="56" rx="6" fill="none" stroke="#ecdfc9" stroke-width="3"/><line x1="18" y1="22" x2="50" y2="22" stroke="#ecdfc9" stroke-width="3.4"/><line x1="18" y1="32" x2="50" y2="32" stroke="#ecdfc9" stroke-width="3.4"/><line x1="18" y1="42" x2="36" y2="42" stroke="#7fae72" stroke-width="4" stroke-linecap="round"/><g transform="rotate(45 66 42)"><rect x="61" y="24" width="10" height="26" rx="3" fill="none" stroke="#e08b6d" stroke-width="3"/><path d="M61 50 l5 8 l5 -8 z" fill="#e08b6d"/></g></svg></div>
+            <h3><span class="n">3</span>自分のことばへ</h3>
+            <p>AIのこたえをそのまま写さず、たしかめて、自分のことばで書く。</p>
+          </div>
+        </div>
+
+        <div class="upload-note fade">
+          <h3>むずかしいページは、<ruby>資料<rt>しりょう</rt></ruby>ごとAIに入れる</h3>
+          <ol>
+            <li><strong>出どころを見る</strong>市役所・県・国・新聞社など、だれが出した情報かをたしかめる。</li>
+            <li><strong>資料を入れる</strong>Geminiの「ファイルを追加」から、PDFやスクリーンショットを入れる。</li>
+            <li><strong>プロンプトをはる</strong>このサイトで作った文をはりつけて、やさしく読み取ってもらう。</li>
+            <li><strong>教科書とくらべる</strong>AIのこたえをそのまま信じず、教科書・資料集・先生の話とくらべる。</li>
+          </ol>
+        </div>
       </div>
-      <a class="btn btn-line" href="https://docs.google.com/forms/d/e/1FAIpQLSfyw3Alsnns-Zy_L-aO4uw1-FHgvkFMe-s3refbxZAsZ2U-1Q/viewform" target="_blank" rel="noopener">フィードバック</a>
     </section>
+
+    <!-- ================= UNITS ================= -->
+    <section id="units">
+      <div class="wrap">
+        <h2 class="section-title">たんげんからさがす</h2>
+        <p class="section-lead">いま勉強している<ruby>単元<rt>たんげん</rt></ruby>から、使いどころをさがせます。</p>
+        <div id="unitArea"></div>
+      </div>
+    </section>
+
+    <!-- ================= FIELD TRIP / EXAMPLES ================= -->
+    <section id="fieldtrip">
+      <div class="wrap">
+        <h2 class="section-title">見学・じっさいの<ruby>事例<rt>じれい</rt></ruby></h2>
+        <div class="out-links">
+          <a class="out-card fade" href="kengaku/">
+            <img class="out-art" src="assets/kidslib_07_kengaku.jpg" alt="黄色いぼうしをかぶって、見学の窓から中を見る子どもたち(水彩イラスト)" width="900" height="600" loading="lazy">
+            <h3>社会科見学セット</h3>
+            <p>クリーンセンター・<ruby>浄水場<rt>じょうすいじょう</rt></ruby>・防災センターの見学を「問い」に変えるプロンプトと、地図・一次資料のリンク。</p>
+            <span class="go">見学セットを開く →</span>
+          </a>
+          <a class="out-card fade" href="examples.html">
+            <div class="out-pict"><svg width="56" height="56" viewBox="0 0 52 52" aria-hidden="true"><rect x="8" y="6" width="36" height="40" rx="6" fill="#ebf3f9" stroke="#6f9fc8" stroke-width="2.6"/><line x1="16" y1="18" x2="36" y2="18" stroke="#6f9fc8" stroke-width="2.6" stroke-linecap="round"/><line x1="16" y1="27" x2="36" y2="27" stroke="#6f9fc8" stroke-width="2.6" stroke-linecap="round"/><line x1="16" y1="36" x2="28" y2="36" stroke="#e08b6d" stroke-width="2.6" stroke-linecap="round"/></svg></div>
+            <h3>試した<ruby>事例<rt>じれい</rt></ruby></h3>
+            <p>じっさいの授業でプロンプトを使ったようすと、そこからわかった使い方のコツ。</p>
+            <span class="go">事例を見る →</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= TEACHERS ================= -->
+    <section id="teachers" class="teachers">
+      <div class="wrap teachers-inner">
+        <h2 class="section-title">先生の方へ</h2>
+        <p>このサイトは、社会科の問題解決的な学習の流れ(つかむ・調べる・まとめる・いかす)に沿って、児童が場面に合ったAIの使い方を選べるように作っています。プロンプトはどれも「答えを先に教えない」「そのまま写させない」設計です。</p>
+        <table>
+          <tr><th>場面</th><th>プロンプトのねらい</th></tr>
+          <tr><td>① つかむ</td><td>学習問題を追究する見通しをもつ(調べる順番・資料を決める)</td></tr>
+          <tr><td>② しらべる</td><td>資料から必要な情報を集める。情報の出どころ・日付・根拠を確かめる</td></tr>
+          <tr><td>③ まとめる</td><td>事実と考えを分け、根拠を入れて自分の言葉で表現する</td></tr>
+          <tr><td>④ いかす</td><td>学んだことを基に、社会への関わり方を選択・判断する</td></tr>
+        </table>
+        <p>「たしかめる」の一次情報リンクは、AIの答えを鵜呑みにしない態度を育てるために置いています。授業では、AIの答え → 一次情報 → 教科書の順で確かめる流れをおすすめします。</p>
+        <p class="src">参考: 小学校学習指導要領解説 社会編、教育出版 令和6年度版『小学社会』年間指導計画・評価計画(案)。挿絵は自作(生成AIを補助に使用し、人の目で検品したものです)。</p>
+        <p><a class="btn ghost" href="https://docs.google.com/forms/d/e/1FAIpQLSfyw3Alsnns-Zy_L-aO4uw1-FHgvkFMe-s3refbxZAsZ2U-1Q/viewform" target="_blank" rel="noopener">使ってみた感想を送る</a></p>
+      </div>
+    </section>
+
   </main>
 
+  <!-- ================= FOOTER / SITEMAP ================= -->
   <footer>
-    <p>子どものためのプロンプトライブラリ | 社会科</p>
-    <p>AIの答えは、教科書・資料・先生の話と照らし合わせて使いましょう。</p>
-  </footer>
-
-  <div class="manual-modal" id="manualModal" hidden aria-hidden="true">
-    <div class="manual-dialog" role="dialog" aria-modal="true" aria-labelledby="manualTitle">
-      <div class="manual-header">
+    <div class="wrap">
+      <div class="sitemap">
         <div>
-          <h2 id="manualTitle">使い方</h2>
-          <p>入力すると、AIに送る文が自動で変わります。</p>
+          <h3>このサイトの地図</h3>
+          <ul>
+            <li><a href="#scenes">いま、学習のどこ?(場面からえらぶ)</a></li>
+            <li><a href="#builder">プロンプトをつかう</a></li>
+            <li><a href="#check">ほんものでたしかめる(一次情報リンク)</a></li>
+            <li><a href="#howto">つかいかた</a></li>
+            <li><a href="#units">たんげんからさがす</a></li>
+          </ul>
         </div>
-        <button class="manual-close" type="button" data-close-manual aria-label="閉じる">×</button>
+        <div>
+          <h3>べつのページ</h3>
+          <ul>
+            <li><a href="kengaku/">社会科見学セット(4年)</a></li>
+            <li><a href="examples.html">試した事例</a></li>
+            <li><a href="#teachers">先生の方へ</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>やくそく</h3>
+          <ul>
+            <li>こたえを写さず、自分のことばで書く</li>
+            <li>出どころと日付をたしかめる</li>
+            <li>まよったら先生や友だちに聞く</li>
+          </ul>
+        </div>
       </div>
-      <div class="manual-body">
-        <div class="manual-flow">
-          <article class="manual-step">
-            <div>
-              <h3>1. GeminiかNotebookLMを選ぶ</h3>
-              <p>Geminiは考えを広げるとき、NotebookLMは入れた資料をもとに読むときに使います。</p>
-            </div>
-            <img class="manual-shot" src="assets/manual-step-choose.png" alt="AIとプロンプトカードを選ぶ画面">
-          </article>
-          <article class="manual-step">
-            <div>
-              <h3>2. 入力すると文が変わる</h3>
-              <p>テーマや気づきを入れると、右側のプロンプトがその場で変わります。</p>
-            </div>
-            <img class="manual-shot" src="assets/manual-step-copy.png" alt="プロンプトをコピーする画面">
-          </article>
-          <article class="manual-step">
-            <div>
-              <h3>3. 資料を入れてから聞く</h3>
-              <p>自治体のPDFやページのスクショは、Geminiの「ファイルを追加」から入れて、プロンプトを貼ります。</p>
-            </div>
-            <img class="manual-shot" src="assets/manual-step-upload.png" alt="資料を入れてからプロンプトを使う画面">
-          </article>
-        </div>
+      <div class="foot-note">
+        <span>© School Stock</span>
+        <span>AIは考える手助け。書くのは自分のことばで。</span>
       </div>
     </div>
-  </div>
+  </footer>
 
-  <div id="toast" role="status" aria-live="polite"></div>
+  <div class="toast" id="toast">コピーしました</div>
 
   <script>
-    const categories = [
-      { id: "research", label: "調べるヒント", color: "var(--green)" },
-      { id: "make", label: "考えをつくる", color: "var(--blue)" },
-      { id: "polish", label: "考えを深める", color: "var(--teal)" },
-      { id: "summarize", label: "まとめる", color: "var(--gold)" }
+    /* ---------- data ---------- */
+    const scenes = [
+      { id: "tsukamu",  label: "つかむ" },
+      { id: "shiraberu", label: "しらべる" },
+      { id: "matomeru", label: "まとめる" },
+      { id: "ikasu",    label: "いかす" }
     ];
+
+    function value(input, fallback) {
+      return input && input.trim() ? input.trim() : fallback;
+    }
 
     const templates = [
       {
         id: "research-plan",
-        category: "research",
+        scene: "tsukamu",
+        step: "つかむ",
         title: "学習問題から、調べることを決めよう",
         description: "学習問題と予想をもとに、次に見る資料や聞くことを整理します。",
-        tags: ["学習問題", "見通し", "資料選び"],
         fields: [
           { id: "unit", label: "単元や場面", placeholder: "例: 4年 水はどこから" },
           { id: "lessonQuestion", label: "学習問題", placeholder: "例: 水はどのように家まで送られてくるのだろう", type: "textarea" },
           { id: "known", label: "もう知っていること・予想", placeholder: "例: 浄水場できれいにしてから送られると思う", type: "textarea" }
         ],
         teacher: ["ねらい: 学習問題を追究する見通しをもつ", "使う場面: 単元導入・調べ活動の前", "支援: 調べる順番と資料を先に決める"],
-        mini: "学習問題を解くために、次に何を調べればよいかを整理してください。",
         gemini(values) {
           return `あなたは小学校4年生以上の社会科の学習を助ける先生です。
 
@@ -1207,17 +802,16 @@
       },
       {
         id: "source-reading-hints",
-        category: "research",
+        scene: "shiraberu",
+        step: "しらべる",
         title: "資料を読むヒントをもらおう",
         description: "写真・地図・グラフ・本文のどこを見ればよいか、視点をしぼります。",
-        tags: ["資料読み取り", "見るところ", "根拠"],
         fields: [
           { id: "unit", label: "単元や場面", placeholder: "例: 5年 米づくりのさかんな地域" },
           { id: "source", label: "見ている資料", placeholder: "例: 教科書の写真、地図、グラフ、表", type: "textarea" },
           { id: "stuck", label: "困っていること", placeholder: "例: グラフから何を読み取ればいいかわからない", type: "textarea" }
         ],
         teacher: ["ねらい: 資料から必要な情報を集める", "使う場面: 個別調べ・教科書写真の読み取り", "支援: 事実と考えを分けて読む"],
-        mini: "この資料のどこを見ればよいか、見るポイントを3つ教えてください。",
         gemini(values) {
           return `あなたは小学校4年生以上の社会科の資料読み取りを助ける先生です。
 
@@ -1254,17 +848,16 @@
       },
       {
         id: "web-source-check",
-        category: "research",
+        scene: "shiraberu",
+        step: "しらべる",
         title: "インターネットの情報をたしかめよう",
         description: "サイトの出どころ・日付・根拠を見て、学習に使える情報か確認します。",
-        tags: ["ネット資料", "出どころ", "正しさ"],
         fields: [
           { id: "unit", label: "単元や場面", placeholder: "例: 4年 防災、5年 食料生産" },
           { id: "pageInfo", label: "見ているページの情報", placeholder: "例: 市役所の防災ページ。URLやページ名、更新日がわかれば書く", type: "textarea" },
           { id: "question", label: "このページで知りたいこと", placeholder: "例: 地域の避難場所はどう決められているのか", type: "textarea" }
         ],
         teacher: ["ねらい: 情報の信頼性を確かめる", "使う場面: インターネット調べの前後", "支援: 出どころ・日付・根拠・目的を確認する"],
-        mini: "このページを学習に使ってよいか、出どころや根拠を確かめてください。",
         gemini(values) {
           return `あなたは小学校4年生以上の社会科で、インターネットの情報を確かめる手伝いをする先生です。
 
@@ -1303,17 +896,16 @@
       },
       {
         id: "web-page-easy-reading",
-        category: "research",
+        scene: "shiraberu",
+        step: "しらべる",
         title: "難しいページをやさしく読み取ろう",
         description: "自治体資料や統計ページの難しい言葉を、社会科の学習に使える形にします。",
-        tags: ["自治体資料", "難しい言葉", "要点"],
         fields: [
           { id: "unit", label: "単元や場面", placeholder: "例: 6年 わたしたちの暮らしを支える政治" },
           { id: "source", label: "入れた資料・ページ", placeholder: "例: 市の子育て支援のPDF、県の統計ページ、ハザードマップ", type: "textarea" },
           { id: "stuck", label: "読み取りにくいところ", placeholder: "例: 専門用語が多い。何が大事かわからない", type: "textarea" }
         ],
         teacher: ["ねらい: 公的資料を社会科の言葉で読み取る", "使う場面: 自治体資料・統計資料を使う調べ学習", "支援: 要約よりも根拠の読み取りを重視する"],
-        mini: "難しい資料を、小学生にもわかる言葉で読み取る手伝いをしてください。",
         gemini(values) {
           return `あなたは小学校4年生以上の社会科で、難しい資料を読み取る手伝いをする先生です。
 
@@ -1353,17 +945,16 @@
       },
       {
         id: "first-opinion",
-        category: "make",
+        scene: "matomeru",
+        step: "まとめる 1 考えをつくる",
         title: "自分の考えをまず1文でつくろう",
         description: "社会科が苦手でも、わかったことから考えを作れるようにします。",
-        tags: ["1文から", "苦手な子向け", "根拠を入れる"],
         fields: [
           { id: "unit", label: "単元や場面", placeholder: "例: 4年 ごみはどこへ" },
           { id: "lessonQuestion", label: "学習問題", placeholder: "例: ごみはどのように集められ、処理されるのだろう", type: "textarea" },
           { id: "facts", label: "調べてわかったこと", placeholder: "例: 分別するとリサイクルしやすくなる", type: "textarea" }
         ],
         teacher: ["ねらい: 事実をもとに自分の考えをもつ", "使う場面: 調べ活動の途中・まとめ前", "支援: 文型を使って短く書く"],
-        mini: "調べてわかったことを使って、自分の考えを1文で作る手伝いをしてください。",
         gemini(values) {
           return `あなたは小学校4年生以上の社会科で、自分の考えを作る手伝いをする先生です。
 
@@ -1399,17 +990,16 @@
       },
       {
         id: "improve-opinion",
-        category: "polish",
+        scene: "matomeru",
+        step: "まとめる 2 考えを深める",
         title: "書いた考えを、もっと社会科らしくしよう",
         description: "根拠・別の立場・くらしとのつながりを入れて考えを深めます。",
-        tags: ["ブラッシュアップ", "別の立場", "根拠"],
         fields: [
           { id: "currentIdea", label: "今の自分の考え", placeholder: "例: 水を大切にしたほうがいいと思います", type: "textarea" },
           { id: "evidence", label: "使いたい根拠", placeholder: "例: 水を送るために多くの施設や人が関わっている", type: "textarea" },
           { id: "nextQuestion", label: "もっと考えたいこと", placeholder: "例: 自分たちにできることは何か", type: "textarea" }
         ],
         teacher: ["ねらい: 思考・判断・表現を高める", "使う場面: まとめ前・意見文の推敲", "支援: 根拠、立場、社会との関わりを確認する"],
-        mini: "今の考えを、根拠や別の立場を入れてもっとよくしてください。",
         gemini(values) {
           return `あなたは小学校4年生以上の社会科で、考えを深める手伝いをする先生です。
 
@@ -1445,17 +1035,16 @@
       },
       {
         id: "discussion-theme",
-        category: "polish",
+        scene: "matomeru",
+        step: "まとめる 2 考えを深める",
         title: "話し合いのテーマをつくろう",
         description: "意見が分かれるところを見つけ、話し合う視点を作ります。",
-        tags: ["話し合い", "視点", "選択・判断"],
         fields: [
           { id: "lessonQuestion", label: "学習問題", placeholder: "例: 地域の安全を守るために何が大切なのだろう", type: "textarea" },
           { id: "positions", label: "出ている考え", placeholder: "例: 備えが大切、役所の取り組みが大切、地域の協力が大切", type: "textarea" },
           { id: "evidence", label: "使えそうな資料や根拠", placeholder: "例: ハザードマップ、避難訓練の資料、地域の人の話", type: "textarea" }
         ],
         teacher: ["ねらい: 説明・議論につながる問いをつくる", "使う場面: ペア・グループ交流前", "支援: 正解探しではなく根拠比べにする"],
-        mini: "この学習問題で、友だちと話し合うテーマを作ってください。",
         gemini(values) {
           return `あなたは小学校4年生以上の社会科で、話し合いを助ける先生です。
 
@@ -1491,17 +1080,16 @@
       },
       {
         id: "social-summary",
-        category: "summarize",
+        scene: "matomeru",
+        step: "まとめる 3 まとめを書く",
         title: "学習問題に答えるまとめをつくろう",
         description: "わかったこと、根拠、自分の考えを分けてまとめます。",
-        tags: ["まとめ", "根拠", "自分の言葉"],
         fields: [
           { id: "lessonQuestion", label: "学習問題", placeholder: "例: 食料生産を発展させるために何が大切なのだろう", type: "textarea" },
           { id: "facts", label: "調べてわかったこと", placeholder: "例: 生産者は品質や安全、働き方の工夫をしている", type: "textarea" },
           { id: "idea", label: "自分の考え", placeholder: "例: 消費者も選び方を考えることが大切だと思う", type: "textarea" }
         ],
         teacher: ["ねらい: 学習問題に対する自分の考えを表現する", "使う場面: 単元末・ノートまとめ", "支援: 事実、根拠、考えを分ける"],
-        mini: "学習問題に答えるまとめを、根拠と自分の考えに分けて作ってください。",
         gemini(values) {
           return `あなたは小学校4年生以上の社会科のまとめを助ける先生です。
 
@@ -1535,165 +1123,225 @@
 3. 自分の考えとして分けて書くとよいこと
 4. 資料だけでは言えないこと`;
         }
+      },
+      {
+        id: "take-action",
+        scene: "ikasu",
+        step: "いかす",
+        title: "学んだことを、くらしにいかそう",
+        description: "自分にできること・地域にできることを考え、えらびます。",
+        fields: [
+          { id: "unit", label: "単元や場面", placeholder: "例: 4年 ごみのしょりと利用" },
+          { id: "learned", label: "学習してわかったこと", placeholder: "例: ごみを減らすために市やせいそう工場が工夫している", type: "textarea" },
+          { id: "target", label: "だれのために・どんな場面で", placeholder: "例: 家の人と、買い物やごみ出しのとき", type: "textarea" }
+        ],
+        teacher: ["ねらい: 学んだことを基に社会への関わり方を選択・判断する", "使う場面: 単元末・発展の時間", "支援: できることを「自分」「家族」「地域」に分ける"],
+        gemini(values) {
+          return `あなたは小学校4年生以上の社会科で、学んだことをくらしにいかす手伝いをする先生です。
+
+単元や場面: ${value(values.unit, "社会科の単元")}
+学習してわかったこと: ${value(values.learned, "まだうまく書けません")}
+だれのために・どんな場面で: ${value(values.target, "まだ決まっていません")}
+
+学んだことをもとに、自分にできることを考える手伝いをしてください。
+やることを決めつけず、次の形で短く出してください。
+
+1. 自分ひとりでできそうなことを2つ
+2. 家族や友だちといっしょにできそうなことを2つ
+3. それをすると、だれがどのように助かるか
+4. ほんとうにできるか、たしかめるとよいこと
+
+最後に「わたしは〜します。なぜなら〜だからです。」の文の型を出してください。`;
+        },
+        notebook(values) {
+          return `NotebookLMに入れた資料だけをもとに答えてください。
+
+単元や場面: ${value(values.unit, "社会科の単元")}
+学習してわかったこと: ${value(values.learned, "まだうまく書けません")}
+だれのために・どんな場面で: ${value(values.target, "まだ決まっていません")}
+
+資料の中から、くらしにいかせる取り組みを探してください。
+次の形で答えてください。
+
+1. 資料にのっている取り組み
+2. 自分の生活とつながるところ
+3. まねできそうなこと
+4. 資料だけではわからないこと`;
+        }
       }
     ];
 
     const lessonExamples = [
-      {
-        grade: "4年",
-        unit: "健康なくらしとまちづくり",
-        question: "例: ごみはどのように集められ、処理されるのか",
-        uses: ["調べるヒント: 収集、処理、再利用の順に資料を見る", "考えをつくる: 分別や減量がなぜ必要かを根拠で考える", "まとめる: 自分たちにできることを一文で入れる"]
-      },
-      {
-        grade: "4年",
-        unit: "水はどこから",
-        question: "例: 水はどのように安全に家まで届くのか",
-        uses: ["調べるヒント: 水源、浄水場、水道管、使う人に分ける", "考えをつくる: 施設と人々の協力に着目する", "まとめる: 水を大切に使う理由まで書く"]
-      },
-      {
-        grade: "5年",
-        unit: "日本の国土とくらし",
-        question: "例: 自然条件と人々のくらしにはどんな関係があるのか",
-        uses: ["調べるヒント: 気候、地形、産業、くらしを比べる", "考えをつくる: 地域の特色と人々の工夫をつなげる", "まとめる: 似ている点と違う点を分けて書く"]
-      },
-      {
-        grade: "5年",
-        unit: "未来を支える食料生産",
-        question: "例: 食料生産を発展させるために何が大切なのか",
-        uses: ["調べるヒント: 生産者、消費者、自然条件、課題に分ける", "考えを深める: 安全・安定・環境の視点で話し合う", "まとめる: これからの食料生産への自分の考えを書く"]
-      },
-      {
-        grade: "6年",
-        unit: "ともに生きる暮らしと政治",
-        question: "例: 人々の願いをかなえるために政治はどう働くのか",
-        uses: ["調べるヒント: 願い、制度、予算、実施までの流れを見る", "考えを深める: だれの立場から見るかを変える", "まとめる: よりよい社会への関わり方を入れる"]
-      },
-      {
-        grade: "6年",
-        unit: "自治体の資料を読む",
-        question: "例: 市の取り組みは、どのような願いや課題から始まったのか",
-        uses: ["調べるヒント: 市役所や県のページは、出どころ・日付・目的を先に見る", "考えを深める: 住民、行政、子どもなど立場を分ける", "まとめる: 資料の言葉を自分の言葉に直して根拠を書く"]
-      },
-      {
-        grade: "6年",
-        unit: "日本の歴史",
-        question: "例: 時代の変化は人々のくらしをどう変えたのか",
-        uses: ["調べるヒント: 人物、できごと、制度、くらしの変化に分ける", "考えをつくる: 変化の理由と影響をつなげる", "まとめる: 歴史を学ぶ意味を自分の言葉で書く"]
-      }
+      { grade: "4年", unit: "健康なくらしとまちづくり", question: "例: ごみはどのように集められ、処理されるのか",
+        uses: [["しらべる", "収集、処理、再利用の順に資料を見る"], ["まとめる", "分別や減量がなぜ必要かを根拠で考える"], ["いかす", "自分たちにできることを一文で入れる"]] },
+      { grade: "4年", unit: "水はどこから", question: "例: 水はどのように安全に家まで届くのか",
+        uses: [["しらべる", "水源、浄水場、水道管、使う人に分ける"], ["まとめる", "施設と人々の協力に着目し、水を大切に使う理由まで書く"]] },
+      { grade: "5年", unit: "日本の国土とくらし", question: "例: 自然条件と人々のくらしにはどんな関係があるのか",
+        uses: [["しらべる", "気候、地形、産業、くらしを比べる"], ["まとめる", "地域の特色と人々の工夫をつなげ、似ている点と違う点を分けて書く"]] },
+      { grade: "5年", unit: "未来を支える食料生産", question: "例: 食料生産を発展させるために何が大切なのか",
+        uses: [["しらべる", "生産者、消費者、自然条件、課題に分ける"], ["まとめる", "安全・安定・環境の視点で話し合い、自分の考えを書く"]] },
+      { grade: "6年", unit: "ともに生きる暮らしと政治", question: "例: 人々の願いをかなえるために政治はどう働くのか",
+        uses: [["しらべる", "願い、制度、予算、実施までの流れを見る"], ["まとめる", "だれの立場から見るかを変える"], ["いかす", "よりよい社会への関わり方を入れる"]] },
+      { grade: "6年", unit: "自治体の資料を読む", question: "例: 市の取り組みは、どのような願いや課題から始まったのか",
+        uses: [["しらべる", "市役所や県のページは、出どころ・日付・目的を先に見る"], ["まとめる", "住民、行政、子どもなど立場を分け、資料の言葉を自分の言葉に直して書く"]] },
+      { grade: "6年", unit: "日本の歴史", question: "例: 時代の変化は人々のくらしをどう変えたのか",
+        uses: [["しらべる", "人物、できごと、制度、くらしの変化に分ける"], ["まとめる", "変化の理由と影響をつなげ、歴史を学ぶ意味を自分の言葉で書く"]] }
     ];
 
+    /* ---------- state ---------- */
+    let currentScene = "tsukamu";
     let currentTool = "gemini";
-    let currentCategory = "research";
     let selectedTemplateId = "research-plan";
-    const values = {};
+    const inputValues = {};
 
-    function value(input, fallback) {
-      return input && input.trim() ? input.trim() : fallback;
-    }
-
+    /* ---------- render ---------- */
     function selectedTemplate() {
-      return templates.find((item) => item.id === selectedTemplateId) || templates[0];
+      return templates.find(t => t.id === selectedTemplateId);
     }
 
-    function activeCategory() {
-      return categories.find((item) => item.id === currentCategory) || categories[0];
-    }
-
-    function renderCategories() {
-      const row = document.getElementById("categoryRow");
-      row.innerHTML = categories.map((category) => `
-        <button type="button" class="${category.id === currentCategory ? "is-active" : ""}" data-category="${category.id}" style="--active-color:${category.color}">
-          ${category.label}
-        </button>
-      `).join("");
-      document.documentElement.style.setProperty("--active-color", activeCategory().color);
-    }
-
-    function renderBuilder() {
-      const template = selectedTemplate();
-      const category = categories.find((item) => item.id === template.category);
-      document.documentElement.style.setProperty("--active-color", category.color);
-      document.getElementById("builderCategory").textContent = category.label;
-      document.getElementById("builderTitle").textContent = template.title;
-      document.getElementById("builderLead").textContent = template.description;
-      document.getElementById("toolBadge").textContent = currentTool === "gemini" ? "Gemini用" : "NotebookLM用";
-      document.getElementById("openAiLink").href = currentTool === "gemini" ? "https://gemini.google.com/" : "https://notebooklm.google.com/";
-      document.getElementById("openAiLink").textContent = currentTool === "gemini" ? "Geminiで開く" : "NotebookLMで開く";
-
-      document.getElementById("fieldGrid").innerHTML = template.fields.map((field) => `
-        <label>
-          <span>${field.label}</span>
-          ${field.type === "textarea"
-            ? `<textarea data-field="${field.id}" placeholder="${field.placeholder}">${values[field.id] || ""}</textarea>`
-            : `<input data-field="${field.id}" type="text" value="${values[field.id] || ""}" placeholder="${field.placeholder}">`}
-        </label>
-      `).join("");
-
-      document.getElementById("hintRow").innerHTML = template.tags.map((tag) => `<span class="hint-chip">${tag}</span>`).join("");
-      updatePrompt();
-    }
-
-    function updatePrompt() {
-      const template = selectedTemplate();
-      const prompt = currentTool === "gemini" ? template.gemini(values) : template.notebook(values);
-      document.getElementById("promptOutput").textContent = prompt;
-    }
-
-    function renderCards() {
-      const search = document.getElementById("searchInput").value.trim().toLowerCase();
-      const list = document.getElementById("promptList");
-      const visible = templates.filter((template) => {
-        const category = categories.find((item) => item.id === template.category);
-        const inCategory = template.category === currentCategory;
-        const text = `${template.title} ${template.description} ${category.label} ${template.tags.join(" ")}`.toLowerCase();
-        return inCategory && (!search || text.includes(search));
+    function renderTemplateList() {
+      const list = document.getElementById("templateList");
+      list.innerHTML = "";
+      templates.filter(t => t.scene === currentScene).forEach(t => {
+        const b = document.createElement("button");
+        b.className = "template-chip";
+        b.setAttribute("aria-pressed", String(t.id === selectedTemplateId));
+        b.innerHTML = `<span class="step">${t.step}</span><span class="t">${t.title}</span>`;
+        b.addEventListener("click", () => { selectTemplate(t.id); });
+        list.appendChild(b);
       });
-
-      list.innerHTML = visible.map((template) => {
-        const category = categories.find((item) => item.id === template.category);
-        return `
-          <article class="prompt-card" style="--card-color:${category.color}">
-            <div class="strip" aria-hidden="true"></div>
-            <div class="prompt-main">
-              <span class="category">${category.label}</span>
-              <h3>${template.title}</h3>
-              <p>${template.description}</p>
-              <div class="hint-row">${template.tags.map((tag) => `<span class="hint-chip">${tag}</span>`).join("")}</div>
-              <div class="mini-prompt">${template.mini}</div>
-              <div class="card-actions">
-                <button class="btn btn-primary" type="button" data-select-template="${template.id}">使ってみる</button>
-                <button class="btn btn-line" type="button" data-copy-card="${template.id}">コピーする</button>
-              </div>
-            </div>
-            <aside class="teacher-note">
-              <h4>先生向けメモ</h4>
-              <ul>${template.teacher.map((item) => `<li>${item}</li>`).join("")}</ul>
-            </aside>
-          </article>
-        `;
-      }).join("") || `<div class="prompt-card"><div class="strip"></div><div class="prompt-main"><h3>見つかりませんでした</h3><p>別の言葉で検索してください。</p></div></div>`;
     }
 
-    function renderLessonExamples() {
-      const area = document.getElementById("lessonExamples");
-      area.innerHTML = lessonExamples.map((example) => `
-        <article class="example-card">
-          <div class="example-meta">
-            <span class="grade-badge">${example.grade}</span>
-            <span>${example.unit}</span>
-          </div>
-          <h3>授業での使いどころ</h3>
-          <p class="example-question">${example.question}</p>
-          <ul>${example.uses.map((item) => `<li>${item}</li>`).join("")}</ul>
-        </article>
-      `).join("");
+    function renderFields() {
+      const t = selectedTemplate();
+      document.getElementById("tplTitle").textContent = t.title;
+      document.getElementById("tplDesc").textContent = t.description;
+      const area = document.getElementById("fieldArea");
+      area.innerHTML = "";
+      t.fields.forEach(f => {
+        const div = document.createElement("div");
+        div.className = "field";
+        const label = document.createElement("label");
+        label.textContent = f.label;
+        label.setAttribute("for", "f-" + f.id);
+        const input = f.type === "textarea" ? document.createElement("textarea") : document.createElement("input");
+        input.id = "f-" + f.id;
+        input.placeholder = f.placeholder || "";
+        input.value = inputValues[t.id + ":" + f.id] || "";
+        input.addEventListener("input", () => {
+          inputValues[t.id + ":" + f.id] = input.value;
+          renderPrompt();
+        });
+        div.appendChild(label);
+        div.appendChild(input);
+        area.appendChild(div);
+      });
+      const memo = document.getElementById("teacherMemo");
+      memo.innerHTML = "";
+      t.teacher.forEach(line => {
+        const li = document.createElement("li");
+        li.textContent = line;
+        memo.appendChild(li);
+      });
     }
 
-    async function copyText(text) {
+    function collectValues() {
+      const t = selectedTemplate();
+      const v = {};
+      t.fields.forEach(f => { v[f.id] = inputValues[t.id + ":" + f.id] || ""; });
+      return v;
+    }
+
+    function renderPrompt() {
+      const t = selectedTemplate();
+      const text = currentTool === "gemini" ? t.gemini(collectValues()) : t.notebook(collectValues());
+      document.getElementById("promptBox").textContent = text;
+      const open = document.getElementById("openTool");
+      if (currentTool === "gemini") {
+        open.textContent = "Geminiで開く";
+        open.href = "https://gemini.google.com/";
+      } else {
+        open.textContent = "NotebookLMで開く";
+        open.href = "https://notebooklm.google.com/";
+      }
+    }
+
+    function selectTemplate(id) {
+      selectedTemplateId = id;
+      renderTemplateList();
+      renderFields();
+      renderPrompt();
+    }
+
+    function selectScene(sceneId) {
+      currentScene = sceneId;
+      document.querySelectorAll(".scene-tab").forEach(tab => {
+        tab.setAttribute("aria-selected", String(tab.dataset.scene === sceneId));
+      });
+      const first = templates.find(t => t.scene === sceneId);
+      if (first) selectedTemplateId = first.id;
+      renderTemplateList();
+      renderFields();
+      renderPrompt();
+    }
+
+    /* ---------- units ---------- */
+    function renderUnits() {
+      const area = document.getElementById("unitArea");
+      const grades = ["4年", "5年", "6年"];
+      grades.forEach(g => {
+        const box = document.createElement("div");
+        box.className = "unit-grade fade";
+        const h = document.createElement("h3");
+        h.textContent = g;
+        box.appendChild(h);
+        lessonExamples.filter(e => e.grade === g).forEach(e => {
+          const row = document.createElement("div");
+          row.className = "unit-row";
+          const left = document.createElement("div");
+          left.innerHTML = `<div class="unit-name">${e.unit}</div><div class="unit-q">${e.question}</div>`;
+          const ul = document.createElement("ul");
+          ul.className = "unit-uses";
+          e.uses.forEach(([scene, text]) => {
+            const li = document.createElement("li");
+            li.innerHTML = `<span class="u-scene">${scene}:</span> ${text}`;
+            ul.appendChild(li);
+          });
+          row.appendChild(left);
+          row.appendChild(ul);
+          box.appendChild(row);
+        });
+        area.appendChild(box);
+      });
+    }
+
+    /* ---------- interactions ---------- */
+    document.querySelectorAll(".scene-tab").forEach(tab => {
+      tab.addEventListener("click", () => selectScene(tab.dataset.scene));
+    });
+
+    document.querySelectorAll(".scene-card").forEach(card => {
+      card.addEventListener("click", () => {
+        selectScene(card.dataset.goto);
+        document.getElementById("builder").scrollIntoView({ behavior: "smooth" });
+      });
+    });
+
+    document.querySelectorAll(".tool-switch button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        currentTool = btn.dataset.tool;
+        document.querySelectorAll(".tool-switch button").forEach(b => {
+          b.setAttribute("aria-selected", String(b === btn));
+        });
+        renderPrompt();
+      });
+    });
+
+    document.getElementById("copyBtn").addEventListener("click", async () => {
+      const text = document.getElementById("promptBox").textContent;
       try {
         await navigator.clipboard.writeText(text);
-      } catch (error) {
+      } catch (e) {
         const area = document.createElement("textarea");
         area.value = text;
         document.body.appendChild(area);
@@ -1701,113 +1349,27 @@
         document.execCommand("copy");
         area.remove();
       }
-      showToast("コピーしました。AIに貼り付けてください。");
-    }
-
-    function showToast(message) {
       const toast = document.getElementById("toast");
-      toast.textContent = message;
-      toast.classList.add("is-visible");
-      window.clearTimeout(showToast.timer);
-      showToast.timer = window.setTimeout(() => toast.classList.remove("is-visible"), 2600);
-    }
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 1600);
+    });
 
-    function openManual() {
-      const modal = document.getElementById("manualModal");
-      modal.hidden = false;
-      modal.setAttribute("aria-hidden", "false");
-      document.body.classList.add("is-modal-open");
-      modal.querySelector("[data-close-manual]").focus();
-    }
+    /* ---------- init (fade-in設定より先に。動的生成した.fadeをobserve対象に含めるため) ---------- */
+    renderUnits();
+    selectScene("tsukamu");
 
-    function closeManual() {
-      const modal = document.getElementById("manualModal");
-      modal.hidden = true;
-      modal.setAttribute("aria-hidden", "true");
-      document.body.classList.remove("is-modal-open");
-    }
-
-    document.addEventListener("click", (event) => {
-      const toolButton = event.target.closest("[data-tool]");
-      if (toolButton) {
-        currentTool = toolButton.dataset.tool;
-        document.querySelectorAll("[data-tool]").forEach((button) => {
-          button.classList.toggle("is-active", button.dataset.tool === currentTool);
+    /* ---------- fade-in ---------- */
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!reduceMotion && "IntersectionObserver" in window) {
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(en => {
+          if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); }
         });
-        renderBuilder();
-        return;
-      }
-
-      const categoryButton = event.target.closest("[data-category]");
-      if (categoryButton) {
-        currentCategory = categoryButton.dataset.category;
-        const firstInCategory = templates.find((template) => template.category === currentCategory);
-        if (firstInCategory) selectedTemplateId = firstInCategory.id;
-        renderCategories();
-        renderBuilder();
-        renderCards();
-        return;
-      }
-
-      const selectButton = event.target.closest("[data-select-template]");
-      if (selectButton) {
-        selectedTemplateId = selectButton.dataset.selectTemplate;
-        currentCategory = selectedTemplate().category;
-        renderCategories();
-        renderBuilder();
-        document.getElementById("builder").scrollIntoView({ behavior: "smooth", block: "start" });
-        return;
-      }
-
-      const cardCopyButton = event.target.closest("[data-copy-card]");
-      if (cardCopyButton) {
-        const template = templates.find((item) => item.id === cardCopyButton.dataset.copyCard);
-        const text = currentTool === "gemini" ? template.gemini(values) : template.notebook(values);
-        copyText(text);
-        return;
-      }
-
-      if (event.target.closest("#copyPromptButton")) {
-        copyText(document.getElementById("promptOutput").textContent);
-        return;
-      }
-
-      if (event.target.closest("[data-open-manual]")) {
-        openManual();
-        return;
-      }
-
-      if (event.target.closest("[data-close-manual]")) {
-        closeManual();
-        return;
-      }
-
-      const modal = document.getElementById("manualModal");
-      if (!modal.hidden && event.target === modal) {
-        closeManual();
-      }
-    });
-
-    document.addEventListener("input", (event) => {
-      if (event.target.matches("[data-field]")) {
-        values[event.target.dataset.field] = event.target.value;
-        updatePrompt();
-      }
-      if (event.target.matches("#searchInput")) {
-        renderCards();
-      }
-    });
-
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape" && !document.getElementById("manualModal").hidden) {
-        closeManual();
-      }
-    });
-
-    renderCategories();
-    renderBuilder();
-    renderCards();
-    renderLessonExamples();
+      }, { threshold: 0.12 });
+      document.querySelectorAll(".fade").forEach(el => io.observe(el));
+    } else {
+      document.querySelectorAll(".fade").forEach(el => el.classList.add("in"));
+    }
   </script>
 </body>
 </html>
